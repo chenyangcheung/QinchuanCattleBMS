@@ -78,3 +78,31 @@ message("OpenCV path: $$OPENCV_PATH")
 message("Includes path: $$INCLUDEPATH")
 message("Libraries: $$LIBS")
 
+# VLC configuration
+win32 {
+        message("Using win32 configuration")
+
+        # change this variable according to your path of opencv
+        VLC_PATH = C:/VLC-Qt_1.1.0_win64_msvc2015 # Note: update with the correct OpenCV version
+        # change this variable according to your version of opencv
+        LIBS_PATH = "$$VLC_PATH/lib"
+
+        CONFIG(debug, debug|release) {
+            LIBS     += -L$$LIBS_PATH \
+                        -lVLCQtCored \
+                        -lVLCQtWidgetsd
+           }
+
+        CONFIG(release, debug|release) {
+            LIBS     += -L$$LIBS_PATH \
+                        -lVLCQtCore \
+                        -lVLCQtWidgets
+           }
+}
+
+INCLUDEPATH += \
+    $$VLC_PATH/include/
+
+message("VLC path: $$VLC_PATH")
+message("Includes path: $$INCLUDEPATH")
+message("Libraries: $$LIBS")
