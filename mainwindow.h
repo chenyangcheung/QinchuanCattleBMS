@@ -31,6 +31,8 @@ private slots:
     void on_OpenFile_clicked();
     void on_OpenCamera_clicked();
     void on_pushButton_clicked();
+    void TakeSnapShot();
+    void saveSnapShot();
 };
 
 #endif // MAINWINDOW_H

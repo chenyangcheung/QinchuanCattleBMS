@@ -22,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent) :
 //    _equalizerDialog->setMediaPlayer(_player);
     ui->camera->setMediaPlayer(_player);
 //    ui->camera->
+    connect(ui->SnapShot, &QPushButton::clicked, this, &MainWindow::saveSnapShot);
+
 }
 
 MainWindow::~MainWindow()
@@ -93,16 +95,41 @@ void MainWindow::on_pushButton_clicked()
 {
 //    QSize curSize = ui->camera->size();
 //    const QRect R(QPoint(0, 0));
-    QPixmap record;
-    record = ui->camera->grab(QRect(QPoint(0, 0), QSize(ui->camera->width(), ui->camera->height())));
-    QString imagePath = QFileDialog::getSaveFileName(this,
-                                                     tr("Save File"),
-                                                     ".",
-                                                     tr("Image Files (*.png *.jpg *.jpeg *.bmp)"));
-    if (!imagePath.isEmpty())
-    {
-//        cv::imwrite(imagePath.toStdString(), savedImage);
-        QImage img = record.toImage();
-        img.save(imagePath);
-    }
+//    QPixmap record;
+//    record = ui->camera->grab(QRect(QPoint(0, 0), QSize(ui->camera->width(), ui->camera->height())));
+//    QString imagePath = QFileDialog::getSaveFileName(this,
+//                                                     tr("Save File"),
+//                                                     ".",
+//                                                     tr("Image Files (*.png *.jpg *.jpeg *.bmp)"));
+//    if (!imagePath.isEmpty())
+//    {
+////        cv::imwrite(imagePath.toStdString(), savedImage);
+//        QImage img = record.toImage();
+//        img.save(imagePath);
+//    }
+}
+
+void MainWindow::saveSnapShot()
+{
+        QString imagePath = QFileDialog::getSaveFileName(this,
+                                                         tr("Save File"),
+                                                         ".",
+                                                         tr("Image Files (*.png *.jpg *.jpeg *.bmp)"));
+//        if (!imagePath.isEmpty())
+//        {
+//    //        cv::imwrite(imagePath.toStdString(), savedImage);
+//            QImage img = record.toImage();
+//            img.save(imagePath);
+//        }
+        // TODO: emit custom signl
+        // pass image path to slot function -- VlcMediaPlayer::snapShotTaken
+}
+
+void MainWindow::TakeSnapShot()
+{
+    // TODO: Generate image name according to current time
+
+    // TODO: emit custom signl
+    // pass image path to slot function -- VlcMediaPlayer::snapShotTaken
+
 }
