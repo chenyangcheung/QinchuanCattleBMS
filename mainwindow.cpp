@@ -1,11 +1,14 @@
 #include <QFileDialog>
 #include <QInputDialog>
+#include <QString>
+#include <QDateTime>
+#include <QDebug>
 
 #include <VLCQtCore/Common.h>
 #include <VLCQtCore/Instance.h>
 #include <VLCQtCore/Media.h>
 #include <VLCQtCore/MediaPlayer.h>
-
+#include <VLCQtCore/Video.h>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -17,18 +20,21 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     _instance = new VlcInstance(VlcCommon::args(), this);
+
     _player = new VlcMediaPlayer(_instance);
     _player->setVideoWidget(ui->camera);
+    _video = new VlcVideo(_player);
 //    _equalizerDialog->setMediaPlayer(_player);
     ui->camera->setMediaPlayer(_player);
 //    ui->camera->
-    connect(ui->SnapShot, &QPushButton::clicked, this, &MainWindow::saveSnapShot);
-
+    connect(ui->SnapShot, &QPushButton::clicked, this, &MainWindow::TakeSnapShot);
+    connect(_player, &VlcMediaPlayer::snapshotTaken,  _video, &VlcVideo::takeSnapshot);
 }
 
 MainWindow::~MainWindow()
 {
     delete _player;
+    delete _video;
     delete _media;
     delete _instance;
     delete ui;
@@ -128,8 +134,12 @@ void MainWindow::saveSnapShot()
 void MainWindow::TakeSnapShot()
 {
     // TODO: Generate image name according to current time
-
+    QDateTime current_date_time = QDateTime::currentDateTime();
+    QString current_date = current_date_time.toString("yyyy-MM-dd-hhmmsszzz");
     // TODO: emit custom signl
     // pass image path to slot function -- VlcMediaPlayer::snapShotTaken
-
+//    qDebug() << "receive signal of taking snap.";
+    QString fileName = qApp->applicationDirPath() + "/" + current_date + ".jpg";
+    emit _player->snapshotTaken(fileName);
+//    qDebug() << "pass file name: " + fileName;
 }

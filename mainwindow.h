@@ -10,6 +10,7 @@ class MainWindow;
 class VlcInstance;
 class VlcMedia;
 class VlcMediaPlayer;
+class VlcVideo;
 
 class MainWindow : public QMainWindow
 {
@@ -24,7 +25,7 @@ private:
     VlcInstance *_instance;
     VlcMedia *_media;
     VlcMediaPlayer *_player;
-
+    VlcVideo *_video;
 private slots:
 //    void openLocal();
 //    void openUrl();
@@ -33,6 +34,8 @@ private slots:
     void on_pushButton_clicked();
     void TakeSnapShot();
     void saveSnapShot();
+signals:
+    void passFileName(const QString &name);
 };
 
 #endif // MAINWINDOW_H
