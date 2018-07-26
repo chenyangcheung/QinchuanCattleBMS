@@ -11,18 +11,23 @@ SnapshotThread::SnapshotThread(QObject *parent)
 
 void SnapshotThread::run()
 {
-    bool ifsuccess = _video->takeSnapshot(ssname);
-    qDebug() << "Snap shot result: " << ifsuccess;
+    bool success = _video->takeSnapshot(ssname);
+    if (success)
+        qDebug() << "Get snapshot: " << ssname;
+    delete _video;
 }
 
 void SnapshotThread::takeSnapshot(VlcMediaPlayer *&player)
 {
+    // Create a video environment
+    // and don't forget delete after using it
     _video = new VlcVideo(player);
+
     // Generate image name according to current time
     QDateTime current_date_time = QDateTime::currentDateTime();
     QString current_date = current_date_time.toString("yyyy-MM-dd-hhmmsszzz");
-    // pass image path to slot function -- VlcMediaPlayer::snapShotTaken
     ssname = qApp->applicationDirPath() + "/" + current_date + ".jpg";
-//    qDebug() << "pass file name: " + ssname;
+
+    // start to take snapshot
     start();
 }

@@ -23,7 +23,9 @@ MainWindow::MainWindow(QWidget *parent) :
     _player->setVideoWidget(ui->camera);
     ui->camera->setMediaPlayer(_player);
 
-    connect(ui->SnapShot, &QPushButton::clicked, this, &MainWindow::TakeSnapShot);
+    connect(ui->OpenVideo, &QPushButton::clicked, this, &MainWindow::openLocal);
+    connect(ui->OpenCamera, &QPushButton::clicked, this, &MainWindow::openUrl);
+    connect(ui->SnapShot, &QPushButton::clicked, this, &MainWindow::takeSnapShot);
 }
 
 MainWindow::~MainWindow()
@@ -34,36 +36,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-//void MainWindow::openLocal()
-//{
-//    QString file =
-//            QFileDialog::getOpenFileName(this, tr("Open file"),
-//                                         QDir::homePath(),
-//                                         tr("Multimedia files(*)"));
-
-//    if (file.isEmpty())
-//        return;
-
-//    _media = new VlcMedia(file, true, _instance);
-
-//    _player->open(_media);
-//}
-
-//void MainWindow::openUrl()
-//{
-//    QString url =
-//            QInputDialog::getText(this, tr("Open Url"), tr("Enter the URL you want to play"));
-
-//    if (url.isEmpty())
-//        return;
-
-//    _media = new VlcMedia(url, _instance);
-
-//    _player->open(_media);
-//}
-
-
-void MainWindow::on_OpenFile_clicked()
+void MainWindow::openLocal()
 {
     QString file =
             QFileDialog::getOpenFileName(this, tr("Open file"),
@@ -78,7 +51,7 @@ void MainWindow::on_OpenFile_clicked()
     _player->open(_media);
 }
 
-void MainWindow::on_OpenCamera_clicked()
+void MainWindow::openUrl()
 {
     QString url =
             QInputDialog::getText(this, tr("Open Url"), tr("Enter the URL you want to play"));
@@ -91,8 +64,8 @@ void MainWindow::on_OpenCamera_clicked()
     _player->open(_media);
 }
 
-void MainWindow::TakeSnapShot()
+void MainWindow::takeSnapShot()
 {
-//    qDebug() << "take snapshoting...";
+    // Pass player to snapshot thread
     SnapshotThread.takeSnapshot(_player);
 }

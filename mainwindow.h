@@ -26,14 +26,11 @@ private:
     VlcInstance *_instance;
     VlcMedia *_media;
     VlcMediaPlayer *_player;
-//    VlcVideo *_video;
     SnapshotThread SnapshotThread;
 private slots:
-//    void openLocal();
-//    void openUrl();
-    void on_OpenFile_clicked();
-    void on_OpenCamera_clicked();
-    void TakeSnapShot();
+    void openLocal();
+    void openUrl();
+    void takeSnapShot();
 };
 
 #endif // MAINWINDOW_H
