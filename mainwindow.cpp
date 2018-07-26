@@ -16,25 +16,19 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     _media(0)
-//    _equalizerDialog(new EqualizerDialog(this))
 {
     ui->setupUi(this);
     _instance = new VlcInstance(VlcCommon::args(), this);
-
     _player = new VlcMediaPlayer(_instance);
     _player->setVideoWidget(ui->camera);
-    _video = new VlcVideo(_player);
-//    _equalizerDialog->setMediaPlayer(_player);
     ui->camera->setMediaPlayer(_player);
-//    ui->camera->
+
     connect(ui->SnapShot, &QPushButton::clicked, this, &MainWindow::TakeSnapShot);
-    connect(_player, &VlcMediaPlayer::snapshotTaken,  _video, &VlcVideo::takeSnapshot);
 }
 
 MainWindow::~MainWindow()
 {
     delete _player;
-    delete _video;
     delete _media;
     delete _instance;
     delete ui;
@@ -97,49 +91,8 @@ void MainWindow::on_OpenCamera_clicked()
     _player->open(_media);
 }
 
-void MainWindow::on_pushButton_clicked()
-{
-//    QSize curSize = ui->camera->size();
-//    const QRect R(QPoint(0, 0));
-//    QPixmap record;
-//    record = ui->camera->grab(QRect(QPoint(0, 0), QSize(ui->camera->width(), ui->camera->height())));
-//    QString imagePath = QFileDialog::getSaveFileName(this,
-//                                                     tr("Save File"),
-//                                                     ".",
-//                                                     tr("Image Files (*.png *.jpg *.jpeg *.bmp)"));
-//    if (!imagePath.isEmpty())
-//    {
-////        cv::imwrite(imagePath.toStdString(), savedImage);
-//        QImage img = record.toImage();
-//        img.save(imagePath);
-//    }
-}
-
-void MainWindow::saveSnapShot()
-{
-        QString imagePath = QFileDialog::getSaveFileName(this,
-                                                         tr("Save File"),
-                                                         ".",
-                                                         tr("Image Files (*.png *.jpg *.jpeg *.bmp)"));
-//        if (!imagePath.isEmpty())
-//        {
-//    //        cv::imwrite(imagePath.toStdString(), savedImage);
-//            QImage img = record.toImage();
-//            img.save(imagePath);
-//        }
-        // TODO: emit custom signl
-        // pass image path to slot function -- VlcMediaPlayer::snapShotTaken
-}
-
 void MainWindow::TakeSnapShot()
 {
-    // TODO: Generate image name according to current time
-    QDateTime current_date_time = QDateTime::currentDateTime();
-    QString current_date = current_date_time.toString("yyyy-MM-dd-hhmmsszzz");
-    // TODO: emit custom signl
-    // pass image path to slot function -- VlcMediaPlayer::snapShotTaken
-//    qDebug() << "receive signal of taking snap.";
-    QString fileName = qApp->applicationDirPath() + "/" + current_date + ".jpg";
-    emit _player->snapshotTaken(fileName);
-//    qDebug() << "pass file name: " + fileName;
+//    qDebug() << "take snapshoting...";
+    SnapshotThread.takeSnapshot(_player);
 }

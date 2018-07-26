@@ -13,9 +13,11 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    snapshotthread.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    snapshotthread.h
 
 FORMS    += mainwindow.ui
 

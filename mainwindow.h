@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "snapshotthread.h"
 
 namespace Ui {
 class MainWindow;
@@ -25,17 +26,14 @@ private:
     VlcInstance *_instance;
     VlcMedia *_media;
     VlcMediaPlayer *_player;
-    VlcVideo *_video;
+//    VlcVideo *_video;
+    SnapshotThread SnapshotThread;
 private slots:
 //    void openLocal();
 //    void openUrl();
     void on_OpenFile_clicked();
     void on_OpenCamera_clicked();
-    void on_pushButton_clicked();
     void TakeSnapShot();
-    void saveSnapShot();
-signals:
-    void passFileName(const QString &name);
 };
 
 #endif // MAINWINDOW_H
