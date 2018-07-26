@@ -30,7 +30,8 @@ OPENCV3 {
         message("Using win32 configuration")
 
         # change this variable according to your path of opencv
-        OPENCV_PATH = D:/opencv3.0/opencv # Note: update with the correct OpenCV version
+#        OPENCV_PATH = D:/opencv3.0/opencv # Note: update with the correct OpenCV version
+        OPENCV_PATH = $$(OPENCV_PATH)
         # change this variable according to your version of opencv
         LIBS_PATH = "$$OPENCV_PATH/build/x64/vc14/lib" #project compiled using Visual C++ 2015 64bit compiler
 
@@ -52,7 +53,8 @@ OPENCV2 {
         message("Using win32 configuration")
 
         # change this variable according to your path of opencv
-        OPENCV_PATH = C:/opencv # Note: update with the correct OpenCV version
+#        OPENCV_PATH = C:/opencv # Note: update with the correct OpenCV version
+        OPENCV_PATH = $$(OPENCV_PATH)
         # change this variable according to your version of opencv
         LIBS_PATH = "$$OPENCV_PATH/build/x64/vc14/lib"
 
@@ -85,7 +87,8 @@ win32 {
         message("Using win32 configuration")
 
         # change this variable according to your path of opencv
-        VLC_PATH = C:/VLC-Qt_1.1.0_win64_msvc2015 # Note: update with the correct OpenCV version
+#        VLC_PATH = C:/VLC-Qt_1.1.0_win64_msvc2015 # Note: update with the correct OpenCV version
+        VLC_PATH = $$(VLC_PATH)
         # change this variable according to your version of opencv
         LIBS_PATH = "$$VLC_PATH/lib"
 
