@@ -6,73 +6,144 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>902</width>
-    <height>515</height>
+    <width>909</width>
+    <height>546</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="VlcWidgetVideo" name="camera" native="true">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>601</width>
-      <height>301</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="OpenVideo">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>340</y>
-      <width>101</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Open Video</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="OpenCamera">
-    <property name="geometry">
-     <rect>
-      <x>140</x>
-      <y>340</y>
-      <width>121</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Open Camera</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="SnapShot">
-    <property name="geometry">
-     <rect>
-      <x>280</x>
-      <y>340</y>
-      <width>93</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Snapshot</string>
-    </property>
-   </widget>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="minimumSize">
+       <size>
+        <width>891</width>
+        <height>461</height>
+       </size>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="rgbCameraTab">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <attribute name="title">
+        <string>2D Camera</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0" colspan="3">
+           <widget class="VlcWidgetVideo" name="camera" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>640</width>
+              <height>360</height>
+             </size>
+            </property>
+            <property name="autoFillBackground">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QPushButton" name="OpenVideo">
+            <property name="minimumSize">
+             <size>
+              <width>101</width>
+              <height>23</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Open Video</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QPushButton" name="OpenCamera">
+            <property name="minimumSize">
+             <size>
+              <width>121</width>
+              <height>23</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Open Camera</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QPushButton" name="SnapShot">
+            <property name="minimumSize">
+             <size>
+              <width>93</width>
+              <height>23</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Snapshot</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+       <zorder>camera</zorder>
+       <zorder>OpenVideo</zorder>
+       <zorder>OpenCamera</zorder>
+       <zorder>SnapShot</zorder>
+       <zorder>SnapShot</zorder>
+       <zorder>OpenCamera</zorder>
+       <zorder>OpenVideo</zorder>
+      </widget>
+      <widget class="QWidget" name="tofCameraTab">
+       <attribute name="title">
+        <string>3D Camera</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="computeTab">
+       <attribute name="title">
+        <string>Compute</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="helpTab">
+       <attribute name="title">
+        <string>Help</string>
+       </attribute>
+      </widget>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>902</width>
+     <width>909</width>
      <height>23</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuQinchuanCattleBMS">
+    <property name="title">
+     <string>Open</string>
+    </property>
+    <addaction name="actionOpen_Video"/>
+    <addaction name="actionOpen_Camera"/>
+   </widget>
+   <addaction name="menuQinchuanCattleBMS"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -81,8 +152,20 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionOpen_Video"/>
+   <addaction name="actionOpen_Camera"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionOpen_Video">
+   <property name="text">
+    <string>Open Video</string>
+   </property>
+  </action>
+  <action name="actionOpen_Camera">
+   <property name="text">
+    <string>Open Camera</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>

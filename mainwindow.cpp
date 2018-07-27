@@ -26,6 +26,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->OpenVideo, &QPushButton::clicked, this, &MainWindow::openLocal);
     connect(ui->OpenCamera, &QPushButton::clicked, this, &MainWindow::openUrl);
     connect(ui->SnapShot, &QPushButton::clicked, this, &MainWindow::takeSnapShot);
+    connect(ui->actionOpen_Video, &QAction::triggered, this, &MainWindow::openLocal);
+    connect(ui->actionOpen_Camera, &QAction::triggered, this, &MainWindow::openUrl);
 }
 
 MainWindow::~MainWindow()
