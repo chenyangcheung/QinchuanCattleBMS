@@ -54,7 +54,7 @@ void MainWindow::openLocal()
 void MainWindow::openUrl()
 {
     QString url =
-            QInputDialog::getText(this, tr("Open Url"), tr("Enter the URL you want to play"));
+            QInputDialog::getText(this, tr("Open Url"), tr("Enter the URL you want to play"), QLineEdit::Normal, "rtsp://admin:*200wan*@172.29.23.12:554/MPEG-4/ch1/main/av_stream");
 
     if (url.isEmpty())
         return;
