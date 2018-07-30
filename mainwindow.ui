@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>909</width>
-    <height>546</height>
+    <width>913</width>
+    <height>554</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,7 +24,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="rgbCameraTab">
        <property name="sizePolicy">
@@ -100,18 +100,26 @@
          </layout>
         </item>
        </layout>
-       <zorder>camera</zorder>
-       <zorder>OpenVideo</zorder>
-       <zorder>OpenCamera</zorder>
-       <zorder>SnapShot</zorder>
-       <zorder>SnapShot</zorder>
-       <zorder>OpenCamera</zorder>
-       <zorder>OpenVideo</zorder>
+      </widget>
+      <widget class="QWidget" name="imgOperateTab">
+       <attribute name="title">
+        <string>2D Image</string>
+       </attribute>
       </widget>
       <widget class="QWidget" name="tofCameraTab">
        <attribute name="title">
         <string>3D Camera</string>
        </attribute>
+       <widget class="QVTKWidget" name="pclViewerWidget" native="true">
+        <property name="geometry">
+         <rect>
+          <x>1</x>
+          <y>1</y>
+          <width>861</width>
+          <height>374</height>
+         </rect>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="computeTab">
        <attribute name="title">
@@ -132,8 +140,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>909</width>
-     <height>23</height>
+     <width>913</width>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuQinchuanCattleBMS">
@@ -169,6 +177,11 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
+  <customwidget>
+   <class>QVTKWidget</class>
+   <extends>QWidget</extends>
+   <header>QVTKWidget.h</header>
+  </customwidget>
   <customwidget>
    <class>VlcWidgetVideo</class>
    <extends>QWidget</extends>
