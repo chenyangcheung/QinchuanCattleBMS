@@ -110,41 +110,63 @@
        <attribute name="title">
         <string>3D Camera</string>
        </attribute>
-       <widget class="QVTKWidget" name="pclViewerWidget" native="true">
-        <property name="geometry">
-         <rect>
-          <x>1</x>
-          <y>1</y>
-          <width>881</width>
-          <height>375</height>
-         </rect>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>881</width>
-          <height>375</height>
-         </size>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="openPCD">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>390</y>
-          <width>93</width>
-          <height>28</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Open PCD</string>
-        </property>
-       </widget>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="0" colspan="3">
+         <widget class="QVTKWidget" name="pclViewerWidget" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>881</width>
+            <height>375</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QPushButton" name="openPCD">
+          <property name="minimumSize">
+           <size>
+            <width>93</width>
+            <height>28</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Open PCD</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QPushButton" name="open3dCamera">
+          <property name="minimumSize">
+           <size>
+            <width>99</width>
+            <height>28</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Open Camera</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QPushButton" name="snapShot3d">
+          <property name="minimumSize">
+           <size>
+            <width>99</width>
+            <height>28</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Snapshot</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="computeTab">
        <attribute name="title">

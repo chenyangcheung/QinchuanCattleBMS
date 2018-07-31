@@ -33,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // 3d camera
     connect(ui->openPCD, &QPushButton::clicked, &ifm3dViewer, &IFM3DViewer::openLocal);
+    connect(ui->open3dCamera, &QPushButton::clicked, this, &MainWindow::open3dCamera);
 }
 
 MainWindow::~MainWindow()
@@ -75,4 +76,9 @@ void MainWindow::takeSnapShot()
 {
     // Pass player to snapshot thread
     SnapshotThread.takeSnapshot(_player);
+}
+
+void MainWindow::open3dCamera()
+{
+    ifm3dViewer.start();
 }

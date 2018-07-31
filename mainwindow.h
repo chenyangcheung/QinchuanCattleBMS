@@ -33,6 +33,7 @@ private slots:
     void openLocal();
     void openUrl();
     void takeSnapShot();
+    void open3dCamera();
 };
 
 #endif // MAINWINDOW_H

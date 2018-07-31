@@ -115,7 +115,7 @@ message("VLC path: $$VLC_PATH")
 #message("Libraries: $$LIBS")
 
 # ifm3d library
-IFM3D_PATH = $$(IFM3D_INSTALL_PATH)
+IFM3D_PATH = $$(IFM3D_PATH)
 
 LIBS += -L$$IFM3D_PATH/lib \
         -lifm3d_camera \
@@ -125,13 +125,15 @@ LIBS += -L$$IFM3D_PATH/lib \
         -lifm3d_tools
 
 INCLUDEPATH += \
-    $$IFM3D_PATH/include/
+    $$IFM3D_PATH/modules\framegrabber\include \
+    $$IFM3D_PATH/modules\camera\include \
+    $$IFM3D_PATH/modules\image\include
 
 
 message("ifm3d path: $$IFM3D_PATH")
 
 # pcl library
-PCL_PATH = $$IFM3D_PATH
+PCL_PATH = $$(IFM3D_INSTALL_PATH)
 
 LIBS += -L$$PCL_PATH/lib \
         -lpcl_common_release \
@@ -160,7 +162,7 @@ INCLUDEPATH += $$PCL_PATH/include/pcl-1.8
 message("pcl path: $$PCL_PATH")
 
 # vtk library
-VTK_PATH = $$IFM3D_PATH
+VTK_PATH = $$(IFM3D_INSTALL_PATH)
 
 LIBS += -L$$VTK_PATH/lib  \
         -lvtkalglib-6.3 \
@@ -279,7 +281,7 @@ INCLUDEPATH += $$VTK_PATH/include/vtk-6.3
 message("vtk path: $$VTK_PATH")
 
 # xmlrpc library
-XMLRPC_PATH = $$IFM3D_PATH
+XMLRPC_PATH = $$(IFM3D_INSTALL_PATH)
 
 LIBS += -L$$XMLRPC_PATH/libs \
         -lxmlrpc \
@@ -307,7 +309,7 @@ LIBS += -L$$BOOST_PATH/lib64-msvc-14.0 \
 INCLUDEPATH += $$BOOST_PATH
 
 # eigen library
-EIGEN_PATH = $$IFM3D_PATH
+EIGEN_PATH = $$(IFM3D_INSTALL_PATH)
 
 #LIBS += -L$$EIGEN_PATH/
 INCLUDEPATH += $$EIGEN_PATH/include/eigen3
