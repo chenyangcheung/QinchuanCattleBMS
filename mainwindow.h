@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "snapshotthread.h"
+#include "ifm3dviewer.h"
 
 namespace Ui {
 class MainWindow;
@@ -27,6 +28,7 @@ private:
     VlcMedia *_media;
     VlcMediaPlayer *_player;
     SnapshotThread SnapshotThread;
+    IFM3DViewer ifm3dViewer;
 private slots:
     void openLocal();
     void openUrl();

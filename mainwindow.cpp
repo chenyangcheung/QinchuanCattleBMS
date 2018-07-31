@@ -22,12 +22,17 @@ MainWindow::MainWindow(QWidget *parent) :
     _player = new VlcMediaPlayer(_instance);
     _player->setVideoWidget(ui->camera);
     ui->camera->setMediaPlayer(_player);
+    ifm3dViewer.initViewer(ui->pclViewerWidget);
 
+    // 2d camera
     connect(ui->OpenVideo, &QPushButton::clicked, this, &MainWindow::openLocal);
     connect(ui->OpenCamera, &QPushButton::clicked, this, &MainWindow::openUrl);
     connect(ui->SnapShot, &QPushButton::clicked, this, &MainWindow::takeSnapShot);
     connect(ui->actionOpen_Video, &QAction::triggered, this, &MainWindow::openLocal);
     connect(ui->actionOpen_Camera, &QAction::triggered, this, &MainWindow::openUrl);
+
+    // 3d camera
+    connect(ui->openPCD, &QPushButton::clicked, &ifm3dViewer, &IFM3DViewer::openLocal);
 }
 
 MainWindow::~MainWindow()

@@ -306,6 +306,12 @@ LIBS += -L$$BOOST_PATH/lib64-msvc-14.0 \
 
 INCLUDEPATH += $$BOOST_PATH
 
+# eigen library
+EIGEN_PATH = $$IFM3D_PATH
+
+#LIBS += -L$$EIGEN_PATH/
+INCLUDEPATH += $$EIGEN_PATH/include/eigen3
+
 message("boost path: $$BOOST_PATH")
 
 message("All include path: $$INCLUDEPATH")
