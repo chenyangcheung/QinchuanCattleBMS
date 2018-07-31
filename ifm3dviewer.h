@@ -25,6 +25,7 @@ private:
 //    pcl::PointCloud::Ptr cloud;
 //    pcl::PointCloud<PointT> c;
     boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
+    boost::shared_ptr<pcl::visualization::PCLVisualizer> realTimeViewer;
 };
 
 #endif // IFM3DVIEWER_H
