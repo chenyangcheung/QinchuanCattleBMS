@@ -100,7 +100,7 @@ void IFM3DViewer::run()
 
         while (true)
         {
-            viewer->spinOnce(100);
+        //    viewer->spinOnce(100);
 
             if (!fg->WaitForFrame(buff.get(), 500))
             {
