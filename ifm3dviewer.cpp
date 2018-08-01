@@ -35,16 +35,19 @@ void IFM3DViewer::initViewer(QVTKWidget *&vd)
     vtkDisplay->update();
 }
 
-void IFM3DViewer::openCamera()
+void IFM3DViewer::openCamera(QString ifm3d_ip)
 {
+    IFM3D_IP = ifm3d_ip;
+
+    cam = std::make_shared<ifm3d::Camera>(IFM3D_IP.toStdString());
     try
     {
         start();
     }
     catch (const std::exception& ex)
     {
-//        qDebug() << "Time out";
-        QMessageBox::question(NULL, "question", "Content", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+        qDebug() << "Time out";
+        return;
     }
 }
 
@@ -88,11 +91,6 @@ void IFM3DViewer::openLocal()
 
 void IFM3DViewer::run()
 {
-//    QMessageBox::question(NULL, "question", "Content", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-//    qDebug() << "line 89";
-//    int win_w = vtkDisplay->width();
-//    int win_h = vtkDisplay->height();
-    auto cam = ifm3d::Camera::MakeShared();
     auto fg = std::make_shared<ifm3d::FrameGrabber>(cam, 0xFFFF);
     auto buff = std::make_shared<ifm3d::ImageBuffer>();
     qDebug() << "Run to " << __LINE__;
@@ -102,7 +100,6 @@ void IFM3DViewer::run()
 //    vtkDisplay->update();
 //    vtkDisplay->addPointCloud<pcl::PointXYZI>(cloud, intensity_distribution, "pcl-viewer");
 
-//    bool is_first = true;
     while (!viewer->wasStopped())
     {
         viewer->spinOnce(100);

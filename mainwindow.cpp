@@ -80,5 +80,9 @@ void MainWindow::takeSnapShot()
 
 void MainWindow::open3dCamera()
 {
-    ifm3dViewer.start();
+    QString ip_add =
+            QInputDialog::getText(this, tr("Open 3D Camera"), tr("Enter the IP address of your camera"), QLineEdit::Normal, "169.254.58.137");
+    if (ip_add.isEmpty())
+        return;
+    ifm3dViewer.openCamera(ip_add);
 }

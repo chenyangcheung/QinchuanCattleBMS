@@ -6,6 +6,7 @@
 #include <pcl/point_types.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/visualization/cloud_viewer.h>
+#include <ifm3d/camera.h>
 
 class IFM3DViewer : public QThread
 {
@@ -14,18 +15,18 @@ public:
     IFM3DViewer(QObject *parent = 0);
     void initViewer(QVTKWidget *&vd);
     void openLocal();
-    void openCamera();
+    void openCamera(QString ifm3d_ip);
     ~IFM3DViewer();
 protected:
     void virtual run() override;
 private:
     QVTKWidget *vtkDisplay;
     QString filename;
+    QString IFM3D_IP;
     pcl::PointCloud<pcl::PointXYZI>::Ptr cloud;
-//    pcl::PointCloud::Ptr cloud;
-//    pcl::PointCloud<PointT> c;
     boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
-    boost::shared_ptr<pcl::visualization::PCLVisualizer> realTimeViewer;
+//    boost::shared_ptr<pcl::visualization::PCLVisualizer> realTimeViewer;
+    ifm3d::Camera::Ptr cam;
 };
 
 #endif // IFM3DVIEWER_H
