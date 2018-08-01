@@ -8,10 +8,11 @@
 #include <memory>
 #include <string>
 #include <pcl/visualization/cloud_viewer.h>
-#include <ifm3d/camera.h>
-#include <ifm3d/fg.h>
+#include <pcl/io/pcd_io.h>
 #include <ifm3d/image.h>
 #include <QMessageBox>
+#include <QDateTime>
+#include <QApplication>
 
 IFM3DViewer::IFM3DViewer(QObject *parent)
     : QThread(parent)
@@ -40,14 +41,15 @@ void IFM3DViewer::openCamera(QString ifm3d_ip)
 {
     IFM3D_IP = ifm3d_ip;
 
-    cam = std::make_shared<ifm3d::Camera>(IFM3D_IP.toStdString());
     try
     {
+        cam = std::make_shared<ifm3d::Camera>(IFM3D_IP.toStdString());
+        fg = std::make_shared<ifm3d::FrameGrabber>(cam, 0xFFFF);
         start();
     }
     catch (const std::exception& ex)
     {
-        qDebug() << "Time out";
+        qDebug() << ex.what();
         return;
     }
 }
@@ -94,7 +96,7 @@ void IFM3DViewer::run()
 {
     try
     {
-        auto fg = std::make_shared<ifm3d::FrameGrabber>(cam, 0xFFFF);
+//        auto fg = std::make_shared<ifm3d::FrameGrabber>(cam, 0xFFFF);
         auto buff = std::make_shared<ifm3d::ImageBuffer>();
         qDebug() << "Run to " << __LINE__;
 
@@ -117,6 +119,20 @@ void IFM3DViewer::run()
         qDebug() << ex.what();
         return;
     }
+}
+
+void IFM3DViewer::takeSnapshot()
+{
+//    auto buff = std::make_shared<ifm3d::ImageBuffer>();
+    pcl::PointCloud<pcl::PointXYZI> *temp = cloud.get();
+
+    // Generate image name according to current time
+    QDateTime current_date_time = QDateTime::currentDateTime();
+    QString current_date = current_date_time.toString("yyyy-MM-dd-hhmmsszzz");
+    QString ssname = qApp->applicationDirPath() + "/" + current_date + ".pcd";
+
+    // Save pcd file by pcl library
+    pcl::io::savePCDFileASCII(ssname.toStdString(), *temp);
 }
 
 IFM3DViewer::~IFM3DViewer()

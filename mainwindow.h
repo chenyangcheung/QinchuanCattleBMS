@@ -34,6 +34,7 @@ private slots:
     void openUrl();
     void takeSnapShot();
     void open3dCamera();
+    void takeSnapShot3d();
 };
 
 #endif // MAINWINDOW_H

@@ -7,6 +7,7 @@
 #include <pcl/io/pcd_io.h>
 #include <pcl/visualization/cloud_viewer.h>
 #include <ifm3d/camera.h>
+#include <ifm3d/fg.h>
 
 class IFM3DViewer : public QThread
 {
@@ -16,6 +17,7 @@ public:
     void initViewer(QVTKWidget *&vd);
     void openLocal();
     void openCamera(QString ifm3d_ip);
+    void takeSnapshot();
     ~IFM3DViewer();
 protected:
     void virtual run() override;
@@ -27,6 +29,7 @@ private:
     boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
 //    boost::shared_ptr<pcl::visualization::PCLVisualizer> realTimeViewer;
     ifm3d::Camera::Ptr cam;
+    ifm3d::FrameGrabber::Ptr fg;
 };
 
 #endif // IFM3DVIEWER_H
