@@ -33,6 +33,7 @@ void IFM3DViewer::initViewer(QVTKWidget *&vd)
     vtkDisplay->SetRenderWindow(viewer->getRenderWindow());
     viewer->setupInteractor(vtkDisplay->GetInteractor(), vtkDisplay->GetRenderWindow());
     vtkDisplay->update();
+    viewer->resetCamera();
 }
 
 void IFM3DViewer::openCamera(QString ifm3d_ip)
@@ -91,28 +92,31 @@ void IFM3DViewer::openLocal()
 
 void IFM3DViewer::run()
 {
-    auto fg = std::make_shared<ifm3d::FrameGrabber>(cam, 0xFFFF);
-    auto buff = std::make_shared<ifm3d::ImageBuffer>();
-    qDebug() << "Run to " << __LINE__;
-    // clear viewer
-//    viewer.reset(new pcl::visualization::PCLVisualizer ("real-time_viewer", false));
-//    viewer->removeAllPointClouds();
-//    vtkDisplay->update();
-//    vtkDisplay->addPointCloud<pcl::PointXYZI>(cloud, intensity_distribution, "pcl-viewer");
-
-    while (!viewer->wasStopped())
+    try
     {
-        viewer->spinOnce(100);
+        auto fg = std::make_shared<ifm3d::FrameGrabber>(cam, 0xFFFF);
+        auto buff = std::make_shared<ifm3d::ImageBuffer>();
+        qDebug() << "Run to " << __LINE__;
 
-        if (!fg->WaitForFrame(buff.get(), 500))
+        while (true)
         {
-            continue;
-        }
-        cloud = buff->Cloud();
-        viewer->updatePointCloud<pcl::PointXYZI>(cloud, "cloud");
-        viewer->resetCamera();
-        vtkDisplay->update();
-    } // end: while (...)
+            viewer->spinOnce(100);
+
+            if (!fg->WaitForFrame(buff.get(), 500))
+            {
+                break;
+            }
+            cloud = buff->Cloud();
+            viewer->updatePointCloud<pcl::PointXYZI>(cloud, "cloud");
+    //        viewer->resetCamera();
+            vtkDisplay->update();
+        } // end: while (...)
+    }
+    catch (const std::exception& ex)
+    {
+        qDebug() << ex.what();
+        return;
+    }
 }
 
 IFM3DViewer::~IFM3DViewer()
