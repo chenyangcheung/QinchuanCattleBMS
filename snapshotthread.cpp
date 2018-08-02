@@ -2,6 +2,7 @@
 #include <QDateTime>
 #include <QApplication>
 #include <QDebug>
+#include <QMessageBox>
 
 SnapshotThread::SnapshotThread(QObject *parent)
     : QThread(parent)
@@ -11,9 +12,7 @@ SnapshotThread::SnapshotThread(QObject *parent)
 
 void SnapshotThread::run()
 {
-    bool success = _video->takeSnapshot(ssname);
-    if (success)
-        qDebug() << "Get snapshot: " << ssname;
+    ifGetSnapshot = _video->takeSnapshot(ssname);
     delete _video;
 }
 
@@ -30,4 +29,12 @@ void SnapshotThread::takeSnapshot(VlcMediaPlayer *&player)
 
     // start to take snapshot
     start();
+
+    // wait snapshot thread to quit
+    quit();
+    wait();
+    if (ifGetSnapshot)
+        QMessageBox::information(nullptr, tr("Info"), tr("Save snapshot to ") + ssname);
+    else
+        QMessageBox::warning(nullptr, tr("Warning"), tr("There are nothing to be taken! Please open a video or camera."));
 }

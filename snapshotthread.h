@@ -16,6 +16,7 @@ protected:
 private:
     VlcVideo *_video;
     QString ssname;
+    bool ifGetSnapshot;
 };
 
 #endif // SNAPSHOTTHREAD_H

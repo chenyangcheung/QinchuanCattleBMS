@@ -3,6 +3,7 @@
 #include <QString>
 #include <QDateTime>
 #include <QDebug>
+#include <QMessageBox>
 
 #include <VLCQtCore/Common.h>
 #include <VLCQtCore/Instance.h>
@@ -11,6 +12,7 @@
 #include <VLCQtCore/Video.h>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <exception>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -68,6 +70,7 @@ void MainWindow::openUrl()
     if (url.isEmpty())
         return;
 
+    // TODO: add exception catch
     _media = new VlcMedia(url, _instance);
 
     _player->open(_media);

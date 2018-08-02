@@ -50,7 +50,9 @@ void IFM3DViewer::openCamera(QString ifm3d_ip)
     catch (const std::exception& ex)
     {
         camIsActive = false;
-        qDebug() << ex.what();
+        QString qExcept;
+//        qDebug() << ex.what();
+        QMessageBox::warning(nullptr, tr("Warning"), qExcept.fromStdString(ex.what()));
         return;
     }
 }
@@ -117,7 +119,14 @@ void IFM3DViewer::run()
 
 void IFM3DViewer::takeSnapshot()
 {
+    if (cloud->empty())
+    {
+        QMessageBox::warning(nullptr, tr("Warning"), tr("There are nothing to be taken! Please open a pcd or camera."));
+        return;
+    }
+
     pcl::PointCloud<pcl::PointXYZI> *temp = cloud.get();
+
     // Generate image name according to current time
     QDateTime current_date_time = QDateTime::currentDateTime();
     QString current_date = current_date_time.toString("yyyy-MM-dd-hhmmsszzz");
@@ -125,6 +134,7 @@ void IFM3DViewer::takeSnapshot()
 
     // Save pcd file by pcl library
     pcl::io::savePCDFileASCII(ssname.toStdString(), *temp);
+    QMessageBox::information(nullptr, tr("Info"), tr("Save snapshot to ") + ssname);
 }
 
 void IFM3DViewer::stop()
