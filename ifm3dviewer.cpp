@@ -17,7 +17,6 @@
 IFM3DViewer::IFM3DViewer(QObject *parent)
     : QThread(parent)
 {
-//    vtkDisplay = vd;
     camIsActive = false;
 }
 
@@ -28,7 +27,6 @@ void IFM3DViewer::initViewer(QVTKWidget *&vd)
     pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZI>
     intensity_distribution(cloud, "intensity");
     viewer.reset(new pcl::visualization::PCLVisualizer ("viewer", false));
-//    qDebug() << "line 19";
     viewer->addPointCloud<pcl::PointXYZI>(cloud, intensity_distribution, "cloud");
 
     viewer->setBackgroundColor (0.1, 0.1, 0.1);
@@ -67,15 +65,12 @@ void IFM3DViewer::openLocal()
     if (!filename.isEmpty())
     {
         std::string file_name = filename.toStdString();
-        //sensor_msgs::PointCloud2 cloud2;
         pcl::PCLPointCloud2 cloud2;
-        //pcl::PointCloud<Eigen::MatrixXf> cloud2;
         Eigen::Vector4f origin;
         Eigen::Quaternionf orientation;
         int pcd_version;
         int data_type;
         unsigned int data_idx;
-//        int offset = 0;
         pcl::PCDReader rd;
         rd.readHeader(file_name, cloud2, origin, orientation, pcd_version, data_type, data_idx);
 
@@ -99,21 +94,15 @@ void IFM3DViewer::run()
 {
     try
     {
-//        auto fg = std::make_shared<ifm3d::FrameGrabber>(cam, 0xFFFF);
         auto buff = std::make_shared<ifm3d::ImageBuffer>();
-        qDebug() << "Run to " << __LINE__;
-
         while (camIsActive)
         {
-        //    viewer->spinOnce(100);
-
             if (!fg->WaitForFrame(buff.get(), 500))
             {
                 break;
             }
             cloud = buff->Cloud();
             viewer->updatePointCloud<pcl::PointXYZI>(cloud, "cloud");
-    //        viewer->resetCamera();
             vtkDisplay->update();
         } // end: while (...)
         camIsActive = false;
@@ -128,9 +117,7 @@ void IFM3DViewer::run()
 
 void IFM3DViewer::takeSnapshot()
 {
-//    auto buff = std::make_shared<ifm3d::ImageBuffer>();
     pcl::PointCloud<pcl::PointXYZI> *temp = cloud.get();
-
     // Generate image name according to current time
     QDateTime current_date_time = QDateTime::currentDateTime();
     QString current_date = current_date_time.toString("yyyy-MM-dd-hhmmsszzz");
@@ -148,7 +135,6 @@ void IFM3DViewer::stop()
 void IFM3DViewer::closeCamera()
 {
     stop();
-    qDebug() << cam->CancelSession();
 }
 
 IFM3DViewer::~IFM3DViewer()
