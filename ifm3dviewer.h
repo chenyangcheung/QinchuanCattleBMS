@@ -18,6 +18,7 @@ public:
     void openLocal();
     void openCamera(QString ifm3d_ip);
     void takeSnapshot();
+    void closeCamera();
     ~IFM3DViewer();
 protected:
     void virtual run() override;
@@ -25,6 +26,7 @@ private:
     QVTKWidget *vtkDisplay;
     QString filename;
     QString IFM3D_IP;
+    bool camIsActive;
     pcl::PointCloud<pcl::PointXYZI>::Ptr cloud;
     boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
 //    boost::shared_ptr<pcl::visualization::PCLVisualizer> realTimeViewer;

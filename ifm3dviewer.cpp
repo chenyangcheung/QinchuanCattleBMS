@@ -18,6 +18,7 @@ IFM3DViewer::IFM3DViewer(QObject *parent)
     : QThread(parent)
 {
 //    vtkDisplay = vd;
+    camIsActive = false;
 }
 
 void IFM3DViewer::initViewer(QVTKWidget *&vd)
@@ -45,10 +46,12 @@ void IFM3DViewer::openCamera(QString ifm3d_ip)
     {
         cam = std::make_shared<ifm3d::Camera>(IFM3D_IP.toStdString());
         fg = std::make_shared<ifm3d::FrameGrabber>(cam, 0xFFFF);
+        camIsActive = true;
         start();
     }
     catch (const std::exception& ex)
     {
+        camIsActive = false;
         qDebug() << ex.what();
         return;
     }
@@ -56,8 +59,8 @@ void IFM3DViewer::openCamera(QString ifm3d_ip)
 
 void IFM3DViewer::openLocal()
 {
-//    vtkDisplay->SetRenderWindow(viewer->getRenderWindow());
-//    viewer->setupInteractor(vtkDisplay->GetInteractor(), vtkDisplay->GetRenderWindow());
+    if (camIsActive)
+        closeCamera();
 
     filename = QFileDialog::getOpenFileName(nullptr,
                tr("Open PointCloud"), ".", tr("Open PCD files (*.pcd)"));
@@ -133,6 +136,12 @@ void IFM3DViewer::takeSnapshot()
 
     // Save pcd file by pcl library
     pcl::io::savePCDFileASCII(ssname.toStdString(), *temp);
+}
+
+void IFM3DViewer::closeCamera()
+{
+    camIsActive = false;
+    qDebug() << cam->CancelSession();
 }
 
 IFM3DViewer::~IFM3DViewer()
