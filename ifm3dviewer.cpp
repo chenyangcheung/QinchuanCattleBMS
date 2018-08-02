@@ -103,7 +103,7 @@ void IFM3DViewer::run()
         auto buff = std::make_shared<ifm3d::ImageBuffer>();
         qDebug() << "Run to " << __LINE__;
 
-        while (true)
+        while (camIsActive)
         {
         //    viewer->spinOnce(100);
 
@@ -116,12 +116,14 @@ void IFM3DViewer::run()
     //        viewer->resetCamera();
             vtkDisplay->update();
         } // end: while (...)
+        camIsActive = false;
     }
     catch (const std::exception& ex)
     {
         qDebug() << ex.what();
         return;
     }
+    camIsActive = false;
 }
 
 void IFM3DViewer::takeSnapshot()
@@ -138,9 +140,14 @@ void IFM3DViewer::takeSnapshot()
     pcl::io::savePCDFileASCII(ssname.toStdString(), *temp);
 }
 
-void IFM3DViewer::closeCamera()
+void IFM3DViewer::stop()
 {
     camIsActive = false;
+}
+
+void IFM3DViewer::closeCamera()
+{
+    stop();
     qDebug() << cam->CancelSession();
 }
 

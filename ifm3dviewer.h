@@ -19,6 +19,7 @@ public:
     void openCamera(QString ifm3d_ip);
     void takeSnapshot();
     void closeCamera();
+    void stop();
     ~IFM3DViewer();
 protected:
     void virtual run() override;
