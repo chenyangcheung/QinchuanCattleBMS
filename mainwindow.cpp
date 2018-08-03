@@ -79,7 +79,7 @@ void MainWindow::openLocal()
 {
     QString file =
             QFileDialog::getOpenFileName(this, tr("Open file"),
-                                         QDir::homePath(),
+                                         ".",
                                          tr("Multimedia files(*)"));
 
     if (file.isEmpty())
@@ -127,13 +127,14 @@ void MainWindow::takeSnapShot3d()
 void MainWindow::addImage()
 {
     QString imageName = QFileDialog::getOpenFileName(this, tr("Open file"),
-                                             QDir::homePath(),
+                                             ".",
                                              tr("Image Files (*.png *.jpg *.jpeg *.bmp)"));
     QFileInfo fi(imageName);
     QLabel imgLabel;
     imgLabel.setText(fi.fileName());
 
     ui->imageListWidget->addItem(imageName);
+//    qDebug() << ui->imageListWidget->count();
 }
 
 void MainWindow::removeImage()
