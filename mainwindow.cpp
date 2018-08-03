@@ -43,7 +43,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->camera->setMediaPlayer(_player);
 
     // 2d image settings
-//    ui->imageListWidget->addItem("test");
+    imgGraphicsViewRatio = 1.0;
+
 
     // 3d camera settings
     ifm3dViewer.initViewer(ui->pclViewerWidget);
@@ -149,6 +150,9 @@ void MainWindow::removeImage()
 
 void MainWindow::display2dImage()
 {
+    // Recover imageGraphicsView size
+    ui->imageGraphicsView->scale(imgGraphicsViewRatio, imgGraphicsViewRatio);
+
     QString imagePath = ui->imageListWidget->currentItem()->text();
 
     if (imagePath.isEmpty())
@@ -173,12 +177,25 @@ void MainWindow::display2dImage()
                                 cvImg.cols * cvImg.channels(),
                                 QImage::Format_Indexed8);
     }
-//    QImage *displayedImg = new QImage(imagePath);
+
     QPixmap showedPixImg = QPixmap::fromImage(displayedImg);
     imageScene = new QGraphicsScene(this);
     imageScene->addPixmap(showedPixImg);
     imageScene->setSceneRect(showedPixImg.rect());
     ui->imageGraphicsView->setScene(imageScene);
+
+    // Scale in or out image
+    double imgWidth = cvImg.size().width;
+    double imgHeight = cvImg.size().height;
+    double ratio = 1.0;
+
+    if (imgWidth > imgHeight)
+        ratio = ui->imageGraphicsView->width() / imgWidth;
+    else
+        ratio = ui->imageGraphicsView->height() / imgHeight;
+
+    imgGraphicsViewRatio = 1 / ratio;
+    ui->imageGraphicsView->scale(ratio, ratio);
 }
 
 void MainWindow::wheelEvent(QWheelEvent *event)

@@ -34,6 +34,7 @@ private:
     SnapshotThread SnapshotThread;
     IFM3DViewer ifm3dViewer;
     QGraphicsScene *imageScene;
+    double imgGraphicsViewRatio;
 private slots:
     // 2d camera
     void openLocal();
