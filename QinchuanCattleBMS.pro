@@ -23,67 +23,6 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui
 
-# You need to set an environment variable called OPENCV_VERSION
-# whose value is OPENCV3 or OPENCV2 according to your opencv version
-CONFIG += $$(OPENCV_VERSION)
-
-OPENCV3 {
-    win32 {
-        message("Using win32 configuration")
-
-        # change this variable according to your path of opencv
-#        OPENCV_PATH = D:/opencv3.0/opencv # Note: update with the correct OpenCV version
-        OPENCV_PATH = $$(OPENCV_PATH)
-        # change this variable according to your version of opencv
-        LIBS_PATH = "$$OPENCV_PATH/build/x64/vc14/lib" #project compiled using Visual C++ 2015 64bit compiler
-
-        CONFIG(debug, debug|release) {
-            LIBS     += -L$$LIBS_PATH \
-                       -lopencv_world310d
-           }
-
-        CONFIG(release, debug|release) {
-            LIBS     += -L$$LIBS_PATH \
-                        -lopencv_world310
-           }
-    }
-
-}
-
-OPENCV2 {
-    win32 {
-        message("Using win32 configuration")
-
-        # change this variable according to your path of opencv
-#        OPENCV_PATH = C:/opencv # Note: update with the correct OpenCV version
-        OPENCV_PATH = $$(OPENCV_PATH)
-        # change this variable according to your version of opencv
-        LIBS_PATH = "$$OPENCV_PATH/build/x64/vc14/lib"
-
-        CONFIG(debug, debug|release) {
-            LIBS     += -L$$LIBS_PATH \
-                        -lopencv_core2413d \
-                        -lopencv_imgproc2413d \
-                        -lopencv_highgui2413d
-           }
-
-        CONFIG(release, debug|release) {
-            LIBS     += -L$$LIBS_PATH \
-                        -lopencv_core2413 \
-                        -lopencv_imgproc2413 \
-                        -lopencv_highgui2413
-           }
-    }
-}
-
-INCLUDEPATH += \
-    $$OPENCV_PATH/build/include/
-
-message("OpenCV version: $$(OPENCV_VERSION)")
-message("OpenCV path: $$OPENCV_PATH")
-#message("OpenCV include path: $$INCLUDEPATH")
-#message("Libraries: $$LIBS")
-
 # VLC configuration
 win32 {
         message("Using win32 configuration")
@@ -316,5 +255,19 @@ INCLUDEPATH += $$EIGEN_PATH/include/eigen3
 
 message("boost path: $$BOOST_PATH")
 
+# opencv library
+OPENCV_PATH = $$(IFM3D_INSTALL_PATH)
+
+LIBS += -L$$OPENCV_PATH/x64/vc14/lib \
+        -lopencv_core340 \
+        -lopencv_imgproc340 \
+        -lopencv_highgui340 \
+        -lopencv_imgcodecs340
+
+INCLUDEPATH += $$OPENCV_PATH/include
+
+message("opencv path: $$OPENCV_PATH")
+
 message("All include path: $$INCLUDEPATH")
 message("All Libraries: $$LIBS")
+

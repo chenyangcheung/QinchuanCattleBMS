@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>913</width>
-    <height>554</height>
+    <width>1102</width>
+    <height>733</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,7 +24,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="rgbCameraTab">
        <property name="sizePolicy">
@@ -105,6 +105,90 @@
        <attribute name="title">
         <string>2D Image</string>
        </attribute>
+       <layout class="QGridLayout" name="gridLayout_4">
+        <item row="0" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QListWidget" name="imageListWidget">
+            <property name="minimumSize">
+             <size>
+              <width>256</width>
+              <height>606</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>300</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Sunken</enum>
+            </property>
+            <property name="midLineWidth">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout">
+            <item>
+             <widget class="QGraphicsView" name="imageGraphicsView">
+              <property name="minimumSize">
+               <size>
+                <width>791</width>
+                <height>411</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="addImgButton">
+              <property name="minimumSize">
+               <size>
+                <width>93</width>
+                <height>28</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Add Image</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="rmImgButton">
+              <property name="minimumSize">
+               <size>
+                <width>93</width>
+                <height>28</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Remove Image</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_4">
+              <property name="minimumSize">
+               <size>
+                <width>93</width>
+                <height>28</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>PushButton</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="tofCameraTab">
        <attribute name="title">
@@ -187,7 +271,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>913</width>
+     <width>1102</width>
      <height>26</height>
     </rect>
    </property>
