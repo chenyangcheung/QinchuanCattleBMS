@@ -38,3 +38,8 @@ void SnapshotThread::takeSnapshot(VlcMediaPlayer *&player)
     else
         QMessageBox::warning(nullptr, tr("Warning"), tr("There are nothing to be taken! Please open a video or camera."));
 }
+
+QString SnapshotThread::getSnapshotName()
+{
+    return ssname;
+}

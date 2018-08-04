@@ -20,12 +20,14 @@ public:
     void takeSnapshot();
     void closeCamera();
     void stop();
+    QString getSnapshotName();
     ~IFM3DViewer();
 protected:
     void virtual run() override;
 private:
     QVTKWidget *vtkDisplay;
     QString filename;
+    QString ssname;
     QString IFM3D_IP;
     bool camIsActive;
     pcl::PointCloud<pcl::PointXYZI>::Ptr cloud;

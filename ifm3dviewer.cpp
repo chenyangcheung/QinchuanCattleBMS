@@ -130,11 +130,16 @@ void IFM3DViewer::takeSnapshot()
     // Generate image name according to current time
     QDateTime current_date_time = QDateTime::currentDateTime();
     QString current_date = current_date_time.toString("yyyy-MM-dd-hhmmsszzz");
-    QString ssname = qApp->applicationDirPath() + "/" + current_date + ".pcd";
+    ssname = qApp->applicationDirPath() + "/" + current_date + ".pcd";
 
     // Save pcd file by pcl library
     pcl::io::savePCDFileASCII(ssname.toStdString(), *temp);
     QMessageBox::information(nullptr, tr("Info"), tr("Save snapshot to ") + ssname);
+}
+
+QString IFM3DViewer::getSnapshotName()
+{
+    return ssname;
 }
 
 void IFM3DViewer::stop()

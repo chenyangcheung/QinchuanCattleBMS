@@ -34,20 +34,23 @@ private:
     SnapshotThread SnapshotThread;
     IFM3DViewer ifm3dViewer;
     QGraphicsScene *imageScene;
-    double imgGraphicsViewRatio;
+    unsigned int dataCount;
+    QString image2DName;    QString image3DName;
 private slots:
     // 2d camera
     void openLocal();
     void openUrl();
     void takeSnapShot();
     // 2d image
-    void addImage();
+    void add2DImage2Table();
     void removeImage();
     void display2dImage();
     // 3d camera
     void open3dCamera();
     void takeSnapShot3d();
     void adjustImageTableSize();
+    // Compute BM
+    void addData2Table();
 };
 
 #endif // MAINWINDOW_H

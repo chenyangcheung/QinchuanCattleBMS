@@ -38,6 +38,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // global settings
+    dataCount = 0;      // init counter with 0
+
     // 2d camera settings
     ui->camera->setStyleSheet("border:1px solid black");
     _instance = new VlcInstance(VlcCommon::args(), this);
@@ -46,10 +49,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->camera->setMediaPlayer(_player);
 
     // 2d image settings
-    imgGraphicsViewRatio = 1.0;
     ui->imageTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->imageTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
-    ui->imageTableWidget->setColumnCount(3);
+    ui->imageTableWidget->setColumnCount(2);
 //    ui->imageTableWidget->setColumnWidth(0, 10);
 //    ui->imageTableWidget->setFixedWidth();
 
@@ -58,17 +60,19 @@ MainWindow::MainWindow(QWidget *parent) :
     font.setBold(true);
     ui->imageTableWidget->horizontalHeader()->setFont(font);
 
-    ui->imageTableWidget->setColumnWidth(0, 31);
-    ui->imageTableWidget->setColumnWidth(1, 105);
-//    ui->imageTableWidget->resizeColumnsToContents();
-    ui->imageTableWidget->horizontalHeader()->setSectionsClickable(false);
+//    ui->imageTableWidget->setColumnWidth(0, 31);
+    ui->imageTableWidget->setColumnWidth(0, 115);
     ui->imageTableWidget->horizontalHeader()->setStretchLastSection(true);
-    ui->imageTableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section{background:skyblue;}");
-    ui->imageTableWidget->setStyleSheet("selection-background-color:lightblue;");
+//    ui->imageTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->imageTableWidget->horizontalHeader()->setSectionsClickable(false);
+//    ui->imageTableWidget->horizontalHeader()->setStretchLastSection(true);
+    ui->imageTableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section{background:lightgray;}");
+    ui->imageTableWidget->setStyleSheet("selection-background-color:skyblue;");
+
 
     QStringList tableHeader;
 
-    tableHeader << tr("ID") << tr("2D Images") << tr("3D Images");
+    tableHeader << tr("2D Images") << tr("3D Images");
     ui->imageTableWidget->setHorizontalHeaderLabels(tableHeader);
 
     // 3d camera settings
@@ -82,9 +86,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionOpen_Camera, &QAction::triggered, this, &MainWindow::openUrl);
 
     // connects of 2d image
-    connect(ui->addImgButton, &QPushButton::clicked, this, &MainWindow::addImage);
+//    connect(ui->addImgButton, &QPushButton::clicked, this, &MainWindow::addImage);
+//    connect(ui->imageTableWidget, &QTableWidget::itemActivated, this, &MainWindow::display2dImage);
+//    connect(ui->rmImgButton, &QPushButton::clicked, this, &MainWindow::removeImage);
     connect(ui->imageTableWidget, &QTableWidget::itemActivated, this, &MainWindow::display2dImage);
-    connect(ui->rmImgButton, &QPushButton::clicked, this, &MainWindow::removeImage);
 
     // connects of 3d camera
     connect(ui->openPCD, &QPushButton::clicked, &ifm3dViewer, &IFM3DViewer::openLocal);
@@ -133,6 +138,10 @@ void MainWindow::takeSnapShot()
 {
     // Pass player to snapshot thread
     SnapshotThread.takeSnapshot(_player);
+
+    // record name of 2D snapshot
+    QFileInfo fi(SnapshotThread.getSnapshotName());
+    image2DName = fi.fileName();
 }
 
 void MainWindow::open3dCamera()
@@ -146,11 +155,26 @@ void MainWindow::open3dCamera()
 
 void MainWindow::takeSnapShot3d()
 {
+    // take 3D snapshot
     ifm3dViewer.takeSnapshot();
+
+    // record name of 3D snapshot
+    QFileInfo fi(ifm3dViewer.getSnapshotName());
+    image3DName = fi.fileName();
+
+    // add data into table
+    if (image2DName.isEmpty())
+        return;
+    if (image3DName.isEmpty())
+        return;
+    addData2Table();
 }
 
-void MainWindow::addImage()
+void MainWindow::add2DImage2Table()
 {
+    dataCount++;
+//    imgName = SnapshotThread.ssname;
+
 //    QString imageName = QFileDialog::getOpenFileName(this, tr("Open file"),
 //                                             ".",
 //                                             tr("Image Files (*.png *.jpg *.jpeg *.bmp)"));
@@ -177,52 +201,39 @@ void MainWindow::removeImage()
 
 void MainWindow::display2dImage()
 {
-    // Recover imageGraphicsView size
-//    ui->imageGraphicsView->scale(imgGraphicsViewRatio, imgGraphicsViewRatio);
+    QString appPath = qApp->applicationDirPath();
+    QString imagePath = appPath + "/" + ui->imageTableWidget->selectedItems().at(0)->text();
+    qDebug() << imagePath;
+    if (imagePath.isEmpty())
+        return;
 
-//    QString imagePath = ui->imageTableWidget->currentItem()->text();
+    cv::Mat cvImg = cv::imread(imagePath.toLocal8Bit().toStdString());
+    QImage displayedImg;
+    cv::Mat tempRgb;
+    // Convert Mat BGR to QImage RGB
+    if (cvImg.channels() == 3)
+    {
+        cv::cvtColor(cvImg, tempRgb, CV_BGR2RGB);
+        displayedImg = QImage((const unsigned char*)(tempRgb.data),
+                                tempRgb.cols, tempRgb.rows,
+                                tempRgb.cols * tempRgb.channels(),
+                                QImage::Format_RGB888);
+    }
+    else
+    {
+        displayedImg = QImage((const unsigned char*)(cvImg.data),
+                                cvImg.cols, cvImg.rows,
+                                cvImg.cols * cvImg.channels(),
+                                QImage::Format_Indexed8);
+    }
 
-//    if (imagePath.isEmpty())
-//        return;
-
-//    cv::Mat cvImg = cv::imread(imagePath.toLocal8Bit().toStdString());
-//    QImage displayedImg;
-//    cv::Mat tempRgb;
-//    // Convert Mat BGR to QImage RGB
-//    if (cvImg.channels() == 3)
-//    {
-//        cv::cvtColor(cvImg, tempRgb, CV_BGR2RGB);
-//        displayedImg = QImage((const unsigned char*)(tempRgb.data),
-//                                tempRgb.cols, tempRgb.rows,
-//                                tempRgb.cols * tempRgb.channels(),
-//                                QImage::Format_RGB888);
-//    }
-//    else
-//    {
-//        displayedImg = QImage((const unsigned char*)(cvImg.data),
-//                                cvImg.cols, cvImg.rows,
-//                                cvImg.cols * cvImg.channels(),
-//                                QImage::Format_Indexed8);
-//    }
-
-//    QPixmap showedPixImg = QPixmap::fromImage(displayedImg);
-//    imageScene = new QGraphicsScene(this);
-//    imageScene->addPixmap(showedPixImg);
-//    imageScene->setSceneRect(showedPixImg.rect());
-//    ui->imageGraphicsView->setScene(imageScene);
-
-//    // Scale in or out image
-//    double imgWidth = cvImg.size().width;
-//    double imgHeight = cvImg.size().height;
-//    double ratio = 1.0;
-
-//    if (imgWidth > imgHeight)
-//        ratio = ui->imageGraphicsView->width() / imgWidth;
-//    else
-//        ratio = ui->imageGraphicsView->height() / imgHeight;
-
-//    imgGraphicsViewRatio = 1 / ratio;
-//    ui->imageGraphicsView->scale(ratio, ratio);
+    QPixmap showedPixImg = QPixmap::fromImage(displayedImg);
+    imageScene = new QGraphicsScene(this);
+    imageScene->addPixmap(showedPixImg);
+    imageScene->setSceneRect(showedPixImg.rect());
+    ui->imageGraphicsView->setScene(imageScene);
+    ui->imageGraphicsView->fitInView(imageScene->itemsBoundingRect(), Qt::KeepAspectRatio);
+    ui->imageGraphicsView->show();
 }
 
 void MainWindow::wheelEvent(QWheelEvent *event)
@@ -242,5 +253,19 @@ void MainWindow::wheelEvent(QWheelEvent *event)
 
 void MainWindow::adjustImageTableSize()
 {
+//    imageScene->addEllipse()
+}
 
+void MainWindow::addData2Table()
+{
+    dataCount = dataCount + 1;
+    int iTRowCount = ui->imageTableWidget->rowCount();
+    ui->imageTableWidget->insertRow(iTRowCount);
+//    QTableWidgetItem *idItem = new QTableWidgetItem(QString::number(dataCount, 10));
+    QTableWidgetItem *img2DItem = new QTableWidgetItem(image2DName);
+    QTableWidgetItem *img3DItem = new QTableWidgetItem(image3DName);
+
+//    ui->imageTableWidget->setItem(iTRowCount, 0, idItem);
+    ui->imageTableWidget->setItem(iTRowCount, 0, img2DItem);
+    ui->imageTableWidget->setItem(iTRowCount, 1, img3DItem);
 }

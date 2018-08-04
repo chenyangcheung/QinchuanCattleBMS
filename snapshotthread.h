@@ -11,6 +11,7 @@ class SnapshotThread : public QThread
 public:
     SnapshotThread(QObject *parent = 0);
     void takeSnapshot(VlcMediaPlayer *&player);
+    QString getSnapshotName();
 protected:
     void virtual run() override;
 private:
