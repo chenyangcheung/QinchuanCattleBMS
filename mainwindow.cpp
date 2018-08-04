@@ -9,6 +9,8 @@
 #include <QKeySequence>
 #include <QFileInfo>
 #include <QLabel>
+#include <QFont>
+#include <QHeaderView>
 
 // VLCQt library
 #include <VLCQtCore/Common.h>
@@ -37,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     // 2d camera settings
+    ui->camera->setStyleSheet("border:1px solid black");
     _instance = new VlcInstance(VlcCommon::args(), this);
     _player = new VlcMediaPlayer(_instance);
     _player->setVideoWidget(ui->camera);
@@ -44,7 +47,29 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // 2d image settings
     imgGraphicsViewRatio = 1.0;
+    ui->imageTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->imageTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->imageTableWidget->setColumnCount(3);
+//    ui->imageTableWidget->setColumnWidth(0, 10);
+//    ui->imageTableWidget->setFixedWidth();
 
+    // settings of header
+    QFont font = ui->imageTableWidget->horizontalHeader()->font();
+    font.setBold(true);
+    ui->imageTableWidget->horizontalHeader()->setFont(font);
+
+    ui->imageTableWidget->setColumnWidth(0, 31);
+    ui->imageTableWidget->setColumnWidth(1, 105);
+//    ui->imageTableWidget->resizeColumnsToContents();
+    ui->imageTableWidget->horizontalHeader()->setSectionsClickable(false);
+    ui->imageTableWidget->horizontalHeader()->setStretchLastSection(true);
+    ui->imageTableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section{background:skyblue;}");
+    ui->imageTableWidget->setStyleSheet("selection-background-color:lightblue;");
+
+    QStringList tableHeader;
+
+    tableHeader << tr("ID") << tr("2D Images") << tr("3D Images");
+    ui->imageTableWidget->setHorizontalHeaderLabels(tableHeader);
 
     // 3d camera settings
     ifm3dViewer.initViewer(ui->pclViewerWidget);
@@ -58,7 +83,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // connects of 2d image
     connect(ui->addImgButton, &QPushButton::clicked, this, &MainWindow::addImage);
-    connect(ui->imageListWidget, &QListWidget::itemActivated, this, &MainWindow::display2dImage);
+    connect(ui->imageTableWidget, &QTableWidget::itemActivated, this, &MainWindow::display2dImage);
     connect(ui->rmImgButton, &QPushButton::clicked, this, &MainWindow::removeImage);
 
     // connects of 3d camera
@@ -126,77 +151,78 @@ void MainWindow::takeSnapShot3d()
 
 void MainWindow::addImage()
 {
-    QString imageName = QFileDialog::getOpenFileName(this, tr("Open file"),
-                                             ".",
-                                             tr("Image Files (*.png *.jpg *.jpeg *.bmp)"));
-    QFileInfo fi(imageName);
-    QLabel imgLabel;
-    imgLabel.setText(fi.fileName());
+//    QString imageName = QFileDialog::getOpenFileName(this, tr("Open file"),
+//                                             ".",
+//                                             tr("Image Files (*.png *.jpg *.jpeg *.bmp)"));
+//    QFileInfo fi(imageName);
+//    QLabel imgLabel;
+//    imgLabel.setText(fi.fileName());
 
-    ui->imageListWidget->addItem(imageName);
-//    qDebug() << ui->imageListWidget->count();
+//    ui->imageTableWidget->addItem(imageName);
+//    ui->imageTableWidget->insertRow(0);
+//    qDebug() << ui->imageTableWidget->count();
 }
 
 void MainWindow::removeImage()
 {
-    QListWidgetItem *curItem = ui->imageListWidget->currentItem();
-    if (curItem == nullptr)
-    {
-        QMessageBox::information(nullptr, tr("Info"), tr("There are no item selected!"));
-        return;
-    }
-    ui->imageListWidget->removeItemWidget(ui->imageListWidget->currentItem());
-    delete ui->imageListWidget->currentItem();
+//    QListWidgetItem *curItem = ui->imageTableWidget->currentItem();
+//    if (curItem == nullptr)
+//    {
+//        QMessageBox::information(nullptr, tr("Info"), tr("There are no item selected!"));
+//        return;
+//    }
+//    ui->imageTableWidget->removeItemWidget(ui->imageTableWidget->currentItem());
+//    delete ui->imageTableWidget->currentItem();
 }
 
 void MainWindow::display2dImage()
 {
     // Recover imageGraphicsView size
-    ui->imageGraphicsView->scale(imgGraphicsViewRatio, imgGraphicsViewRatio);
+//    ui->imageGraphicsView->scale(imgGraphicsViewRatio, imgGraphicsViewRatio);
 
-    QString imagePath = ui->imageListWidget->currentItem()->text();
+//    QString imagePath = ui->imageTableWidget->currentItem()->text();
 
-    if (imagePath.isEmpty())
-        return;
+//    if (imagePath.isEmpty())
+//        return;
 
-    cv::Mat cvImg = cv::imread(imagePath.toLocal8Bit().toStdString());
-    QImage displayedImg;
-    cv::Mat tempRgb;
-    // Convert Mat BGR to QImage RGB
-    if (cvImg.channels() == 3)
-    {
-        cv::cvtColor(cvImg, tempRgb, CV_BGR2RGB);
-        displayedImg = QImage((const unsigned char*)(tempRgb.data),
-                                tempRgb.cols, tempRgb.rows,
-                                tempRgb.cols * tempRgb.channels(),
-                                QImage::Format_RGB888);
-    }
-    else
-    {
-        displayedImg = QImage((const unsigned char*)(cvImg.data),
-                                cvImg.cols, cvImg.rows,
-                                cvImg.cols * cvImg.channels(),
-                                QImage::Format_Indexed8);
-    }
+//    cv::Mat cvImg = cv::imread(imagePath.toLocal8Bit().toStdString());
+//    QImage displayedImg;
+//    cv::Mat tempRgb;
+//    // Convert Mat BGR to QImage RGB
+//    if (cvImg.channels() == 3)
+//    {
+//        cv::cvtColor(cvImg, tempRgb, CV_BGR2RGB);
+//        displayedImg = QImage((const unsigned char*)(tempRgb.data),
+//                                tempRgb.cols, tempRgb.rows,
+//                                tempRgb.cols * tempRgb.channels(),
+//                                QImage::Format_RGB888);
+//    }
+//    else
+//    {
+//        displayedImg = QImage((const unsigned char*)(cvImg.data),
+//                                cvImg.cols, cvImg.rows,
+//                                cvImg.cols * cvImg.channels(),
+//                                QImage::Format_Indexed8);
+//    }
 
-    QPixmap showedPixImg = QPixmap::fromImage(displayedImg);
-    imageScene = new QGraphicsScene(this);
-    imageScene->addPixmap(showedPixImg);
-    imageScene->setSceneRect(showedPixImg.rect());
-    ui->imageGraphicsView->setScene(imageScene);
+//    QPixmap showedPixImg = QPixmap::fromImage(displayedImg);
+//    imageScene = new QGraphicsScene(this);
+//    imageScene->addPixmap(showedPixImg);
+//    imageScene->setSceneRect(showedPixImg.rect());
+//    ui->imageGraphicsView->setScene(imageScene);
 
-    // Scale in or out image
-    double imgWidth = cvImg.size().width;
-    double imgHeight = cvImg.size().height;
-    double ratio = 1.0;
+//    // Scale in or out image
+//    double imgWidth = cvImg.size().width;
+//    double imgHeight = cvImg.size().height;
+//    double ratio = 1.0;
 
-    if (imgWidth > imgHeight)
-        ratio = ui->imageGraphicsView->width() / imgWidth;
-    else
-        ratio = ui->imageGraphicsView->height() / imgHeight;
+//    if (imgWidth > imgHeight)
+//        ratio = ui->imageGraphicsView->width() / imgWidth;
+//    else
+//        ratio = ui->imageGraphicsView->height() / imgHeight;
 
-    imgGraphicsViewRatio = 1 / ratio;
-    ui->imageGraphicsView->scale(ratio, ratio);
+//    imgGraphicsViewRatio = 1 / ratio;
+//    ui->imageGraphicsView->scale(ratio, ratio);
 }
 
 void MainWindow::wheelEvent(QWheelEvent *event)
@@ -212,4 +238,9 @@ void MainWindow::wheelEvent(QWheelEvent *event)
             ui->imageGraphicsView->scale(0.9, 0.9);
         }
     }
+}
+
+void MainWindow::adjustImageTableSize()
+{
+
 }

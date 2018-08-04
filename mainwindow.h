@@ -47,6 +47,7 @@ private slots:
     // 3d camera
     void open3dCamera();
     void takeSnapShot3d();
+    void adjustImageTableSize();
 };
 
 #endif // MAINWINDOW_H
