@@ -93,7 +93,7 @@ void MainWindow::openLocal()
 void MainWindow::openUrl()
 {
     QString url =
-            QInputDialog::getText(this, tr("Open Url"), tr("Enter the URL you want to play"), QLineEdit::Normal, "rtsp://admin:*200wan*@172.29.23.12:554/MPEG-4/ch1/main/av_stream");
+            QInputDialog::getText(this, tr("Open Url"), tr("Enter the URL you want to play"), QLineEdit::Normal, "rtsp://admin:*200wan*@192.168.1.2:554/MPEG-4/ch1/main/av_stream");
 
     if (url.isEmpty())
         return;
@@ -113,7 +113,7 @@ void MainWindow::takeSnapShot()
 void MainWindow::open3dCamera()
 {
     QString ip_add =
-            QInputDialog::getText(this, tr("Open 3D Camera"), tr("Enter the IP address of your camera"), QLineEdit::Normal, "169.254.58.137");
+            QInputDialog::getText(this, tr("Open 3D Camera"), tr("Enter the IP address of your camera"), QLineEdit::Normal, "192.168.1.3");
     if (ip_add.isEmpty())
         return;
     ifm3dViewer.openCamera(ip_add);
