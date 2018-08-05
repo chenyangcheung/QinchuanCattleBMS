@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include <QButtonGroup>
 #include <QVector>
+#include <QCheckBox>
 
 #include "snapshotthread.h"
 #include "ifm3dviewer.h"
@@ -39,8 +40,10 @@ private:
     QGraphicsScene *imageScene;
     ImgMarkScene *imgMarkScene;
     QButtonGroup *ptRatioBtnGroup;
+    QButtonGroup *ptCheckboxGroup;
     unsigned int dataCount;
     QString image2DName;    QString image3DName;
+//    QVector<QCheckBox*> ptCheckboxList;
     QVector<QPoint> pointsInfoList;
 private slots:
     // 2d camera
@@ -60,6 +63,8 @@ private slots:
     void toggleSelectedFlag();
     void updatePointInfo(qreal x, qreal y);
 //    void addMark2Img(qreal x, qreal y);
+    void savePointInfo(bool checked);
+    void clearAll();
 };
 
 #endif // MAINWINDOW_H

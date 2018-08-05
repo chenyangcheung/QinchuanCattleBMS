@@ -16,12 +16,14 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     snapshotthread.cpp \
     ifm3dviewer.cpp \
-    imgmarkscene.cpp
+    imgmarkscene.cpp \
+    markitem.cpp
 
 HEADERS  += mainwindow.h \
     snapshotthread.h \
     ifm3dviewer.h \
-    imgmarkscene.h
+    imgmarkscene.h \
+    markitem.h
 
 FORMS    += mainwindow.ui
 

@@ -85,6 +85,17 @@ MainWindow::MainWindow(QWidget *parent) :
     ptRatioBtnGroup->addButton(ui->point7Ratio, 6);
     ptRatioBtnGroup->addButton(ui->point8Ratio, 7);
 
+    ptCheckboxGroup = new QButtonGroup(this);
+    ptCheckboxGroup->setExclusive(false);
+    ptCheckboxGroup->addButton(ui->point1Checkbox, 0);
+    ptCheckboxGroup->addButton(ui->point2Checkbox, 1);
+    ptCheckboxGroup->addButton(ui->point3Checkbox, 2);
+    ptCheckboxGroup->addButton(ui->point4Checkbox, 3);
+    ptCheckboxGroup->addButton(ui->point5Checkbox, 4);
+    ptCheckboxGroup->addButton(ui->point6Checkbox, 5);
+    ptCheckboxGroup->addButton(ui->point7Checkbox, 6);
+    ptCheckboxGroup->addButton(ui->point8Checkbox, 7);
+
     // init points info list
     for (int i = 0; i < 8; i++)
     {
@@ -119,6 +130,14 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->point8Ratio, &QRadioButton::clicked, this, &MainWindow::toggleSelectedFlag);
 
     connect(imgMarkScene, &ImgMarkScene::pointInfo, this, &MainWindow::updatePointInfo);
+    connect(ui->point1Checkbox, &QCheckBox::clicked, this, &MainWindow::savePointInfo);
+    connect(ui->point2Checkbox, &QCheckBox::clicked, this, &MainWindow::savePointInfo);
+    connect(ui->point3Checkbox, &QCheckBox::clicked, this, &MainWindow::savePointInfo);
+    connect(ui->point4Checkbox, &QCheckBox::clicked, this, &MainWindow::savePointInfo);
+    connect(ui->point5Checkbox, &QCheckBox::clicked, this, &MainWindow::savePointInfo);
+    connect(ui->point6Checkbox, &QCheckBox::clicked, this, &MainWindow::savePointInfo);
+    connect(ui->point7Checkbox, &QCheckBox::clicked, this, &MainWindow::savePointInfo);
+    connect(ui->point8Checkbox, &QCheckBox::clicked, this, &MainWindow::savePointInfo);
 
     // connects of 3d camera
     connect(ui->openPCD, &QPushButton::clicked, &ifm3dViewer, &IFM3DViewer::openLocal);
@@ -231,7 +250,7 @@ void MainWindow::removeImage()
 void MainWindow::display2dImage()
 {
     // TODO: clear ratio buttons
-
+    clearAll();
     QString appPath = qApp->applicationDirPath();
     QString imagePath = appPath + "/" + ui->imageTableWidget->selectedItems().at(0)->text();
     qDebug() << imagePath;
@@ -264,10 +283,6 @@ void MainWindow::display2dImage()
     ui->imageGraphicsView->setScene(imgMarkScene);
     ui->imageGraphicsView->fitInView(imgMarkScene->itemsBoundingRect(), Qt::KeepAspectRatio);
 //    ui->imageGraphicsView->show();
-    int x = 200, y =200;
-    int pW = 5; int R = 20;
-    imgMarkScene->addLine(x, y, x, y, QPen(Qt::black, pW));
-    imgMarkScene->addEllipse(x - 20, y - 20, R * 2, R * 2, QPen(Qt::black, pW));
 }
 
 void MainWindow::wheelEvent(QWheelEvent *event)
@@ -311,8 +326,56 @@ void MainWindow::toggleSelectedFlag()
 
 void MainWindow::updatePointInfo(qreal x, qreal y)
 {
+    qDebug() << imgMarkScene->getPrevItem()->getSavedFlag();
+    if (imgMarkScene->getPrevItem()->getSavedFlag())
+        return;
     int curRatioID = ptRatioBtnGroup->checkedId();
     pointsInfoList[curRatioID].setX(x);
     pointsInfoList[curRatioID].setY(y);
     qDebug() << "Updata Point " << curRatioID << ": "<< pointsInfoList[curRatioID];
+}
+
+void MainWindow::savePointInfo(bool checked)
+{
+    int intCurRatioID = ptRatioBtnGroup->checkedId();
+    if (intCurRatioID == -1)
+    {
+        QMessageBox::warning(nullptr, tr("Warning"), tr("Please select which point you want to set firstly!"));
+        ptCheckboxGroup->checkedButton()->setChecked(false);
+        return;
+    }
+
+    if (checked)
+    {
+        if (imgMarkScene->getPrevItem() == Q_NULLPTR)
+        {
+            QString curRatioID = QString::number(intCurRatioID, 10);
+
+            QMessageBox::warning(nullptr, tr("Warning"), tr("Please select position for point ") + curRatioID);
+            ptCheckboxGroup->checkedButton()->setChecked(false);
+            return;
+        }
+        qDebug() << "Checked";
+        imgMarkScene->getPrevItem()->setSavedFlag(true);
+//        imgMarkScene->resetPrevItem();
+//        int nextID = ptRatioBtnGroup->checkedId() + 1;
+//        if (nextID == 8)    nextID = 0;
+//        ptRatioBtnGroup->button(nextID)->setChecked(true);
+    }
+    else
+    {
+        qDebug() << "Unchecked";
+        if (imgMarkScene->getPrevItem() != Q_NULLPTR)
+            imgMarkScene->getPrevItem()->setSavedFlag(false);
+    }
+}
+
+void MainWindow::clearAll()
+{
+    imgMarkScene->clear();
+    imgMarkScene->resetPrevItem();
+    if (ptRatioBtnGroup->checkedButton() != Q_NULLPTR)
+        ptRatioBtnGroup->checkedButton()->setChecked(false);
+    for (int i = 0; i < 8; i++)
+        ptCheckboxGroup->button(i)->setChecked(false);
 }

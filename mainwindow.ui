@@ -721,7 +721,7 @@
               <item row="0" column="2">
                <layout class="QHBoxLayout" name="horizontalLayout_6">
                 <item>
-                 <widget class="QCheckBox" name="checkBox_7">
+                 <widget class="QCheckBox" name="point2Checkbox">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -788,7 +788,7 @@
               <item row="0" column="3">
                <layout class="QHBoxLayout" name="horizontalLayout_7">
                 <item>
-                 <widget class="QCheckBox" name="point1CheckBox">
+                 <widget class="QCheckBox" name="point1Checkbox">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -855,7 +855,7 @@
               <item row="1" column="0">
                <layout class="QHBoxLayout" name="horizontalLayout_8">
                 <item>
-                 <widget class="QCheckBox" name="point8Label">
+                 <widget class="QCheckBox" name="point8Checkbox">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -880,7 +880,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLabel" name="label_5">
+                 <widget class="QLabel" name="point8Label">
                   <property name="minimumSize">
                    <size>
                     <width>61</width>
@@ -947,7 +947,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLabel" name="label_6">
+                 <widget class="QLabel" name="point7Label">
                   <property name="minimumSize">
                    <size>
                     <width>61</width>
