@@ -15,11 +15,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     snapshotthread.cpp \
-    ifm3dviewer.cpp
+    ifm3dviewer.cpp \
+    imgmarkscene.cpp
 
 HEADERS  += mainwindow.h \
     snapshotthread.h \
-    ifm3dviewer.h
+    ifm3dviewer.h \
+    imgmarkscene.h
 
 FORMS    += mainwindow.ui
 

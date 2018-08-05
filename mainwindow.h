@@ -3,8 +3,12 @@
 
 #include <QGraphicsScene>
 #include <QMainWindow>
+#include <QButtonGroup>
+#include <QVector>
+
 #include "snapshotthread.h"
 #include "ifm3dviewer.h"
+#include "imgmarkscene.h"
 
 namespace Ui {
 class MainWindow;
@@ -25,7 +29,6 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     void wheelEvent(QWheelEvent *event);
     ~MainWindow();
-
 private:
     Ui::MainWindow *ui;
     VlcInstance *_instance;
@@ -34,8 +37,11 @@ private:
     SnapshotThread SnapshotThread;
     IFM3DViewer ifm3dViewer;
     QGraphicsScene *imageScene;
+    ImgMarkScene *imgMarkScene;
+    QButtonGroup *ptRatioBtnGroup;
     unsigned int dataCount;
     QString image2DName;    QString image3DName;
+    QVector<QPoint> pointsInfoList;
 private slots:
     // 2d camera
     void openLocal();
@@ -51,6 +57,9 @@ private slots:
     void adjustImageTableSize();
     // Compute BM
     void addData2Table();
+    void toggleSelectedFlag();
+    void updatePointInfo(qreal x, qreal y);
+//    void addMark2Img(qreal x, qreal y);
 };
 
 #endif // MAINWINDOW_H

@@ -52,8 +52,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->imageTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->imageTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->imageTableWidget->setColumnCount(2);
-//    ui->imageTableWidget->setColumnWidth(0, 10);
-//    ui->imageTableWidget->setFixedWidth();
 
     // settings of header
     QFont font = ui->imageTableWidget->horizontalHeader()->font();
@@ -75,7 +73,28 @@ MainWindow::MainWindow(QWidget *parent) :
     tableHeader << tr("2D Images") << tr("3D Images");
     ui->imageTableWidget->setHorizontalHeaderLabels(tableHeader);
 
+    imgMarkScene = new ImgMarkScene(this);
+
+    ptRatioBtnGroup = new QButtonGroup(this);
+    ptRatioBtnGroup->addButton(ui->point1Ratio, 0);
+    ptRatioBtnGroup->addButton(ui->point2Ratio, 1);
+    ptRatioBtnGroup->addButton(ui->point3Ratio, 2);
+    ptRatioBtnGroup->addButton(ui->point4Ratio, 3);
+    ptRatioBtnGroup->addButton(ui->point5Ratio, 4);
+    ptRatioBtnGroup->addButton(ui->point6Ratio, 5);
+    ptRatioBtnGroup->addButton(ui->point7Ratio, 6);
+    ptRatioBtnGroup->addButton(ui->point8Ratio, 7);
+
+    // init points info list
+    for (int i = 0; i < 8; i++)
+    {
+        QPoint p(0, 0);
+        pointsInfoList.push_back(p);
+    }
+//    spScene = new SelectPointScene(0);
+
     // 3d camera settings
+//    ImgMarkScene *iks = new ImgMarkScene();
     ifm3dViewer.initViewer(ui->pclViewerWidget);
 
     // connects of 2d camera
@@ -85,11 +104,21 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionOpen_Video, &QAction::triggered, this, &MainWindow::openLocal);
     connect(ui->actionOpen_Camera, &QAction::triggered, this, &MainWindow::openUrl);
 
-    // connects of 2d image
+    // connects of compute body measurement
 //    connect(ui->addImgButton, &QPushButton::clicked, this, &MainWindow::addImage);
 //    connect(ui->imageTableWidget, &QTableWidget::itemActivated, this, &MainWindow::display2dImage);
 //    connect(ui->rmImgButton, &QPushButton::clicked, this, &MainWindow::removeImage);
     connect(ui->imageTableWidget, &QTableWidget::itemActivated, this, &MainWindow::display2dImage);
+    connect(ui->point1Ratio, &QRadioButton::clicked, this, &MainWindow::toggleSelectedFlag);
+    connect(ui->point2Ratio, &QRadioButton::clicked, this, &MainWindow::toggleSelectedFlag);
+    connect(ui->point3Ratio, &QRadioButton::clicked, this, &MainWindow::toggleSelectedFlag);
+    connect(ui->point4Ratio, &QRadioButton::clicked, this, &MainWindow::toggleSelectedFlag);
+    connect(ui->point5Ratio, &QRadioButton::clicked, this, &MainWindow::toggleSelectedFlag);
+    connect(ui->point6Ratio, &QRadioButton::clicked, this, &MainWindow::toggleSelectedFlag);
+    connect(ui->point7Ratio, &QRadioButton::clicked, this, &MainWindow::toggleSelectedFlag);
+    connect(ui->point8Ratio, &QRadioButton::clicked, this, &MainWindow::toggleSelectedFlag);
+
+    connect(imgMarkScene, &ImgMarkScene::pointInfo, this, &MainWindow::updatePointInfo);
 
     // connects of 3d camera
     connect(ui->openPCD, &QPushButton::clicked, &ifm3dViewer, &IFM3DViewer::openLocal);
@@ -201,6 +230,8 @@ void MainWindow::removeImage()
 
 void MainWindow::display2dImage()
 {
+    // TODO: clear ratio buttons
+
     QString appPath = qApp->applicationDirPath();
     QString imagePath = appPath + "/" + ui->imageTableWidget->selectedItems().at(0)->text();
     qDebug() << imagePath;
@@ -228,12 +259,15 @@ void MainWindow::display2dImage()
     }
 
     QPixmap showedPixImg = QPixmap::fromImage(displayedImg);
-    imageScene = new QGraphicsScene(this);
-    imageScene->addPixmap(showedPixImg);
-    imageScene->setSceneRect(showedPixImg.rect());
-    ui->imageGraphicsView->setScene(imageScene);
-    ui->imageGraphicsView->fitInView(imageScene->itemsBoundingRect(), Qt::KeepAspectRatio);
-    ui->imageGraphicsView->show();
+    imgMarkScene->addPixmap(showedPixImg);
+    imgMarkScene->setSceneRect(showedPixImg.rect());
+    ui->imageGraphicsView->setScene(imgMarkScene);
+    ui->imageGraphicsView->fitInView(imgMarkScene->itemsBoundingRect(), Qt::KeepAspectRatio);
+//    ui->imageGraphicsView->show();
+    int x = 200, y =200;
+    int pW = 5; int R = 20;
+    imgMarkScene->addLine(x, y, x, y, QPen(Qt::black, pW));
+    imgMarkScene->addEllipse(x - 20, y - 20, R * 2, R * 2, QPen(Qt::black, pW));
 }
 
 void MainWindow::wheelEvent(QWheelEvent *event)
@@ -268,4 +302,17 @@ void MainWindow::addData2Table()
 //    ui->imageTableWidget->setItem(iTRowCount, 0, idItem);
     ui->imageTableWidget->setItem(iTRowCount, 0, img2DItem);
     ui->imageTableWidget->setItem(iTRowCount, 1, img3DItem);
+}
+
+void MainWindow::toggleSelectedFlag()
+{
+    imgMarkScene->setSelectedFlag(true);
+}
+
+void MainWindow::updatePointInfo(qreal x, qreal y)
+{
+    int curRatioID = ptRatioBtnGroup->checkedId();
+    pointsInfoList[curRatioID].setX(x);
+    pointsInfoList[curRatioID].setY(y);
+    qDebug() << "Updata Point " << curRatioID << ": "<< pointsInfoList[curRatioID];
 }
