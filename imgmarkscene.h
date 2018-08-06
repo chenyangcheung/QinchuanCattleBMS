@@ -11,8 +11,13 @@ public:
     explicit ImgMarkScene(QObject *parent = 0);
     void addMark2Img(qreal x, qreal y);
     void setSelectedFlag(bool f);
+    bool getSelectedFlag();
     MarkItem* getPrevItem();
     void resetPrevItem();
+    bool ifAllSaved();
+    void resetAllSaved();
+    void setAllSaved();
+    int curItemID;
     ~ImgMarkScene();
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
@@ -22,6 +27,7 @@ private:
     bool ifSelectedPoint;
 //    QGraphicsItem *prevItem;
     MarkItem *prevItem;
+    bool allItemSaved;
 signals:
     void pointInfo(qreal x, qreal y);
 };

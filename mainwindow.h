@@ -10,6 +10,7 @@
 #include "snapshotthread.h"
 #include "ifm3dviewer.h"
 #include "imgmarkscene.h"
+#include "imgpoint.h"
 
 namespace Ui {
 class MainWindow;
@@ -43,8 +44,9 @@ private:
     QButtonGroup *ptCheckboxGroup;
     unsigned int dataCount;
     QString image2DName;    QString image3DName;
+    QPoint curPos;
 //    QVector<QCheckBox*> ptCheckboxList;
-    QVector<QPoint> pointsInfoList;
+    QVector<ImgPoint> pointList;
 private slots:
     // 2d camera
     void openLocal();
@@ -64,6 +66,7 @@ private slots:
     void updatePointInfo(qreal x, qreal y);
 //    void addMark2Img(qreal x, qreal y);
     void savePointInfo(bool checked);
+    bool checkIfAllSaved();
     void clearAll();
 };
 

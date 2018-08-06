@@ -5,7 +5,7 @@
 class MarkItem : public QGraphicsItem
 {
 public:
-    MarkItem(qreal x_ = 0, qreal y_ = 0, qreal r_ = 20, qreal w_ = 5, QColor c = QColor(219, 226, 234));
+    MarkItem(qreal x_ = 0, qreal y_ = 0, qreal r_ = 20, qreal w_ = 5, int i = 0, QColor c = QColor(219, 226, 234));
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     void setSavedFlag(bool f);
@@ -14,6 +14,7 @@ private:
     qreal x, y;
     qreal r;
     qreal w;
+    int id;
     QColor color;
     bool ifSaved;
 };

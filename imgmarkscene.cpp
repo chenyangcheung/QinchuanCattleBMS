@@ -8,18 +8,28 @@ ImgMarkScene::ImgMarkScene(QObject *parent)
       prevItem(0)
 {
     ifSelectedPoint = false;
+    allItemSaved = false;
 }
 
 void ImgMarkScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    if ((event->button() == Qt::LeftButton) && ifSelectedPoint)
+    if ((event->button() == Qt::LeftButton))
     {
         qreal x = event->scenePos().x();  qreal y = event->scenePos().y();
-        if ((prevItem != Q_NULLPTR) && (!prevItem->getSavedFlag()))
-            removeItem(prevItem);
 
-        addMark2Img(x, y);
-        emit pointInfo(x, y);
+        if ((prevItem != Q_NULLPTR))
+        {
+            removeItem(prevItem);
+//            update();
+            qDebug() << "Run to " << __LINE__;
+        }
+
+        if (!allItemSaved)
+        {
+            addMark2Img(x, y);
+            emit pointInfo(x, y);
+        }
+        qDebug() << allItemSaved;
     }
 }
 
@@ -33,10 +43,10 @@ void ImgMarkScene::addMark2Img(qreal x, qreal y)
     QColor cattleColorR(219, 226, 234);
     int pW = 5; int R = 20;
 
-    MarkItem *mi = new MarkItem(x, y, R, pW, cattleColorR);
+    MarkItem *mi = new MarkItem(x, y, R, pW, curItemID, cattleColorR);
     addItem(mi);
     prevItem = mi;
-    update();
+//    update();
 }
 
 void ImgMarkScene::setSelectedFlag(bool f)
@@ -51,7 +61,28 @@ MarkItem* ImgMarkScene::getPrevItem()
 
 void ImgMarkScene::resetPrevItem()
 {
+//    delete prevItem;
     prevItem = Q_NULLPTR;
+}
+
+bool ImgMarkScene::getSelectedFlag()
+{
+    return ifSelectedPoint;
+}
+
+bool ImgMarkScene::ifAllSaved()
+{
+    return allItemSaved;
+}
+
+void ImgMarkScene::resetAllSaved()
+{
+    allItemSaved = false;
+}
+
+void ImgMarkScene::setAllSaved()
+{
+    allItemSaved = true;
 }
 
 ImgMarkScene::~ImgMarkScene()

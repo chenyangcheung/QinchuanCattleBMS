@@ -84,6 +84,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ptRatioBtnGroup->addButton(ui->point6Ratio, 5);
     ptRatioBtnGroup->addButton(ui->point7Ratio, 6);
     ptRatioBtnGroup->addButton(ui->point8Ratio, 7);
+    ptRatioBtnGroup->button(0)->setChecked(true);
 
     ptCheckboxGroup = new QButtonGroup(this);
     ptCheckboxGroup->setExclusive(false);
@@ -99,8 +100,10 @@ MainWindow::MainWindow(QWidget *parent) :
     // init points info list
     for (int i = 0; i < 8; i++)
     {
-        QPoint p(0, 0);
-        pointsInfoList.push_back(p);
+        ImgPoint ip(QPoint(0, 0), false, i);
+//        ip.ratioBtnPtr = ptRatioBtnGroup->button(i);
+//        ip.checkBoxPtr = ptCheckboxGroup->button(i);
+        pointList.push_back(ip);
     }
 //    spScene = new SelectPointScene(0);
 
@@ -138,6 +141,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->point6Checkbox, &QCheckBox::clicked, this, &MainWindow::savePointInfo);
     connect(ui->point7Checkbox, &QCheckBox::clicked, this, &MainWindow::savePointInfo);
     connect(ui->point8Checkbox, &QCheckBox::clicked, this, &MainWindow::savePointInfo);
+
+    connect(ui->resetButton, &QPushButton::clicked, this, &MainWindow::clearAll);
 
     // connects of 3d camera
     connect(ui->openPCD, &QPushButton::clicked, &ifm3dViewer, &IFM3DViewer::openLocal);
@@ -251,6 +256,7 @@ void MainWindow::display2dImage()
 {
     // TODO: clear ratio buttons
     clearAll();
+    imgMarkScene->clear();
     QString appPath = qApp->applicationDirPath();
     QString imagePath = appPath + "/" + ui->imageTableWidget->selectedItems().at(0)->text();
     qDebug() << imagePath;
@@ -322,41 +328,68 @@ void MainWindow::addData2Table()
 void MainWindow::toggleSelectedFlag()
 {
     imgMarkScene->setSelectedFlag(true);
+//    if (imgMarkScene->getPrevItem() != Q_NULLPTR)
+//        imgMarkScene->getPrevItem()->setSavedFlag(false);
 }
 
 void MainWindow::updatePointInfo(qreal x, qreal y)
 {
-    qDebug() << imgMarkScene->getPrevItem()->getSavedFlag();
-    if (imgMarkScene->getPrevItem()->getSavedFlag())
-        return;
-    int curRatioID = ptRatioBtnGroup->checkedId();
-    pointsInfoList[curRatioID].setX(x);
-    pointsInfoList[curRatioID].setY(y);
-    qDebug() << "Updata Point " << curRatioID << ": "<< pointsInfoList[curRatioID];
+//    qDebug() << imgMarkScene->getPrevItem()->getSavedFlag();
+//    if (imgMarkScene->getPrevItem()->getSavedFlag())
+//        return;
+//    int curRatioID = ptRatioBtnGroup->checkedId();
+//    pointsInfoList[curRatioID].setX(x);
+//    pointsInfoList[curRatioID].setY(y);
+    curPos = QPoint(x, y);
+    qDebug() << "Current position: " << "[" << x << "," << y << "]";
 }
 
 void MainWindow::savePointInfo(bool checked)
 {
-    int intCurRatioID = ptRatioBtnGroup->checkedId();
-    if (intCurRatioID == -1)
-    {
-        QMessageBox::warning(nullptr, tr("Warning"), tr("Please select which point you want to set firstly!"));
-        ptCheckboxGroup->checkedButton()->setChecked(false);
-        return;
-    }
+    int curRatioID = ptRatioBtnGroup->checkedId();
+    int curCheckboxID = ptCheckboxGroup->checkedId();
 
     if (checked)
     {
-        if (imgMarkScene->getPrevItem() == Q_NULLPTR)
+        if (curRatioID != curCheckboxID)
         {
-            QString curRatioID = QString::number(intCurRatioID, 10);
-
-            QMessageBox::warning(nullptr, tr("Warning"), tr("Please select position for point ") + curRatioID);
-            ptCheckboxGroup->checkedButton()->setChecked(false);
+            QMessageBox::warning(nullptr, tr("Warning"), tr("Point ") + QString::number(curCheckboxID, 10) +
+                                 tr(" has not been set position!"));
+            ptCheckboxGroup->button(curCheckboxID)->setChecked(false);
             return;
         }
-        qDebug() << "Checked";
-        imgMarkScene->getPrevItem()->setSavedFlag(true);
+        else
+        {
+            pointList[curRatioID].ifSaved = true;
+            pointList[curRatioID].pos = curPos;
+            pointList[curRatioID].markItemPtr = imgMarkScene->getPrevItem();
+            if (checkIfAllSaved())
+            {
+                imgMarkScene->setAllSaved();
+                qDebug() << "All saved";
+            }
+            imgMarkScene->resetPrevItem();
+            int nextID = curRatioID + 1;
+            if (nextID == 8)    nextID = 0;
+            ptRatioBtnGroup->button(nextID)->setChecked(true);
+        }
+//        if (imgMarkScene->getPrevItem() == Q_NULLPTR)
+//        {
+//            QString curRatioID = QString::number(intCurRatioID, 10);
+//            QMessageBox::warning(nullptr, tr("Warning"), tr("Please select position for point ") + curRatioID);
+//            ptCheckboxGroup->checkedButton()->setChecked(false);
+//            return;
+//        }
+//        if (!imgMarkScene->getSelectedFlag())
+//        {
+//            QString curRatioID = QString::number(intCurRatioID, 10);
+//            QMessageBox::warning(nullptr, tr("Warning"), tr("Please select position for point ") + curRatioID);
+//            ptCheckboxGroup->checkedButton()->setChecked(false);
+//            return;
+//        }
+//        qDebug() << "Checked " << ptCheckboxGroup->checkedId();
+//        imgMarkScene->getPrevItem()->setSavedFlag(true);
+//        imgMarkScene->setSelectedFlag(false);
 //        imgMarkScene->resetPrevItem();
 //        int nextID = ptRatioBtnGroup->checkedId() + 1;
 //        if (nextID == 8)    nextID = 0;
@@ -364,18 +397,42 @@ void MainWindow::savePointInfo(bool checked)
     }
     else
     {
-        qDebug() << "Unchecked";
-        if (imgMarkScene->getPrevItem() != Q_NULLPTR)
-            imgMarkScene->getPrevItem()->setSavedFlag(false);
+//        qDebug() << "Unchecked";
+//        imgMarkScene->resetPrevItem();
+//        if (imgMarkScene->getPrevItem() != Q_NULLPTR)
+//            imgMarkScene->getPrevItem()->setSavedFlag(false);
+        imgMarkScene->resetAllSaved();
+        pointList[curCheckboxID].ifSaved = false;
     }
 }
 
 void MainWindow::clearAll()
 {
-    imgMarkScene->clear();
+//    imgMarkScene->clear();
+    for (int i = 0; i < 8; i++)
+    {
+        if (pointList[i].markItemPtr != Q_NULLPTR)
+        {
+            imgMarkScene->removeItem(pointList[i].markItemPtr);
+            pointList[i].markItemPtr = Q_NULLPTR;
+        }
+    }
+
+    if (imgMarkScene->getPrevItem() != Q_NULLPTR)
+        imgMarkScene->removeItem(imgMarkScene->getPrevItem());
     imgMarkScene->resetPrevItem();
-    if (ptRatioBtnGroup->checkedButton() != Q_NULLPTR)
-        ptRatioBtnGroup->checkedButton()->setChecked(false);
+
+    ptRatioBtnGroup->button(0)->setChecked(true);
     for (int i = 0; i < 8; i++)
         ptCheckboxGroup->button(i)->setChecked(false);
+}
+
+bool MainWindow::checkIfAllSaved()
+{
+    for (int i = 0; i < 8; i++)
+    {
+        if (!pointList[i].ifSaved)
+            return false;
+    }
+    return true;
 }

@@ -2,19 +2,20 @@
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 
-MarkItem::MarkItem(qreal x_, qreal y_, qreal r_, qreal w_, QColor c)
+MarkItem::MarkItem(qreal x_, qreal y_, qreal r_, qreal w_, int i, QColor c)
 {
     x = x_;
     y = y_;
     r = r_;
     color = c;
     w = w_;
+    id = i;
     ifSaved = false;
 }
 
 QRectF MarkItem::boundingRect() const
 {
-    return QRectF(x, y, r * 2, r * 2);
+    return QRectF(x - r, y - r, r * 2, r * 2);
 }
 
 void MarkItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -22,9 +23,11 @@ void MarkItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     Q_UNUSED(option);
     Q_UNUSED(widget);
     painter->setPen(QPen(color, w));
-    painter->drawEllipse(x - 20, y - 20, r * 2, r * 2);
+    painter->drawEllipse(x - r, y - r, r * 2, r * 2);
     painter->setPen(QPen(color, w + 3));
     painter->drawLine(x, y, x, y);
+//    painter->drawPoints(QPointF(x, y), 1);
+//    painter->drawText(QPoint(x - r * 2, y), "P" + QString::number(id, 10));
 }
 
 bool MarkItem::getSavedFlag()
