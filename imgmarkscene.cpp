@@ -10,6 +10,8 @@ ImgMarkScene::ImgMarkScene(QObject *parent)
     ifSelectedPoint = false;
     allItemSaved = false;
     curItemID = 1;
+    for (int i = 0; i < 8; i++)
+        pointSaveds[i] = false;
 }
 
 void ImgMarkScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -23,10 +25,10 @@ void ImgMarkScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
             removeItem(prevItem);
         }
 
-        if (!allItemSaved)
+        if (!pointSaveds[curItemID - 1] && !allItemSaved)
         {
-            addMark2Img(x, y);
-            emit pointInfo(x, y);
+                addMark2Img(x, y);
+                emit pointInfo(x, y);
         }
         qDebug() << allItemSaved;
     }

@@ -381,6 +381,7 @@ void MainWindow::savePointInfo(bool checked)
         else
         {
             pointList[curRatioID].ifSaved = true;
+            imgMarkScene->pointSaveds[curRatioID] = true;
             pointList[curRatioID].pos = curPos;
             pointList[curRatioID].markItemPtr = imgMarkScene->getPrevItem();
             if (checkIfAllSaved())
@@ -418,12 +419,14 @@ void MainWindow::unsavePoint1Info(bool checked)
     if (!checked)
     {
         pointList[curCheckboxID].ifSaved = false;
+        imgMarkScene->pointSaveds[curCheckboxID] = false;
         if (pointList[curCheckboxID].markItemPtr != Q_NULLPTR)
         {
             imgMarkScene->removeItem(pointList[curCheckboxID].markItemPtr);
             pointList[curCheckboxID].markItemPtr = Q_NULLPTR;
         }
         imgMarkScene->resetAllSaved();
+        ptRatioBtnGroup->button(curCheckboxID)->setChecked(true);
     }
 }
 
@@ -433,12 +436,14 @@ void MainWindow::unsavePoint2Info(bool checked)
     if (!checked)
     {
         pointList[curCheckboxID].ifSaved = false;
+        imgMarkScene->pointSaveds[curCheckboxID] = false;
         if (pointList[curCheckboxID].markItemPtr != Q_NULLPTR)
         {
             imgMarkScene->removeItem(pointList[curCheckboxID].markItemPtr);
             pointList[curCheckboxID].markItemPtr = Q_NULLPTR;
         }
         imgMarkScene->resetAllSaved();
+        ptRatioBtnGroup->button(curCheckboxID)->setChecked(true);
     }
 }
 
@@ -448,12 +453,14 @@ void MainWindow::unsavePoint3Info(bool checked)
     if (!checked)
     {
         pointList[curCheckboxID].ifSaved = false;
+        imgMarkScene->pointSaveds[curCheckboxID] = false;
         if (pointList[curCheckboxID].markItemPtr != Q_NULLPTR)
         {
             imgMarkScene->removeItem(pointList[curCheckboxID].markItemPtr);
             pointList[curCheckboxID].markItemPtr = Q_NULLPTR;
         }
         imgMarkScene->resetAllSaved();
+        ptRatioBtnGroup->button(curCheckboxID)->setChecked(true);
     }
 }
 
@@ -463,12 +470,14 @@ void MainWindow::unsavePoint4Info(bool checked)
     if (!checked)
     {
         pointList[curCheckboxID].ifSaved = false;
+        imgMarkScene->pointSaveds[curCheckboxID] = false;
         if (pointList[curCheckboxID].markItemPtr != Q_NULLPTR)
         {
             imgMarkScene->removeItem(pointList[curCheckboxID].markItemPtr);
             pointList[curCheckboxID].markItemPtr = Q_NULLPTR;
         }
         imgMarkScene->resetAllSaved();
+        ptRatioBtnGroup->button(curCheckboxID)->setChecked(true);
     }
 }
 
@@ -478,12 +487,14 @@ void MainWindow::unsavePoint5Info(bool checked)
     if (!checked)
     {
         pointList[curCheckboxID].ifSaved = false;
+        imgMarkScene->pointSaveds[curCheckboxID] = false;
         if (pointList[curCheckboxID].markItemPtr != Q_NULLPTR)
         {
             imgMarkScene->removeItem(pointList[curCheckboxID].markItemPtr);
             pointList[curCheckboxID].markItemPtr = Q_NULLPTR;
         }
         imgMarkScene->resetAllSaved();
+        ptRatioBtnGroup->button(curCheckboxID)->setChecked(true);
     }
 }
 
@@ -493,12 +504,14 @@ void MainWindow::unsavePoint6Info(bool checked)
     if (!checked)
     {
         pointList[curCheckboxID].ifSaved = false;
+        imgMarkScene->pointSaveds[curCheckboxID] = false;
         if (pointList[curCheckboxID].markItemPtr != Q_NULLPTR)
         {
             imgMarkScene->removeItem(pointList[curCheckboxID].markItemPtr);
             pointList[curCheckboxID].markItemPtr = Q_NULLPTR;
         }
         imgMarkScene->resetAllSaved();
+        ptRatioBtnGroup->button(curCheckboxID)->setChecked(true);
     }
 }
 
@@ -508,12 +521,14 @@ void MainWindow::unsavePoint7Info(bool checked)
     if (!checked)
     {
         pointList[curCheckboxID].ifSaved = false;
+        imgMarkScene->pointSaveds[curCheckboxID] = false;
         if (pointList[curCheckboxID].markItemPtr != Q_NULLPTR)
         {
             imgMarkScene->removeItem(pointList[curCheckboxID].markItemPtr);
             pointList[curCheckboxID].markItemPtr = Q_NULLPTR;
         }
         imgMarkScene->resetAllSaved();
+        ptRatioBtnGroup->button(curCheckboxID)->setChecked(true);
     }
 }
 
@@ -523,12 +538,14 @@ void MainWindow::unsavePoint8Info(bool checked)
     if (!checked)
     {
         pointList[curCheckboxID].ifSaved = false;
+        imgMarkScene->pointSaveds[curCheckboxID] = false;
         if (pointList[curCheckboxID].markItemPtr != Q_NULLPTR)
         {
             imgMarkScene->removeItem(pointList[curCheckboxID].markItemPtr);
             pointList[curCheckboxID].markItemPtr = Q_NULLPTR;
         }
         imgMarkScene->resetAllSaved();
+        ptRatioBtnGroup->button(curCheckboxID)->setChecked(true);
     }
 }
 
@@ -554,6 +571,7 @@ void MainWindow::clearAll()
     for (int i = 0; i < 8; i++)
     {
         pointList[i].ifSaved = false;
+        imgMarkScene->pointSaveds[i] = false;
         ptCheckboxGroup->button(i)->setChecked(false);
     }
     imgMarkScene->resetAllSaved();

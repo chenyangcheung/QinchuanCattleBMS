@@ -17,6 +17,7 @@ public:
     bool ifAllSaved();
     void resetAllSaved();
     void setAllSaved();
+    bool pointSaveds[8];
     int curItemID;
     ~ImgMarkScene();
 protected:
