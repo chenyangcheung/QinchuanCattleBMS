@@ -15,7 +15,7 @@ MarkItem::MarkItem(qreal x_, qreal y_, qreal r_, qreal w_, int i, QColor c)
 
 QRectF MarkItem::boundingRect() const
 {
-    return QRectF(x - r, y - r, r * 2, r * 2);
+    return QRectF(x - 5 * r, y - 2 * r, r * 6, r * 4);
 }
 
 void MarkItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -28,6 +28,10 @@ void MarkItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     painter->drawLine(x, y, x, y);
 //    painter->drawPoints(QPointF(x, y), 1);
 //    painter->drawText(QPoint(x - r * 2, y), "P" + QString::number(id, 10));
+    QFont font;
+    font.setPointSize(40);
+    painter->setFont(font);
+    painter->drawText(x - 5 * r, y + r, "P" + QString::number(id, 10));
 }
 
 bool MarkItem::getSavedFlag()

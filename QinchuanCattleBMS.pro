@@ -18,14 +18,16 @@ SOURCES += main.cpp\
     ifm3dviewer.cpp \
     imgmarkscene.cpp \
     markitem.cpp \
-    imgpoint.cpp
+    imgpoint.cpp \
+    bmscore.cpp
 
 HEADERS  += mainwindow.h \
     snapshotthread.h \
     ifm3dviewer.h \
     imgmarkscene.h \
     markitem.h \
-    imgpoint.h
+    imgpoint.h \
+    bmscore.h
 
 FORMS    += mainwindow.ui
 

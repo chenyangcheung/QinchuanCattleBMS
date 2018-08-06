@@ -9,6 +9,7 @@ ImgMarkScene::ImgMarkScene(QObject *parent)
 {
     ifSelectedPoint = false;
     allItemSaved = false;
+    curItemID = 1;
 }
 
 void ImgMarkScene::mousePressEvent(QGraphicsSceneMouseEvent *event)

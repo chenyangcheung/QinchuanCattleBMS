@@ -131,14 +131,14 @@ MainWindow::MainWindow(QWidget *parent) :
 //    connect(ui->imageTableWidget, &QTableWidget::itemActivated, this, &MainWindow::display2dImage);
 //    connect(ui->rmImgButton, &QPushButton::clicked, this, &MainWindow::removeImage);
     connect(ui->imageTableWidget, &QTableWidget::itemActivated, this, &MainWindow::display2dImage);
-    connect(ui->point1Ratio, &QRadioButton::clicked, this, &MainWindow::toggleSelectedFlag);
-    connect(ui->point2Ratio, &QRadioButton::clicked, this, &MainWindow::toggleSelectedFlag);
-    connect(ui->point3Ratio, &QRadioButton::clicked, this, &MainWindow::toggleSelectedFlag);
-    connect(ui->point4Ratio, &QRadioButton::clicked, this, &MainWindow::toggleSelectedFlag);
-    connect(ui->point5Ratio, &QRadioButton::clicked, this, &MainWindow::toggleSelectedFlag);
-    connect(ui->point6Ratio, &QRadioButton::clicked, this, &MainWindow::toggleSelectedFlag);
-    connect(ui->point7Ratio, &QRadioButton::clicked, this, &MainWindow::toggleSelectedFlag);
-    connect(ui->point8Ratio, &QRadioButton::clicked, this, &MainWindow::toggleSelectedFlag);
+    connect(ui->point1Ratio, &QRadioButton::toggled, this, &MainWindow::toggleSelectedFlag);
+    connect(ui->point2Ratio, &QRadioButton::toggled, this, &MainWindow::toggleSelectedFlag);
+    connect(ui->point3Ratio, &QRadioButton::toggled, this, &MainWindow::toggleSelectedFlag);
+    connect(ui->point4Ratio, &QRadioButton::toggled, this, &MainWindow::toggleSelectedFlag);
+    connect(ui->point5Ratio, &QRadioButton::toggled, this, &MainWindow::toggleSelectedFlag);
+    connect(ui->point6Ratio, &QRadioButton::toggled, this, &MainWindow::toggleSelectedFlag);
+    connect(ui->point7Ratio, &QRadioButton::toggled, this, &MainWindow::toggleSelectedFlag);
+    connect(ui->point8Ratio, &QRadioButton::toggled, this, &MainWindow::toggleSelectedFlag);
 
     connect(imgMarkScene, &ImgMarkScene::pointInfo, this, &MainWindow::updatePointInfo);
     connect(ui->point1Checkbox, &QCheckBox::clicked, this, &MainWindow::savePointInfo);
@@ -353,6 +353,7 @@ void MainWindow::addData2Table()
 void MainWindow::toggleSelectedFlag()
 {
     imgMarkScene->setSelectedFlag(true);
+    imgMarkScene->curItemID = ptRatioBtnGroup->checkedId() + 1;
 //    if (imgMarkScene->getPrevItem() != Q_NULLPTR)
 //        imgMarkScene->getPrevItem()->setSavedFlag(false);
 }
