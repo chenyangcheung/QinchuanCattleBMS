@@ -20,8 +20,6 @@ void ImgMarkScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
         if ((prevItem != Q_NULLPTR))
         {
             removeItem(prevItem);
-//            update();
-            qDebug() << "Run to " << __LINE__;
         }
 
         if (!allItemSaved)
