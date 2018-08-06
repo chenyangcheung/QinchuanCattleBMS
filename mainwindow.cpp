@@ -110,6 +110,7 @@ MainWindow::MainWindow(QWidget *parent) :
         ImgPoint ip(QPoint(0, 0), false, i);
 //        ip.ratioBtnPtr = ptRatioBtnGroup->button(i);
 //        ip.checkBoxPtr = ptCheckboxGroup->button(i);
+        ip.markItemPtr = Q_NULLPTR;
         pointList.push_back(ip);
     }
 //    spScene = new SelectPointScene(0);
@@ -148,6 +149,15 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->point6Checkbox, &QCheckBox::clicked, this, &MainWindow::savePointInfo);
     connect(ui->point7Checkbox, &QCheckBox::clicked, this, &MainWindow::savePointInfo);
     connect(ui->point8Checkbox, &QCheckBox::clicked, this, &MainWindow::savePointInfo);
+
+    connect(ui->point1Checkbox, &QCheckBox::clicked, this, &MainWindow::unsavePoint1Info);
+    connect(ui->point2Checkbox, &QCheckBox::clicked, this, &MainWindow::unsavePoint2Info);
+    connect(ui->point3Checkbox, &QCheckBox::clicked, this, &MainWindow::unsavePoint3Info);
+    connect(ui->point4Checkbox, &QCheckBox::clicked, this, &MainWindow::unsavePoint4Info);
+    connect(ui->point5Checkbox, &QCheckBox::clicked, this, &MainWindow::unsavePoint5Info);
+    connect(ui->point6Checkbox, &QCheckBox::clicked, this, &MainWindow::unsavePoint6Info);
+    connect(ui->point7Checkbox, &QCheckBox::clicked, this, &MainWindow::unsavePoint7Info);
+    connect(ui->point8Checkbox, &QCheckBox::clicked, this, &MainWindow::unsavePoint8Info);
 
     connect(ui->resetButton, &QPushButton::clicked, this, &MainWindow::clearAll);
 
@@ -357,7 +367,6 @@ void MainWindow::savePointInfo(bool checked)
 {
     int curRatioID = ptRatioBtnGroup->checkedId();
     int curCheckboxID = ptCheckboxGroup->checkedId();
-
     if (checked)
     {
         if (curRatioID != curCheckboxID ||
@@ -384,11 +393,141 @@ void MainWindow::savePointInfo(bool checked)
             ptRatioBtnGroup->button(nextID)->setChecked(true);
         }
     }
-    else
+//    else
+//    {
+//        qDebug() << "Unchecked";
+//        imgMarkScene->resetAllSaved();
+//        pointList[curCheckboxID].ifSaved = false;
+//        qDebug() << "Run to " << __LINE__;
+//        if (pointList[curCheckboxID].markItemPtr != Q_NULLPTR)
+//        {
+//            qDebug() << "Run to " << __LINE__;
+//            imgMarkScene->removeItem(pointList[curCheckboxID].markItemPtr);
+//            qDebug() << "current checkbox" << curCheckboxID;
+//            qDebug() << "Run to " << __LINE__;
+//            pointList[curCheckboxID].markItemPtr = Q_NULLPTR;
+//            qDebug() << "Run to " << __LINE__;
+//        }
+//    }
+}
+
+void MainWindow::unsavePoint1Info(bool checked)
+{
+    int curCheckboxID = 0;
+    if (!checked)
     {
-        imgMarkScene->resetAllSaved();
         pointList[curCheckboxID].ifSaved = false;
-        imgMarkScene->removeItem(pointList[curCheckboxID].markItemPtr);
+        if (pointList[curCheckboxID].markItemPtr != Q_NULLPTR)
+        {
+            imgMarkScene->removeItem(pointList[curCheckboxID].markItemPtr);
+            pointList[curCheckboxID].markItemPtr = Q_NULLPTR;
+        }
+        imgMarkScene->resetAllSaved();
+    }
+}
+
+void MainWindow::unsavePoint2Info(bool checked)
+{
+    int curCheckboxID = 1;
+    if (!checked)
+    {
+        pointList[curCheckboxID].ifSaved = false;
+        if (pointList[curCheckboxID].markItemPtr != Q_NULLPTR)
+        {
+            imgMarkScene->removeItem(pointList[curCheckboxID].markItemPtr);
+            pointList[curCheckboxID].markItemPtr = Q_NULLPTR;
+        }
+        imgMarkScene->resetAllSaved();
+    }
+}
+
+void MainWindow::unsavePoint3Info(bool checked)
+{
+    int curCheckboxID = 2;
+    if (!checked)
+    {
+        pointList[curCheckboxID].ifSaved = false;
+        if (pointList[curCheckboxID].markItemPtr != Q_NULLPTR)
+        {
+            imgMarkScene->removeItem(pointList[curCheckboxID].markItemPtr);
+            pointList[curCheckboxID].markItemPtr = Q_NULLPTR;
+        }
+        imgMarkScene->resetAllSaved();
+    }
+}
+
+void MainWindow::unsavePoint4Info(bool checked)
+{
+    int curCheckboxID = 3;
+    if (!checked)
+    {
+        pointList[curCheckboxID].ifSaved = false;
+        if (pointList[curCheckboxID].markItemPtr != Q_NULLPTR)
+        {
+            imgMarkScene->removeItem(pointList[curCheckboxID].markItemPtr);
+            pointList[curCheckboxID].markItemPtr = Q_NULLPTR;
+        }
+        imgMarkScene->resetAllSaved();
+    }
+}
+
+void MainWindow::unsavePoint5Info(bool checked)
+{
+    int curCheckboxID = 4;
+    if (!checked)
+    {
+        pointList[curCheckboxID].ifSaved = false;
+        if (pointList[curCheckboxID].markItemPtr != Q_NULLPTR)
+        {
+            imgMarkScene->removeItem(pointList[curCheckboxID].markItemPtr);
+            pointList[curCheckboxID].markItemPtr = Q_NULLPTR;
+        }
+        imgMarkScene->resetAllSaved();
+    }
+}
+
+void MainWindow::unsavePoint6Info(bool checked)
+{
+    int curCheckboxID = 5;
+    if (!checked)
+    {
+        pointList[curCheckboxID].ifSaved = false;
+        if (pointList[curCheckboxID].markItemPtr != Q_NULLPTR)
+        {
+            imgMarkScene->removeItem(pointList[curCheckboxID].markItemPtr);
+            pointList[curCheckboxID].markItemPtr = Q_NULLPTR;
+        }
+        imgMarkScene->resetAllSaved();
+    }
+}
+
+void MainWindow::unsavePoint7Info(bool checked)
+{
+    int curCheckboxID = 6;
+    if (!checked)
+    {
+        pointList[curCheckboxID].ifSaved = false;
+        if (pointList[curCheckboxID].markItemPtr != Q_NULLPTR)
+        {
+            imgMarkScene->removeItem(pointList[curCheckboxID].markItemPtr);
+            pointList[curCheckboxID].markItemPtr = Q_NULLPTR;
+        }
+        imgMarkScene->resetAllSaved();
+    }
+}
+
+void MainWindow::unsavePoint8Info(bool checked)
+{
+    int curCheckboxID = 7;
+    if (!checked)
+    {
+        pointList[curCheckboxID].ifSaved = false;
+        if (pointList[curCheckboxID].markItemPtr != Q_NULLPTR)
+        {
+            imgMarkScene->removeItem(pointList[curCheckboxID].markItemPtr);
+            pointList[curCheckboxID].markItemPtr = Q_NULLPTR;
+        }
+        imgMarkScene->resetAllSaved();
     }
 }
 
@@ -416,6 +555,7 @@ void MainWindow::clearAll()
         pointList[i].ifSaved = false;
         ptCheckboxGroup->button(i)->setChecked(false);
     }
+    imgMarkScene->resetAllSaved();
 }
 
 bool MainWindow::checkIfAllSaved()
@@ -426,5 +566,14 @@ bool MainWindow::checkIfAllSaved()
             return false;
     }
     return true;
+}
+
+void MainWindow::computeBodyMeasurement()
+{
+    if (!checkIfAllSaved())
+    {
+        QMessageBox::warning(nullptr, tr("Warning"), tr("There are points un-set positon, please set position for them!"));
+        return;
+    }
 }
 

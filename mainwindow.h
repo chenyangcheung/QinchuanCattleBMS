@@ -66,8 +66,17 @@ private slots:
     void updatePointInfo(qreal x, qreal y);
 //    void addMark2Img(qreal x, qreal y);
     void savePointInfo(bool checked);
+    void unsavePoint1Info(bool checked);
+    void unsavePoint2Info(bool checked);
+    void unsavePoint3Info(bool checked);
+    void unsavePoint4Info(bool checked);
+    void unsavePoint5Info(bool checked);
+    void unsavePoint6Info(bool checked);
+    void unsavePoint7Info(bool checked);
+    void unsavePoint8Info(bool checked);
     bool checkIfAllSaved();
     void clearAll();
+    void computeBodyMeasurement();
 };
 
 #endif // MAINWINDOW_H
