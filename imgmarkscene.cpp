@@ -30,7 +30,7 @@ void ImgMarkScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
                 addMark2Img(x, y);
                 emit pointInfo(x, y);
         }
-        qDebug() << allItemSaved;
+//        qDebug() << allItemSaved;
     }
 }
 

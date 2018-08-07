@@ -33,7 +33,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="rgbCameraTab">
        <property name="sizePolicy">
@@ -1214,12 +1214,21 @@
    </property>
    <widget class="QMenu" name="menuQinchuanCattleBMS">
     <property name="title">
-     <string>Open</string>
+     <string>Media</string>
     </property>
     <addaction name="actionOpen_Video"/>
     <addaction name="actionOpen_Camera"/>
+    <addaction name="actionOpen_PCD"/>
+    <addaction name="actionOpen_3D_camera"/>
+   </widget>
+   <widget class="QMenu" name="menuSettings">
+    <property name="title">
+     <string>Settings</string>
+    </property>
+    <addaction name="setThresholdAction"/>
    </widget>
    <addaction name="menuQinchuanCattleBMS"/>
+   <addaction name="menuSettings"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -1228,8 +1237,6 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionOpen_Video"/>
-   <addaction name="actionOpen_Camera"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOpen_Video">
@@ -1239,7 +1246,22 @@
   </action>
   <action name="actionOpen_Camera">
    <property name="text">
-    <string>Open Camera</string>
+    <string>Open 2D Camera</string>
+   </property>
+  </action>
+  <action name="actionOpen_3D_camera">
+   <property name="text">
+    <string>Open 3D camera</string>
+   </property>
+  </action>
+  <action name="actionOpen_PCD">
+   <property name="text">
+    <string>Open PCD</string>
+   </property>
+  </action>
+  <action name="setThresholdAction">
+   <property name="text">
+    <string>Set Threshold</string>
    </property>
   </action>
  </widget>

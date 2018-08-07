@@ -29,7 +29,7 @@
 // custom library
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include "bmscore.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -127,9 +127,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionOpen_Camera, &QAction::triggered, this, &MainWindow::openUrl);
 
     // connects of compute body measurement
-//    connect(ui->addImgButton, &QPushButton::clicked, this, &MainWindow::addImage);
-//    connect(ui->imageTableWidget, &QTableWidget::itemActivated, this, &MainWindow::display2dImage);
-//    connect(ui->rmImgButton, &QPushButton::clicked, this, &MainWindow::removeImage);
     connect(ui->imageTableWidget, &QTableWidget::itemActivated, this, &MainWindow::display2dImage);
     connect(ui->point1Ratio, &QRadioButton::toggled, this, &MainWindow::toggleSelectedFlag);
     connect(ui->point2Ratio, &QRadioButton::toggled, this, &MainWindow::toggleSelectedFlag);
@@ -160,11 +157,14 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->point8Checkbox, &QCheckBox::clicked, this, &MainWindow::unsavePoint8Info);
 
     connect(ui->resetButton, &QPushButton::clicked, this, &MainWindow::clearAll);
+    connect(ui->cbmButton, &QPushButton::clicked, this, &MainWindow::computeBodyMeasurement);
 
     // connects of 3d camera
     connect(ui->openPCD, &QPushButton::clicked, &ifm3dViewer, &IFM3DViewer::openLocal);
     connect(ui->open3dCamera, &QPushButton::clicked, this, &MainWindow::open3dCamera);
     connect(ui->snapShot3d, &QPushButton::clicked, this, &MainWindow::takeSnapShot3d);
+
+    connect(ui->setThresholdAction, &QAction::triggered, this, &MainWindow::setBMScoreThreshold);
 }
 
 MainWindow::~MainWindow()
@@ -271,7 +271,6 @@ void MainWindow::removeImage()
 
 void MainWindow::display2dImage()
 {
-    // TODO: clear ratio buttons
     clearAll();
     imgMarkScene->clear();
     for (int i = 0; i < 8; i++)
@@ -283,7 +282,7 @@ void MainWindow::display2dImage()
 
     QString appPath = qApp->applicationDirPath();
     QString imagePath = appPath + "/" + ui->imageTableWidget->selectedItems().at(0)->text();
-    qDebug() << imagePath;
+
     if (imagePath.isEmpty())
         return;
 
@@ -312,7 +311,6 @@ void MainWindow::display2dImage()
     imgMarkScene->setSceneRect(showedPixImg.rect());
     ui->imageGraphicsView->setScene(imgMarkScene);
     ui->imageGraphicsView->fitInView(imgMarkScene->itemsBoundingRect(), Qt::KeepAspectRatio);
-//    ui->imageGraphicsView->show();
 }
 
 void MainWindow::wheelEvent(QWheelEvent *event)
@@ -332,7 +330,7 @@ void MainWindow::wheelEvent(QWheelEvent *event)
 
 void MainWindow::adjustImageTableSize()
 {
-//    imageScene->addEllipse()
+
 }
 
 void MainWindow::addData2Table()
@@ -340,22 +338,18 @@ void MainWindow::addData2Table()
     dataCount = dataCount + 1;
     int iTRowCount = ui->imageTableWidget->rowCount();
     ui->imageTableWidget->insertRow(iTRowCount);
-//    QTableWidgetItem *idItem = new QTableWidgetItem(QString::number(dataCount, 10));
+
     QTableWidgetItem *img2DItem = new QTableWidgetItem(image2DName);
     QTableWidgetItem *img3DItem = new QTableWidgetItem(image3DName);
 
-//    ui->imageTableWidget->setItem(iTRowCount, 0, idItem);
     ui->imageTableWidget->setItem(iTRowCount, 0, img2DItem);
     ui->imageTableWidget->setItem(iTRowCount, 1, img3DItem);
-//    display2dImage();
 }
 
 void MainWindow::toggleSelectedFlag()
 {
     imgMarkScene->setSelectedFlag(true);
     imgMarkScene->curItemID = ptRatioBtnGroup->checkedId() + 1;
-//    if (imgMarkScene->getPrevItem() != Q_NULLPTR)
-//        imgMarkScene->getPrevItem()->setSavedFlag(false);
 }
 
 void MainWindow::updatePointInfo(qreal x, qreal y)
@@ -387,7 +381,6 @@ void MainWindow::savePointInfo(bool checked)
             if (checkIfAllSaved())
             {
                 imgMarkScene->setAllSaved();
-                qDebug() << "All saved";
             }
             imgMarkScene->resetPrevItem();
             int nextID = curRatioID + 1;
@@ -395,22 +388,6 @@ void MainWindow::savePointInfo(bool checked)
             ptRatioBtnGroup->button(nextID)->setChecked(true);
         }
     }
-//    else
-//    {
-//        qDebug() << "Unchecked";
-//        imgMarkScene->resetAllSaved();
-//        pointList[curCheckboxID].ifSaved = false;
-//        qDebug() << "Run to " << __LINE__;
-//        if (pointList[curCheckboxID].markItemPtr != Q_NULLPTR)
-//        {
-//            qDebug() << "Run to " << __LINE__;
-//            imgMarkScene->removeItem(pointList[curCheckboxID].markItemPtr);
-//            qDebug() << "current checkbox" << curCheckboxID;
-//            qDebug() << "Run to " << __LINE__;
-//            pointList[curCheckboxID].markItemPtr = Q_NULLPTR;
-//            qDebug() << "Run to " << __LINE__;
-//        }
-//    }
 }
 
 void MainWindow::unsavePoint1Info(bool checked)
@@ -551,7 +528,6 @@ void MainWindow::unsavePoint8Info(bool checked)
 
 void MainWindow::clearAll()
 {
-//    imgMarkScene->clear();
     // clear items in graphics view
     for (int i = 0; i < 8; i++)
     {
@@ -570,6 +546,7 @@ void MainWindow::clearAll()
     ptRatioBtnGroup->button(0)->setChecked(true);
     for (int i = 0; i < 8; i++)
     {
+
         pointList[i].ifSaved = false;
         imgMarkScene->pointSaveds[i] = false;
         ptCheckboxGroup->button(i)->setChecked(false);
@@ -594,5 +571,45 @@ void MainWindow::computeBodyMeasurement()
         QMessageBox::warning(nullptr, tr("Warning"), tr("There are points un-set positon, please set position for them!"));
         return;
     }
+
+    // input pcd data
+    QString pcdPath = qApp->applicationDirPath() + "/" + ui->imageTableWidget->selectedItems().at(1)->text();
+    bool readPCDSuccess = bmscore.readCloudData(pcdPath.toStdString());
+    if (!readPCDSuccess)
+    {
+        qDebug() << "Read PCD file failed!";
+        return;
+    }
+    bmscore.initBMScore();
+    std::vector<PtPos> pps(8);
+    qDebug() << "Running to line: " << __LINE__;
+    for (int i = 0; i < 8; i++)
+    {
+        pps[i].x = pointList[i].pos.x();
+        pps[i].y = pointList[i].pos.y();
+    }
+    qDebug() << "Running to line: " << __LINE__;
+    bmscore.setPtPosList(pps);
+    qDebug() << "Set Positon success: " << __LINE__;
+    bmscore.computeBodyMeasurement();
+
+    // display result
+    ui->withersHgtInfoLabel->setText(QString("%1").arg(bmscore.getWithersHeight()));
+    ui->chestDptInfoLabel->setText(QString("%1").arg(bmscore.getChestDepth()));
+    ui->backHgtInfoLabel->setText(QString("%1").arg(bmscore.getBackHeight()));
+    ui->waistHgtInfoLabel->setText(QString("%1").arg(bmscore.getWaistHeight()));
+    ui->hipHgtInfoLabel->setText(QString("%1").arg(bmscore.getHipHeight()));
+    ui->rumpLgtInfoLabel->setText(QString("%1").arg(bmscore.getRumpLength()));
+    ui->bodyLgtInfoLabel->setText(QString("%1").arg(bmscore.getBodyLength()));
+}
+
+void MainWindow::setBMScoreThreshold()
+{
+    bool ok = false;
+    int t = QInputDialog::getInt(this, "Set Threshold", "Please set value of threshold: ", 10, 5, 100, 1, &ok);
+    if (!ok)
+        return;
+
+    bmscore.setThreshold(t);
 }
 

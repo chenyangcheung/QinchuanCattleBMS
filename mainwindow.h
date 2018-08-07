@@ -11,6 +11,7 @@
 #include "ifm3dviewer.h"
 #include "imgmarkscene.h"
 #include "imgpoint.h"
+#include "bmscore.h"
 
 namespace Ui {
 class MainWindow;
@@ -47,6 +48,7 @@ private:
     QPoint curPos;
 //    QVector<QCheckBox*> ptCheckboxList;
     QVector<ImgPoint> pointList;
+    BMScore bmscore;
 private slots:
     // 2d camera
     void openLocal();
@@ -77,6 +79,7 @@ private slots:
     bool checkIfAllSaved();
     void clearAll();
     void computeBodyMeasurement();
+    void setBMScoreThreshold();
 };
 
 #endif // MAINWINDOW_H
