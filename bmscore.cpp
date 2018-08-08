@@ -167,36 +167,117 @@ void BMScore::computeBodyMeasurement()
 
             for(int j=0; j<8; j++)
             {
-                if(u <= x[j] + threshold && u >= x[j] - threshold && v <= y[j] + threshold && v >= y[j] - threshold)
+                if(u <= x[j] + threshold && u >= x[j] - threshold && v <= y[j] + threshold && v >= y[j] - threshold )
                 {
                     world_points[j].x = cloud->points[pointIdxNKNSearch[i]].x;
                     world_points[j].y = cloud->points[pointIdxNKNSearch[i]].y;
                     world_points[j].z = cloud->points[pointIdxNKNSearch[i]].z;
-                    qDebug() << "World Point: " << "(" << world_points[j].x << "," << world_points[j].y << "," << world_points[j].z << ")";
+                  //  qDebug() << "World Point: " << j << "(" << world_points[j].x << "," << world_points[j].y << "," << world_points[j].z << ")";
                 }
+                continue;
             }
-            for(int k=0; k<4; k++)
-            {
-                if(u <= xi[k] + threshold && u >= xi[k] - threshold && v <= yi[k] + threshold && v >= yi[k] - threshold)
-                {
-                    invisible_points[k].x = cloud->points[pointIdxNKNSearch[i]].x;
-                    invisible_points[k].y = cloud->points[pointIdxNKNSearch[i]].y;
-                    invisible_points[k].z = cloud->points[pointIdxNKNSearch[i]].z;
-                    qDebug() << "Invisible Point: " << "(" << invisible_points[k].x << "," << invisible_points[k].y << "," << invisible_points[k].z << ")";
-                }
-            }
-        }
+//            if(u <= x[0] + threshold && u >= x[0] - threshold && v <= y[0] + threshold && v >= y[0] - threshold )
+//            {
+//                   world_points[0].x = cloud->points[pointIdxNKNSearch[0]].x;
+//                   world_points[0].y = cloud->points[pointIdxNKNSearch[0]].y;
+//                   world_points[0].z = cloud->points[pointIdxNKNSearch[0]].z;
+//                   qDebug() << "World Point 1: "  << "(" << world_points[0].x << "," << world_points[0].y << "," << world_points[0].z << ")";
+//            }
+//            if(u <= x[1] + threshold && u >= x[1] - threshold && v <= y[1] + threshold && v >= y[1] - threshold )
+//            {
+//                   world_points[1].x = cloud->points[pointIdxNKNSearch[1]].x;
+//                   world_points[1].y = cloud->points[pointIdxNKNSearch[1]].y;
+//                   world_points[1].z = cloud->points[pointIdxNKNSearch[1]].z;
+//                   qDebug() << "World Point 2: (" << world_points[1].x << "," << world_points[1].y << "," << world_points[1].z << ")";
+//            }
+//            if(u <= x[2] + threshold && u >= x[2] - threshold && v <= y[2] + threshold && v >= y[2] - threshold )
+//            {
+//                   world_points[2].x = cloud->points[pointIdxNKNSearch[2]].x;
+//                   world_points[2].y = cloud->points[pointIdxNKNSearch[2]].y;
+//                   world_points[2].z = cloud->points[pointIdxNKNSearch[2]].z;
+//                   qDebug() << "World Point 3: (" << world_points[2].x << "," << world_points[2].y << "," << world_points[2].z << ")";
+//            }
+//            if(u <= x[3] + threshold && u >= x[3] - threshold && v <= y[3] + threshold && v >= y[3] - threshold )
+//            {
+//                   world_points[3].x = cloud->points[pointIdxNKNSearch[3]].x;
+//                   world_points[3].y = cloud->points[pointIdxNKNSearch[3]].y;
+//                   world_points[3].z = cloud->points[pointIdxNKNSearch[3]].z;
+//                   qDebug() << "World Point 4: " << "(" << world_points[3].x << "," << world_points[3].y << "," << world_points[3].z << ")";
+//            }
+//            if(u <= x[4] + threshold && u >= x[4] - threshold && v <= y[4] + threshold && v >= y[4] - threshold )
+//            {
+//                   world_points[4].x = cloud->points[pointIdxNKNSearch[4]].x;
+//                   world_points[4].y = cloud->points[pointIdxNKNSearch[4]].y;
+//                   world_points[4].z = cloud->points[pointIdxNKNSearch[4]].z;
+//                   qDebug() << "World Point 5: " << "(" << world_points[4].x << "," << world_points[4].y << "," << world_points[4].z << ")";
+//            }
+//            if(u <= x[5] + threshold && u >= x[5] - threshold && v <= y[5] + threshold && v >= y[5] - threshold )
+//            {
+//                   world_points[5].x = cloud->points[pointIdxNKNSearch[5]].x;
+//                   world_points[5].y = cloud->points[pointIdxNKNSearch[5]].y;
+//                   world_points[5].z = cloud->points[pointIdxNKNSearch[5]].z;
+//                   qDebug() << "World Point 6: " << "(" << world_points[5].x << "," << world_points[5].y << "," << world_points[5].z << ")";
+//            }
+//            if(u <= x[6] + threshold && u >= x[6] - threshold && v <= y[6] + threshold && v >= y[6] - threshold )
+//            {
+//                   world_points[6].x = cloud->points[pointIdxNKNSearch[6]].x;
+//                   world_points[6].y = cloud->points[pointIdxNKNSearch[6]].y;
+//                   world_points[6].z = cloud->points[pointIdxNKNSearch[6]].z;
+//                   qDebug() << "World Point 7: " << "(" << world_points[6].x << "," << world_points[6].y << "," << world_points[6].z << ")";
+//            }
+//            if(u <= x[7] + threshold && u >= x[7] - threshold && v <= y[7] + threshold && v >= y[7] - threshold )
+//            {
+//                   world_points[7].x = cloud->points[pointIdxNKNSearch[7]].x;
+//                   world_points[7].y = cloud->points[pointIdxNKNSearch[7]].y;
+//                   world_points[7].z = cloud->points[pointIdxNKNSearch[7]].z;
+//                   qDebug() << "World Point 8: " << "(" << world_points[7].x << "," << world_points[7].y << "," << world_points[7].z << ")";
+//            }
+
+//            if(u <= xi[0] + threshold && u >= xi[0] - threshold && v <= yi[0] + threshold && v >= yi[0] - threshold)
+//            {
+//                invisible_points[0].x = cloud->points[pointIdxNKNSearch[0]].x;
+//                invisible_points[0].y = cloud->points[pointIdxNKNSearch[0]].y;
+//                invisible_points[0].z = cloud->points[pointIdxNKNSearch[0]].z;
+//            //    qDebug() << "Invisible Point 1: << "(" << invisible_points[k].x << "," << invisible_points[k].y << "," << invisible_points[k].z << ")";
+//            }
+//            if(u <= xi[1] + threshold && u >= xi[1] - threshold && v <= yi[1] + threshold && v >= yi[1] - threshold)
+//            {
+//                invisible_points[1].x = cloud->points[pointIdxNKNSearch[1]].x;
+//                invisible_points[1].y = cloud->points[pointIdxNKNSearch[1]].y;
+//                invisible_points[1].z = cloud->points[pointIdxNKNSearch[1]].z;
+//             //   qDebug() << "Invisible Point 1: << "(" << invisible_points[k].x << "," << invisible_points[k].y << "," << invisible_points[k].z << ")";
+//            }
+//            if(u <= xi[2] + threshold && u >= xi[2] - threshold && v <= yi[2] + threshold && v >= yi[2] - threshold)
+//            {
+//                invisible_points[2].x = cloud->points[pointIdxNKNSearch[2]].x;
+//                invisible_points[2].y = cloud->points[pointIdxNKNSearch[2]].y;
+//                invisible_points[2].z = cloud->points[pointIdxNKNSearch[2]].z;
+//             //   qDebug() << "Invisible Point 1: << "(" << invisible_points[k].x << "," << invisible_points[k].y << "," << invisible_points[k].z << ")";
+//            }
+//            if(u <= xi[3] + threshold && u >= xi[3] - threshold && v <= yi[3] + threshold && v >= yi[3] - threshold)
+//            {
+//                invisible_points[3].x = cloud->points[pointIdxNKNSearch[3]].x;
+//                invisible_points[3].y = cloud->points[pointIdxNKNSearch[3]].y;
+//                invisible_points[3].z = cloud->points[pointIdxNKNSearch[3]].z;
+//             //   qDebug() << "Invisible Point 1: << "(" << invisible_points[k].x << "," << invisible_points[k].y << "," << invisible_points[k].z << ")";
+//            }
     }
+     for(int j=0;j<8;j++){
+         qDebug() << "World Point: " << j+1 << "(" << world_points[j].x << "," << world_points[j].y << "," << world_points[j].z << ")";
+     }
+//     for(int k=0;k<4;k++){
+//          qDebug() << "Invisible Point: " <<k+1<< "(" << invisible_points[k].x << "," << invisible_points[k].y << "," << invisible_points[k].z << ")";
+//     }
     //计算各项体尺数值
     withers_height = sqrt((world_points[0].x-world_points[1].x)*(world_points[0].x-world_points[1].x) + (world_points[0].y-world_points[1].y)*(world_points[0].y-world_points[1].y) + (world_points[0].z-world_points[1].z)*(world_points[0].z-world_points[1].z));
     chest_depth =  sqrt((world_points[2].x-world_points[3].x)*(world_points[2].x-world_points[3].x) + (world_points[2].y-world_points[3].y)*(world_points[2].y-world_points[3].y) + (world_points[2].z-world_points[3].z)*(world_points[2].z-world_points[3].z));
-    back_height = sqrt((world_points[4].x-invisible_points[0].x)*(world_points[4].x-invisible_points[0].x) + (world_points[4].y-invisible_points[0].y)*(world_points[4].y-invisible_points[0].y) + (world_points[4].z-invisible_points[0].z)*(world_points[4].z-invisible_points[0].z));
-    waist_height = sqrt((world_points[5].x-invisible_points[1].x)*(world_points[5].x-invisible_points[1].x) + (world_points[5].y-invisible_points[1].y)*(world_points[5].y-invisible_points[1].y) + (world_points[5].z-invisible_points[1].z)*(world_points[5].z-invisible_points[1].z));
-    hip_height = sqrt((world_points[7].x-invisible_points[2].x)*(world_points[7].x-invisible_points[2].x) + (world_points[7].y-invisible_points[2].y)*(world_points[7].y-invisible_points[2].y) + (world_points[7].z-invisible_points[2].z)*(world_points[7].z-invisible_points[2].z));
-    rump_length = sqrt((world_points[7].x-invisible_points[3].x)*(world_points[7].x-invisible_points[3].x) + (world_points[7].y-invisible_points[3].y)*(world_points[7].y-invisible_points[3].y) + (world_points[7].z-invisible_points[3].z)*(world_points[7].z-invisible_points[3].z));
+    back_height = sqrt((world_points[4].x-world_points[4].x)*(world_points[4].x-world_points[4].x) + (world_points[4].y-world_points[1].y)*(world_points[4].y-world_points[1].y) + (world_points[4].z-world_points[4].z)*(world_points[4].z-world_points[4].z));
+    waist_height = sqrt((world_points[5].x-world_points[5].x)*(world_points[5].x-world_points[5].x) + (world_points[5].y-world_points[1].y)*(world_points[5].y-world_points[1].y) + (world_points[5].z-world_points[5].z)*(world_points[5].z-world_points[5].z));
+    hip_height = sqrt((world_points[7].x-world_points[7].x)*(world_points[7].x-world_points[7].x) + (world_points[7].y-world_points[1].y)*(world_points[7].y-world_points[1].y) + (world_points[7].z-world_points[7].z)*(world_points[7].z-world_points[7].z));
+    rump_length = sqrt((world_points[7].x-world_points[5].x)*(world_points[7].x-world_points[5].x) + (world_points[7].y-world_points[7].y)*(world_points[7].y-world_points[7].y) + (world_points[7].z-world_points[7].z)*(world_points[7].z-world_points[7].z));
     body_length = sqrt((world_points[6].x-world_points[7].x)*(world_points[6].x-world_points[7].x) + (world_points[6].y-world_points[7].y)*(world_points[6].y-world_points[7].y) + (world_points[6].z-world_points[7].z)*(world_points[6].z-world_points[7].z));
 }
-
+}
 double BMScore::getWithersHeight()
 {
     return withers_height;
