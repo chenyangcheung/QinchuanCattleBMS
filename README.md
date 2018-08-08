@@ -30,9 +30,9 @@ Suggested version: visual_studio_community_2015_x86
    Value: %OPENCV_DIR%
 1. Name: BOOST_INSTALL_PATH     
    value: %BOOST_INSTALL_DIR%\local\boost_1_64_0
-1. Name: IFM3D_INSTALL_PAT
+1. Name: IFM3D_INSTALL_PATH                
    Value: %IFM3D_INSTALL_PATH%\install
-1. Name: IFM3D_PATH
+1. Name: IFM3D_PATH              
    Value: %IFM3D_PATH_DIR%\ifm3d
 
 ### Dynamic link library:
