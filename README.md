@@ -28,15 +28,19 @@ Suggested version: visual_studio_community_2015_x86
    Tips: The value of this variable should be UPPER case.The value can be OPENCV2 or OPENCV3 which depends on the version of your OpenCV.
 1. Name:OPENCV_PATH     
    Value: %OPENCV_DIR%
-1. Name: VLC_PATH     
-   value: %VLC_DIR%
+1. Name: BOOST_INSTALL_PATH     
+   value: %BOOST_INSTALL_DIR%\local\boost_1_64_0
+1. Name: IFM3D_INSTALL_PAT
+   Value: %IFM3D_INSTALL_PATH%\install
+1. Name: IFM3D_PATH
+   Value: %IFM3D_PATH_DIR%\ifm3d
 
 ### Dynamic link library:
 
 **Name: Path**
 1. Value：%OPENCV_DIR%\bin
-1. Value：%VLC_DIR%\bin
 1. Value：%QT_DIR%\bin
+1. Value: %VLC_DIR%\bin
 
 
 ## Tips
