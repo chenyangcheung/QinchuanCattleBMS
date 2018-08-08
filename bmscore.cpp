@@ -118,8 +118,9 @@ std::vector<std::vector<double>> BMScore::matrix_multiply(std::vector<std::vecto
 void BMScore::computeBodyMeasurement()
 {
     K = cloud->width * cloud->height;
-    std::vector<int>pointIdxNKNSearch(K); //存储查询点近邻索引
-    std::vector<float>pointNKNSquaredDistance(K); //存储近邻点对应距离平方
+
+    std::vector<int> pointIdxNKNSearch(K); //存储查询点近邻索引
+    std::vector<float> pointNKNSquaredDistance(K); //存储近邻点对应距离平方
     int x[8], y[8];
     int xi[4], yi[4];
 
@@ -132,6 +133,7 @@ void BMScore::computeBodyMeasurement()
     }
 
     kdtree.setInputCloud(cloud); //设置搜索空间
+
     //Back_height B
     xi[0] = x[4];
     yi[0] = y[1];

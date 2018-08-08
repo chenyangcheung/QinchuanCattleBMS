@@ -572,7 +572,10 @@ void MainWindow::computeBodyMeasurement()
         return;
     }
 
-    // input pcd data
+    // step 1: init BMS core
+    bmscore.initBMScore();
+
+    // step 2: input pcd data
     QString pcdPath = qApp->applicationDirPath() + "/" + ui->imageTableWidget->selectedItems().at(1)->text();
     bool readPCDSuccess = bmscore.readCloudData(pcdPath.toStdString());
     if (!readPCDSuccess)
@@ -580,7 +583,8 @@ void MainWindow::computeBodyMeasurement()
         qDebug() << "Read PCD file failed!";
         return;
     }
-    bmscore.initBMScore();
+
+    // step 3: set positions of 8 points
     std::vector<PtPos> pps(8);
     qDebug() << "Running to line: " << __LINE__;
     for (int i = 0; i < 8; i++)
@@ -591,9 +595,11 @@ void MainWindow::computeBodyMeasurement()
     qDebug() << "Running to line: " << __LINE__;
     bmscore.setPtPosList(pps);
     qDebug() << "Set Positon success: " << __LINE__;
+
+    // step 4: compute body measurent according to PCD data and points data
     bmscore.computeBodyMeasurement();
 
-    // display result
+    // display result in GUI
     ui->withersHgtInfoLabel->setText(QString("%1").arg(bmscore.getWithersHeight()));
     ui->chestDptInfoLabel->setText(QString("%1").arg(bmscore.getChestDepth()));
     ui->backHgtInfoLabel->setText(QString("%1").arg(bmscore.getBackHeight()));
