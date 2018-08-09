@@ -270,6 +270,7 @@ LIBS += -L$$OPENCV_PATH/x64/vc14/lib \
         -lopencv_core340 \
         -lopencv_imgproc340 \
         -lopencv_highgui340 \
+        -lopencv_calib3d340 \
         -lopencv_imgcodecs340
 
 INCLUDEPATH += $$OPENCV_PATH/include
