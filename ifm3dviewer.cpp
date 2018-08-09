@@ -99,10 +99,11 @@ void IFM3DViewer::run()
         auto buff = std::make_shared<ifm3d::ImageBuffer>();
         while (camIsActive)
         {
-            if (!fg->WaitForFrame(buff.get(), 500))
+            if (!fg->WaitForFrame(buff.get(), 500, true, false))
             {
                 break;
             }
+            buff->Cloud();
             cloud = buff->Cloud();
             viewer->updatePointCloud<pcl::PointXYZI>(cloud, "cloud");
             vtkDisplay->update();
@@ -133,7 +134,10 @@ void IFM3DViewer::takeSnapshot()
     ssname = qApp->applicationDirPath() + "/" + current_date + ".pcd";
 
     // Save pcd file by pcl library
-    pcl::io::savePCDFileASCII(ssname.toStdString(), *temp);
+//    pcl::io::savePCDFileASCII(ssname.toStdString(), *temp);
+    pcl::PCDWriter writer;
+    writer.write(ssname.toStdString(), *temp);
+
     QMessageBox::information(nullptr, tr("Info"), tr("Save snapshot to ") + ssname);
 }
 

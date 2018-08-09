@@ -167,6 +167,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->setThresholdAction, &QAction::triggered, this, &MainWindow::setBMScoreThreshold);
     connect(ui->helpButton, &QPushButton::clicked, this, &MainWindow::showSelectPointsHelp);
+
+    connect(ui->open3DcameraAction, &QAction::triggered, this, &MainWindow::open3dCamera);
+    connect(ui->openPCDAction, &QAction::triggered, &ifm3dViewer, &IFM3DViewer::openLocal);
 }
 
 MainWindow::~MainWindow()
@@ -614,7 +617,8 @@ void MainWindow::computeBodyMeasurement()
 void MainWindow::setBMScoreThreshold()
 {
     bool ok = false;
-    int t = QInputDialog::getInt(this, "Set Threshold", "Please set value of threshold: ", 10, 5, 100, 1, &ok);
+    int curValue = bmscore.getThreshold();
+    int t = QInputDialog::getInt(this, "Set Threshold", "Please set value of threshold: ", curValue, 5, 100, 1, &ok);
     if (!ok)
         return;
 
