@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     imgmarkscene.cpp \
     markitem.cpp \
     imgpoint.cpp \
-    bmscore.cpp
+    bmscore.cpp \
+    helpdialog.cpp
 
 HEADERS  += mainwindow.h \
     snapshotthread.h \
@@ -27,9 +28,11 @@ HEADERS  += mainwindow.h \
     imgmarkscene.h \
     markitem.h \
     imgpoint.h \
-    bmscore.h
+    bmscore.h \
+    helpdialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    helpdialog.ui
 
 # VLC configuration
 win32 {
@@ -279,4 +282,7 @@ message("opencv path: $$OPENCV_PATH")
 
 message("All include path: $$INCLUDEPATH")
 message("All Libraries: $$LIBS")
+
+RESOURCES += \
+    qbmsres.qrc
 

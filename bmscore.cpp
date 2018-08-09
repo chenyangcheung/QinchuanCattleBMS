@@ -1,8 +1,10 @@
 #include "bmscore.h"
 #include <QDebug>
+#include <pcl/filters/voxel_grid.h>
 
 BMScore::BMScore()
 {
+    raw_cloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
     cloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
     threshold = 10;
     for (int i = 0; i < 8; i++)
@@ -48,8 +50,16 @@ bool BMScore::readCloudData(std::string cloudName)
 {
     if (cloudName.empty())
         return false;
-    reader.read(cloudName, *cloud);
-    qDebug() << "Read cloud Success: " << __LINE__;
+    int flag = reader.read(cloudName, *cloud);
+
+    if (flag == -1)
+        return false;
+
+    pcl::VoxelGrid<pcl::PointXYZ> sor;//滤波处理对象
+    sor.setInputCloud(cloud);
+    sor.setLeafSize(0.01f, 0.01f, 0.01f);//设置滤波器处理时采用的体素大小的参数
+    sor.filter(*cloud);
+
     return true;
 }
 
@@ -167,14 +177,17 @@ void BMScore::computeBodyMeasurement()
 
             for(int j=0; j<8; j++)
             {
+//                qDebug() << "u" << u;
+//                qDebug() << "v" << v;
                 if(u <= x[j] + threshold && u >= x[j] - threshold && v <= y[j] + threshold && v >= y[j] - threshold )
                 {
+                     qDebug() << "id" << i;
                     world_points[j].x = cloud->points[pointIdxNKNSearch[i]].x;
                     world_points[j].y = cloud->points[pointIdxNKNSearch[i]].y;
                     world_points[j].z = cloud->points[pointIdxNKNSearch[i]].z;
                   //  qDebug() << "World Point: " << j << "(" << world_points[j].x << "," << world_points[j].y << "," << world_points[j].z << ")";
                 }
-                continue;
+//                continue;
             }
 //            if(u <= x[0] + threshold && u >= x[0] - threshold && v <= y[0] + threshold && v >= y[0] - threshold )
 //            {

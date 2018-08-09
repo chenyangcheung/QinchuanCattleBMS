@@ -31,6 +31,7 @@ private:
     std::vector<std::vector<double>> middle;
     std::vector<std::vector<double>> neican;
     pcl::PCDReader reader;
+    pcl::PointCloud<pcl::PointXYZ>::Ptr raw_cloud;
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud;
 public:
     BMScore();

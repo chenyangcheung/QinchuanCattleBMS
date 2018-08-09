@@ -33,7 +33,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="rgbCameraTab">
        <property name="sizePolicy">
@@ -1182,7 +1182,7 @@
                  </size>
                 </property>
                 <property name="text">
-                 <string>Help</string>
+                 <string>How to select</string>
                 </property>
                </widget>
               </item>
@@ -1198,6 +1198,36 @@
        <attribute name="title">
         <string>Help</string>
        </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_9">
+        <item>
+         <widget class="QLabel" name="helpLabel">
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Plain</enum>
+          </property>
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;HOW TO MEASURE BODY SIZE OF CATTLE&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;Step1:&lt;/span&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt; Capture two-dimensional picture of Qinchuan Cattle.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;2D pictures can be obtained by “Open video” to choose a file which has existed or “Open Camera” and “Snapshot” to get real-time picture which we recommend. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;Step2:&lt;/span&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt; Capture three-dimensional point clouds data of Qinchuan Cattle. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;3D point clouds data can be obtained by “Open PCD” to choose a file in *.pcd format or “Open Camera” and “Snapshot” to get real-time picture which we recommend. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;Step3:&lt;/span&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt; Compute body Measurement. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Double click the item which is needs to be displayed. The specific positions of “Point 1”to “Point 8” can be showed once you click on “Help”. Choose radio in front of every points and check it when you made up your decision. You can select them all over again by “Reset”. The result of body traits will be listed on the top left after clicking the “Compute Body Measurement”. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::RichText</enum>
+          </property>
+          <property name="scaledContents">
+           <bool>true</bool>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+          <property name="textInteractionFlags">
+           <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>
@@ -1218,8 +1248,8 @@
     </property>
     <addaction name="actionOpen_Video"/>
     <addaction name="actionOpen_Camera"/>
-    <addaction name="actionOpen_PCD"/>
-    <addaction name="actionOpen_3D_camera"/>
+    <addaction name="openPCDAction"/>
+    <addaction name="open3DcameraAction"/>
    </widget>
    <widget class="QMenu" name="menuSettings">
     <property name="title">
@@ -1249,12 +1279,12 @@
     <string>Open 2D Camera</string>
    </property>
   </action>
-  <action name="actionOpen_3D_camera">
+  <action name="open3DcameraAction">
    <property name="text">
     <string>Open 3D camera</string>
    </property>
   </action>
-  <action name="actionOpen_PCD">
+  <action name="openPCDAction">
    <property name="text">
     <string>Open PCD</string>
    </property>

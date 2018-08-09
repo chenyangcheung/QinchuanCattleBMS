@@ -11,6 +11,7 @@
 #include <QLabel>
 #include <QFont>
 #include <QHeaderView>
+#include <helpdialog.h>
 
 // VLCQt library
 #include <VLCQtCore/Common.h>
@@ -165,6 +166,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->snapShot3d, &QPushButton::clicked, this, &MainWindow::takeSnapShot3d);
 
     connect(ui->setThresholdAction, &QAction::triggered, this, &MainWindow::setBMScoreThreshold);
+    connect(ui->helpButton, &QPushButton::clicked, this, &MainWindow::showSelectPointsHelp);
 }
 
 MainWindow::~MainWindow()
@@ -619,3 +621,8 @@ void MainWindow::setBMScoreThreshold()
     bmscore.setThreshold(t);
 }
 
+void MainWindow::showSelectPointsHelp()
+{
+    HelpDialog hdlg;
+    hdlg.exec();
+}

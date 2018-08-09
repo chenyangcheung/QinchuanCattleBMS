@@ -13,7 +13,7 @@ SnapshotThread::SnapshotThread(QObject *parent)
 void SnapshotThread::setCalParams()
 {
     cameraMatrix = cv::Mat::eye(3, 3, CV_64F);
-    distCoeffs = cv::Mat::zeros(5, 1, CV_64F);
+    distCoeffs = cv::Mat::zeros(4, 1, CV_64F);
     // === Intrinsic ===
     cameraMatrix.at<double>(0, 0) = 1302.728840;
     cameraMatrix.at<double>(0, 2) = 921.523419;
@@ -25,7 +25,7 @@ void SnapshotThread::setCalParams()
     distCoeffs.at<double>(1, 0) = 0.200639;
     distCoeffs.at<double>(2, 0) = 0.000581;
     distCoeffs.at<double>(3, 0) = 0.000784;
-    distCoeffs.at<double>(4, 0) = 0;
+//    distCoeffs.at<double>(4, 0) = 0;
 //    Mat cameraMatrix = Mat::eye(3, 3, CV_64F);
 //        cameraMatrix.at<double>(0, 0) = 4.450537506243416e+02;
 //        cameraMatrix.at<double>(0, 1) = 0.192095145445498;

@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/imgs">
+        <file alias="select_pts">selectPts.jpg</file>
+    </qresource>
+</RCC>

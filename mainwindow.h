@@ -80,6 +80,7 @@ private slots:
     void clearAll();
     void computeBodyMeasurement();
     void setBMScoreThreshold();
+    void showSelectPointsHelp();
 };
 
 #endif // MAINWINDOW_H
