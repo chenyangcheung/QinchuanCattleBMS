@@ -13,6 +13,7 @@
 #include <QMessageBox>
 #include <QDateTime>
 #include <QApplication>
+#include <pcl/common/transforms.h>
 
 IFM3DViewer::IFM3DViewer(QObject *parent)
     : QThread(parent)
@@ -30,6 +31,17 @@ void IFM3DViewer::initViewer(QVTKWidget *&vd)
     viewer->addPointCloud<pcl::PointXYZI>(cloud, intensity_distribution, "cloud");
 
     viewer->setBackgroundColor (0.1, 0.1, 0.1);
+//    int v_pcl(0);
+//    viewer->createViewPort(0., 0., 1., 1., v_pcl);
+//    viewer->setBackgroundColor(0, 0, 0, v_pcl);
+//    viewer->setCameraPosition(-3.0, // x-position
+//                              0,    // y-position
+//                              0,    // z-position
+//                              0,    // x-axis "up" (0 = false)
+//                              0,    // y-axis "up" (0 = false)
+//                              1,    // z-axis "up" (1 = true)
+//                              v_pcl);    // viewport
+    viewer->addCoordinateSystem (1.0, "cloud", 0);
     vtkDisplay->SetRenderWindow(viewer->getRenderWindow());
     viewer->setupInteractor(vtkDisplay->GetInteractor(), vtkDisplay->GetRenderWindow());
     vtkDisplay->update();
@@ -87,6 +99,7 @@ void IFM3DViewer::openLocal()
         }
 
         viewer->updatePointCloud<pcl::PointXYZI>(cloud, "cloud");
+//        std::cout << matrix << std::endl;
         viewer->resetCamera();
         vtkDisplay->update();
     }
@@ -99,7 +112,7 @@ void IFM3DViewer::run()
         auto buff = std::make_shared<ifm3d::ImageBuffer>();
         while (camIsActive)
         {
-            if (!fg->WaitForFrame(buff.get(), 500, true, false))
+            if (!fg->WaitForFrame(buff.get(), 500))
             {
                 break;
             }
@@ -135,6 +148,22 @@ void IFM3DViewer::takeSnapshot()
 
     // Save pcd file by pcl library
 //    pcl::io::savePCDFileASCII(ssname.toStdString(), *temp);
+
+    // swap x value and z value
+//    for (int i = 0; i < temp->width * temp->height; i++)
+//    {
+//        double t = temp->points[i].x;
+//        temp->points[i].x = - temp->points[i].x;
+//        temp->points[i].z = - temp->points[i].z;
+//    }
+    float theta = M_PI/2; // The angle of rotation in radians
+    Eigen::Affine3f transform_2 = Eigen::Affine3f::Identity();
+    transform_2.translation() << -3.0, 0.0, 1.0;
+    // The same rotation matrix as before; theta radians around Z axis
+     transform_2.rotate (Eigen::AngleAxisf (theta, Eigen::Vector3f::UnitX()));
+     theta = M_PI / 4;
+     transform_2.rotate (Eigen::AngleAxisf (theta, Eigen::Vector3f::UnitZ()));
+     pcl::transformPointCloud (*temp, *temp, transform_2);
     pcl::PCDWriter writer;
     writer.write(ssname.toStdString(), *temp);
 

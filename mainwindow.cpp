@@ -557,6 +557,15 @@ void MainWindow::clearAll()
         ptCheckboxGroup->button(i)->setChecked(false);
     }
     imgMarkScene->resetAllSaved();
+
+    // clear body measurement info
+    ui->waistHgtInfoLabel->setText("");
+    ui->withersHgtInfoLabel->setText("");
+    ui->bodyLgtInfoLabel->setText("");
+    ui->backHgtInfoLabel->setText("");
+    ui->hipHgtInfoLabel->setText("");
+    ui->rumpLgtInfoLabel->setText("");
+    ui->chestDptInfoLabel->setText("");
 }
 
 bool MainWindow::checkIfAllSaved()

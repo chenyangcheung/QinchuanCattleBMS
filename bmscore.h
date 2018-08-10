@@ -26,7 +26,7 @@ private:
     int K;
     int threshold;
     //保留的八个位置+四个用户不可见的位置
-    pcl::PointXYZ world_points[7];
+    pcl::PointXYZ world_points[8];
   //  pcl::PointXYZ invisible_points[3];
     std::vector<std::vector<double>> middle;
     std::vector<std::vector<double>> neican;
