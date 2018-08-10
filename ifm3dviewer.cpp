@@ -153,17 +153,17 @@ void IFM3DViewer::takeSnapshot()
 //    for (int i = 0; i < temp->width * temp->height; i++)
 //    {
 //        double t = temp->points[i].x;
-//        temp->points[i].x = - temp->points[i].x;
-//        temp->points[i].z = - temp->points[i].z;
+//        temp->points[i].x = temp->points[i].z;
+//        temp->points[i].z = t;
 //    }
-    float theta = M_PI/2; // The angle of rotation in radians
-    Eigen::Affine3f transform_2 = Eigen::Affine3f::Identity();
-    transform_2.translation() << -3.0, 0.0, 1.0;
-    // The same rotation matrix as before; theta radians around Z axis
-     transform_2.rotate (Eigen::AngleAxisf (theta, Eigen::Vector3f::UnitX()));
-     theta = M_PI / 4;
-     transform_2.rotate (Eigen::AngleAxisf (theta, Eigen::Vector3f::UnitZ()));
-     pcl::transformPointCloud (*temp, *temp, transform_2);
+//    float theta = M_PI/2; // The angle of rotation in radians
+//    Eigen::Affine3f transform_2 = Eigen::Affine3f::Identity();
+//    transform_2.translation() << -3.0, 0.0, 1.0;
+//    // The same rotation matrix as before; theta radians around Z axis
+//     transform_2.rotate (Eigen::AngleAxisf (theta, Eigen::Vector3f::UnitX()));
+//     theta = M_PI / 4;
+//     transform_2.rotate (Eigen::AngleAxisf (theta, Eigen::Vector3f::UnitZ()));
+//     pcl::transformPointCloud (*temp, *temp, transform_2);
     pcl::PCDWriter writer;
     writer.write(ssname.toStdString(), *temp);
 

@@ -170,9 +170,9 @@ void BMScore::computeBodyMeasurement()
         qDebug() << "Running to line: " << __LINE__;
         for (size_t i = 0; i < pointIdxNKNSearch.size(); i++)
         {
-            double cloud_after_x = cloud->points[pointIdxNKNSearch[i]].x + 0.20247;
+            double cloud_after_z = cloud->points[pointIdxNKNSearch[i]].x + 0.20247;
             double cloud_after_y = cloud->points[pointIdxNKNSearch[i]].y - 0.00161;
-            double cloud_after_z = cloud->points[pointIdxNKNSearch[i]].z - 0.019;
+            double cloud_after_x = cloud->points[pointIdxNKNSearch[i]].z - 0.019;
 
             std::vector<std::vector<double>> C = { { cloud_after_x },{ cloud_after_y },{ cloud_after_z } };
 
