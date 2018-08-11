@@ -29,6 +29,18 @@ void IFM3DViewer::initViewer(QVTKWidget *&vd)
     viewer.reset(new pcl::visualization::PCLVisualizer ("viewer", false));
     viewer->addPointCloud<pcl::PointXYZI>(cloud, intensity_distribution, "cloud");
 
+    viewer->addCoordinateSystem();
+    int v_pcl(0);
+//    viewer->createViewPort(0., 0., 1., 1., v_pcl);
+//    viewer->setBackgroundColor(0, 0, 0, v_pcl);
+    viewer->setCameraPosition(-3.0, // x-position
+                              0,    // y-position
+                              0,    // z-position
+                              0,    // x-axis "up" (0 = false)
+                              0,    // y-axis "up" (0 = false)
+                              1,    // z-axis "up" (1 = true)
+                              v_pcl);    // viewport
+
     viewer->setBackgroundColor (0.1, 0.1, 0.1);
     vtkDisplay->SetRenderWindow(viewer->getRenderWindow());
     viewer->setupInteractor(vtkDisplay->GetInteractor(), vtkDisplay->GetRenderWindow());
@@ -99,7 +111,7 @@ void IFM3DViewer::run()
         auto buff = std::make_shared<ifm3d::ImageBuffer>();
         while (camIsActive)
         {
-            if (!fg->WaitForFrame(buff.get(), 500, true, false))
+            if (!fg->WaitForFrame(buff.get(), 500))
             {
                 break;
             }
