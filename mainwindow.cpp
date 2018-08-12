@@ -126,6 +126,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->SnapShot, &QPushButton::clicked, this, &MainWindow::takeSnapShot);
     connect(ui->actionOpen_Video, &QAction::triggered, this, &MainWindow::openLocal);
     connect(ui->actionOpen_Camera, &QAction::triggered, this, &MainWindow::openUrl);
+    connect(_player, &VlcMediaPlayer::end, _player, &VlcMediaPlayer::stop);
 
     // connects of compute body measurement
     connect(ui->imageTableWidget, &QTableWidget::itemActivated, this, &MainWindow::display2dImage);
