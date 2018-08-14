@@ -192,7 +192,7 @@ void MainWindow::openLocal()
     QString file =
             QFileDialog::getOpenFileName(this, tr("Open file"),
                                          ".",
-                                         tr("Multimedia files(*)"));
+                                         tr("Multimedia files(*.mp4 *.mkv *.dvi *.flv *.rmvb *.wmv *avi *wmv);;Image files(*.png *.jpg *.jpeg *.bmp *.gif)"));
 
     if (file.isEmpty())
         return;
