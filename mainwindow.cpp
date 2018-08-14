@@ -12,6 +12,8 @@
 #include <QFont>
 #include <QHeaderView>
 #include <helpdialog.h>
+#include <QFile>
+#include <QTextStream>
 
 // VLCQt library
 #include <VLCQtCore/Common.h>
@@ -171,6 +173,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->open3DcameraAction, &QAction::triggered, this, &MainWindow::open3dCamera);
     connect(ui->openPCDAction, &QAction::triggered, &ifm3dViewer, &IFM3DViewer::openLocal);
+
+    // menu action
+    connect(ui->saveBMIAction, &QAction::triggered, this, &MainWindow::saveBMIToFile);
 }
 
 MainWindow::~MainWindow()
@@ -534,6 +539,10 @@ void MainWindow::unsavePoint8Info(bool checked)
 
 void MainWindow::clearAll()
 {
+    // unset ifComputed flag
+    ifComputed = false;
+    // TODO: check if previous BMI result is saved
+
     // clear items in graphics view
     for (int i = 0; i < 8; i++)
     {
@@ -587,6 +596,9 @@ void MainWindow::computeBodyMeasurement()
         return;
     }
 
+    // set ifComputed flag
+    ifComputed = true;
+
     // step 1: init BMS core
     bmscore.initBMScore();
 
@@ -639,4 +651,60 @@ void MainWindow::showSelectPointsHelp()
 {
     HelpDialog hdlg;
     hdlg.exec();
+}
+
+QString MainWindow::getFileNamePrefix()
+{
+    return QString();
+}
+
+void MainWindow::saveBMIToFile()
+{
+    // check if has computed result
+    if (!ifComputed)
+    {
+        QMessageBox::warning(nullptr, "Warning", "There are no result to save!");
+        return;
+    }
+
+    // Generate image name according to current time
+    QDateTime current_date_time = QDateTime::currentDateTime();
+    QString current_date = current_date_time.toString("yyyy-MM-dd-hhmmsszzz");
+    QString defaultFilePath = qApp->applicationDirPath() + "/" + current_date + "-BMI-result.txt";
+    QString realFilePath = QFileDialog::getSaveFileName(nullptr, "Save BMI Computation Result",
+                                                    defaultFilePath);
+
+    if (realFilePath.isEmpty())
+        return;
+
+    QFile file(realFilePath);
+
+    if (!file.open(QIODevice::ReadWrite | QIODevice::Text))
+        return;
+
+    QTextStream out(&file);
+    out << "======== Body Measurement System Computation Result ========";
+    out << "\n";
+    out << "-- Images Info --\n";
+    out << "\n";
+    out << "2D Image File: " << image2DName << "\n";
+    out << "3D Image File: " << image3DName << "\n";
+    out << "\n";
+    out << "-- Position Info --\n";
+    out << "\n";
+    for (int i = 0; i < 8; i++)
+        out << "Point " << i << ": (" << pointList[i].pos.x() << ", " << pointList[i].pos.y() << ")\n";
+    out << "\n";
+    out << "-- Body Measurement Info --\n";
+    out << "\n";
+
+    out << "Withers Height: " << bmscore.getWithersHeight() << " m\n";
+    out << "Chest Depth: " << bmscore.getChestDepth() << " m\n";
+    out << "Back Height: " << bmscore.getBackHeight() << " m\n";
+    out << "Body Length: " << bmscore.getBodyLength() << " m\n";
+    out << "Waist Height: " << bmscore.getWaistHeight() << " m\n";
+    out << "Rump Length: " << bmscore.getRumpLength() << " m\n";
+    out << "Hip Height: " << bmscore.getHipHeight() << " m\n";
+
+    file.close();
 }

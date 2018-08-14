@@ -1257,8 +1257,22 @@
     </property>
     <addaction name="setThresholdAction"/>
    </widget>
+   <widget class="QMenu" name="menuFiles">
+    <property name="title">
+     <string>Files</string>
+    </property>
+    <addaction name="saveBMIAction"/>
+   </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>About</string>
+    </property>
+    <addaction name="aboutAction"/>
+   </widget>
    <addaction name="menuQinchuanCattleBMS"/>
+   <addaction name="menuFiles"/>
    <addaction name="menuSettings"/>
+   <addaction name="menuAbout"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -1292,6 +1306,16 @@
   <action name="setThresholdAction">
    <property name="text">
     <string>Set Threshold</string>
+   </property>
+  </action>
+  <action name="saveBMIAction">
+   <property name="text">
+    <string>Save BMI Result</string>
+   </property>
+  </action>
+  <action name="aboutAction">
+   <property name="text">
+    <string>About</string>
    </property>
   </action>
  </widget>
