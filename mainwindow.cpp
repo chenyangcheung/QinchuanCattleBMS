@@ -649,8 +649,9 @@ void MainWindow::setBMScoreThreshold()
 
 void MainWindow::showSelectPointsHelp()
 {
-    HelpDialog hdlg;
-    hdlg.exec();
+    HelpDialog *hdlg = new HelpDialog;
+    hdlg->setModal(false);
+    hdlg->show();
 }
 
 QString MainWindow::getFileNamePrefix()
