@@ -189,6 +189,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::openLocal()
 {
+    // clear player
+    _player->stop();
+
     QString file =
             QFileDialog::getOpenFileName(this, tr("Open file"),
                                          ".",
