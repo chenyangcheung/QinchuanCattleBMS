@@ -197,6 +197,19 @@ void MainWindow::openLocal()
     if (file.isEmpty())
         return;
 
+    // remove specail process for image files
+    disconnect(_player, &VlcMediaPlayer::playing, _player, &VlcMediaPlayer::pause);
+
+    QFileInfo fi(file);
+    QString fileType = fi.suffix();
+
+    // if type is image, player pause!
+    if (fileType == "jpg" || fileType == "png"
+     || fileType == "jpeg" || fileType == "bmp"
+     || fileType == "gif")
+    {
+        connect(_player, &VlcMediaPlayer::playing, _player, &VlcMediaPlayer::pause);
+    }
     _media = new VlcMedia(file, true, _instance);
 
     _player->open(_media);
