@@ -43,6 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // global settings
     dataCount = 0;      // init counter with 0
+    useDefalutValue = true;
 
     // 2d camera settings
     ui->camera->setStyleSheet("border:1px solid black");
@@ -366,6 +367,7 @@ void MainWindow::toggleSelectedFlag()
 void MainWindow::updatePointInfo(qreal x, qreal y)
 {
     curPos = QPoint(x, y);
+    useDefalutValue = false;
     qDebug() << "Current position: " << "[" << x << "," << y << "]";
 }
 
@@ -541,6 +543,8 @@ void MainWindow::clearAll()
 {
     // unset ifComputed flag
     ifComputed = false;
+
+    useDefalutValue = true;
     // TODO: check if previous BMI result is saved
 
     // clear items in graphics view
@@ -590,7 +594,7 @@ bool MainWindow::checkIfAllSaved()
 
 void MainWindow::computeBodyMeasurement()
 {
-    if (!checkIfAllSaved())
+    if (!useDefalutValue && !checkIfAllSaved())
     {
         QMessageBox::warning(nullptr, tr("Warning"), tr("There are points un-set positon, please set position for them!"));
         return;

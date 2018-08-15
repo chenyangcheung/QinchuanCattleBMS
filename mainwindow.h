@@ -52,6 +52,7 @@ private:
     // flags
     bool ifComputed;      // check it before save BMI result, and it should be set true after trigger compute button
                           // and unset when triggering reset button
+    bool useDefalutValue;
     QString getFileNamePrefix();
 private slots:
     // 2d camera
