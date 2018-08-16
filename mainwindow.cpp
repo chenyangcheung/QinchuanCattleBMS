@@ -14,6 +14,7 @@
 #include <helpdialog.h>
 #include <QFile>
 #include <QTextStream>
+#include <QDir>
 
 // VLCQt library
 #include <VLCQtCore/Common.h>
@@ -44,6 +45,15 @@ MainWindow::MainWindow(QWidget *parent) :
     // global settings
     dataCount = 0;      // init counter with 0
     useDefalutValue = true;
+    snapshotPath = qApp->applicationDirPath() + "/bms_snapshots";
+    // create snapshot path
+    if (!QDir().exists(snapshotPath))
+    {
+        bool r = QDir().mkpath(snapshotPath);
+        // save log to file
+    }
+    ifm3dViewer.setSnapshotPath(snapshotPath);
+    SnapshotThread.setSnapshotPath(snapshotPath);
 
     // 2d camera settings
     ui->camera->setStyleSheet("border:1px solid black");
@@ -179,6 +189,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->saveBMIAction, &QAction::triggered, this, &MainWindow::saveBMIToFile);
     connect(ui->aboutAppAction, &QAction::triggered, this, &MainWindow::showAboutInfo);
     connect(ui->aboutQtAction, &QAction::triggered, this, &MainWindow::showQtAbout);
+    connect(ui->setSnapshotPathAction, &QAction::triggered, this, &MainWindow::setSanpshotPath);
 }
 
 MainWindow::~MainWindow()
@@ -310,8 +321,8 @@ void MainWindow::display2dImage()
         ptCheckboxGroup->button(i)->blockSignals(false);
     }
 
-    QString appPath = qApp->applicationDirPath();
-    QString imagePath = appPath + "/" + ui->imageTableWidget->selectedItems().at(0)->text();
+//    QString appPath = qApp->applicationDirPath();
+    QString imagePath = QFileInfo(snapshotPath).filePath() + "/" + ui->imageTableWidget->selectedItems().at(0)->text();
 
     if (imagePath.isEmpty())
         return;
@@ -625,7 +636,7 @@ void MainWindow::computeBodyMeasurement()
     bmscore.initBMScore();
 
     // step 2: input pcd data
-    QString pcdPath = qApp->applicationDirPath() + "/" + ui->imageTableWidget->selectedItems().at(1)->text();
+    QString pcdPath = QFileInfo(snapshotPath).filePath() + "/" + ui->imageTableWidget->selectedItems().at(1)->text();
     bool readPCDSuccess = bmscore.readCloudData(pcdPath.toStdString());
     if (!readPCDSuccess)
     {
@@ -742,4 +753,24 @@ void MainWindow::showQtAbout()
 {
     QMessageBox::aboutQt(nullptr, "About Qt");
     return;
+}
+
+void MainWindow::setSanpshotPath()
+{
+    QString ssp =
+            QInputDialog::getText(this, tr("Set sanpshot path"), tr("Enter the path to save snapshot"), QLineEdit::Normal, snapshotPath);
+
+    if (ssp.isEmpty())
+        return;
+
+    snapshotPath = ssp;
+    if (!QDir().exists(ssp))
+    {
+        bool r = QDir().mkpath(ssp);
+        // to save error to log file
+    }
+    // TODO: consider immigranting previous images
+
+    ifm3dViewer.setSnapshotPath(ssp);
+    SnapshotThread.setSnapshotPath(ssp);
 }

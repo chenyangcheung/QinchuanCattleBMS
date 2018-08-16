@@ -1260,6 +1260,7 @@
      <string>Settings</string>
     </property>
     <addaction name="setThresholdAction"/>
+    <addaction name="setSnapshotPathAction"/>
    </widget>
    <widget class="QMenu" name="menuFiles">
     <property name="title">
@@ -1326,6 +1327,11 @@
   <action name="aboutQtAction">
    <property name="text">
     <string>About Qt</string>
+   </property>
+  </action>
+  <action name="setSnapshotPathAction">
+   <property name="text">
+    <string>Set Snapshot Path</string>
    </property>
   </action>
  </widget>

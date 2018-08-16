@@ -14,6 +14,8 @@
 #include <QDateTime>
 #include <QApplication>
 #include <pcl/common/transforms.h>
+#include <QFileInfo>
+
 
 IFM3DViewer::IFM3DViewer(QObject *parent)
     : QThread(parent)
@@ -255,7 +257,7 @@ void IFM3DViewer::takeSnapshot()
     // Generate image name according to current time
     QDateTime current_date_time = QDateTime::currentDateTime();
     QString current_date = current_date_time.toString("yyyy-MM-dd-hhmmsszzz");
-    ssname = qApp->applicationDirPath() + "/" + current_date + ".pcd";
+    ssname = QFileInfo(snapshotPath).filePath() + "/" + current_date + ".pcd";
 
     lock.lockForRead();
     // Save pcd file by pcl library
@@ -284,4 +286,9 @@ void IFM3DViewer::closeCamera()
 IFM3DViewer::~IFM3DViewer()
 {
 
+}
+
+void IFM3DViewer::setSnapshotPath(QString ssp)
+{
+    snapshotPath = ssp;
 }

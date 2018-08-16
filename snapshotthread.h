@@ -15,6 +15,7 @@ public:
     QString getSnapshotName();
     void setCalParams();
     void imgCalibrate(QString imgName);
+    void setSnapshotPath(QString ssp);
 protected:
     void virtual run() override;
 private:
@@ -23,6 +24,7 @@ private:
     bool ifGetSnapshot;
     cv::Mat cameraMatrix;
     cv::Mat distCoeffs;
+    QString snapshotPath;
 };
 
 #endif // SNAPSHOTTHREAD_H

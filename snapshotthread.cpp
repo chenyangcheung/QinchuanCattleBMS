@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QDebug>
 #include <QMessageBox>
+#include <QFileInfo>
 
 SnapshotThread::SnapshotThread(QObject *parent)
     : QThread(parent)
@@ -42,7 +43,7 @@ void SnapshotThread::takeSnapshot(VlcMediaPlayer *&player)
     // Generate image name according to current time
     QDateTime current_date_time = QDateTime::currentDateTime();
     QString current_date = current_date_time.toString("yyyy-MM-dd-hhmmsszzz");
-    ssname = qApp->applicationDirPath() + "/" + current_date + ".jpg";
+    ssname = QFileInfo(snapshotPath).filePath() + "/" + current_date + ".jpg";
 
     // start to take snapshot
     start();
@@ -80,4 +81,9 @@ void SnapshotThread::imgCalibrate(QString imgName)
     cv::remap(img, calibratedImg, map1, map2, cv::INTER_LINEAR);
 
     cv::imwrite(imgName.toStdString(), calibratedImg);
+}
+
+void SnapshotThread::setSnapshotPath(QString ssp)
+{
+    snapshotPath = ssp;
 }

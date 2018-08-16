@@ -32,6 +32,7 @@ public:
     void stop();
     QString getSnapshotName();
     ~IFM3DViewer();
+    void setSnapshotPath(QString ssp);
 protected:
     void virtual run() override;
 private:
@@ -53,6 +54,7 @@ private:
     PMDHandle hnd = 0; // connection handle
     PMDDataDescription dd;
     QReadWriteLock lock;
+    QString snapshotPath;
 };
 
 #endif // IFM3DVIEWER_H
