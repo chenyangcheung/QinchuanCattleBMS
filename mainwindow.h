@@ -87,6 +87,8 @@ private slots:
     void setBMScoreThreshold();
     void showSelectPointsHelp();
     void saveBMIToFile();
+    void showAboutInfo();
+    void showQtAbout();
 };
 
 #endif // MAINWINDOW_H

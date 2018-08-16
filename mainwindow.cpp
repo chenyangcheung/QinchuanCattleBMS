@@ -177,6 +177,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // menu action
     connect(ui->saveBMIAction, &QAction::triggered, this, &MainWindow::saveBMIToFile);
+    connect(ui->aboutAppAction, &QAction::triggered, this, &MainWindow::showAboutInfo);
+    connect(ui->aboutQtAction, &QAction::triggered, this, &MainWindow::showQtAbout);
 }
 
 MainWindow::~MainWindow()
@@ -728,4 +730,16 @@ void MainWindow::saveBMIToFile()
     out << "Hip Height: " << bmscore.getHipHeight() << " m\n";
 
     file.close();
+}
+
+void MainWindow::showAboutInfo()
+{
+    QMessageBox::about(nullptr, "About QinchuanCattleBMS", "This is a software to compute body measurement of Cattles.");
+    return;
+}
+
+void MainWindow::showQtAbout()
+{
+    QMessageBox::aboutQt(nullptr, "About Qt");
+    return;
 }
