@@ -17,7 +17,11 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>QinchuanCattleBMS</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="qbmsres.qrc">
+    <normaloff>:/imgs/app-icon</normaloff>:/imgs/app-icon</iconset>
   </property>
   <property name="layoutDirection">
    <enum>Qt::LeftToRight</enum>
@@ -1267,7 +1271,8 @@
     <property name="title">
      <string>About</string>
     </property>
-    <addaction name="aboutAction"/>
+    <addaction name="aboutAppAction"/>
+    <addaction name="aboutQtAction"/>
    </widget>
    <addaction name="menuQinchuanCattleBMS"/>
    <addaction name="menuFiles"/>
@@ -1313,9 +1318,14 @@
     <string>Save BMI Result</string>
    </property>
   </action>
-  <action name="aboutAction">
+  <action name="aboutAppAction">
    <property name="text">
-    <string>About</string>
+    <string>About App</string>
+   </property>
+  </action>
+  <action name="aboutQtAction">
+   <property name="text">
+    <string>About Qt</string>
    </property>
   </action>
  </widget>
@@ -1337,6 +1347,8 @@
    </slots>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="qbmsres.qrc"/>
+ </resources>
  <connections/>
 </ui>

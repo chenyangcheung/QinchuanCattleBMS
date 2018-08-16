@@ -286,3 +286,5 @@ message("All Libraries: $$LIBS")
 RESOURCES += \
     qbmsres.qrc
 
+RC_FILE = app.rc
+
