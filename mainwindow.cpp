@@ -45,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // global settings
     dataCount = 0;      // init counter with 0
     useDefalutValue = true;
-    snapshotPath = qApp->applicationDirPath() + "/bms_snapshots";
+    snapshotPath = QDir::homePath() + "/bms_snapshots";
     // create snapshot path
     if (!QDir().exists(snapshotPath))
     {
