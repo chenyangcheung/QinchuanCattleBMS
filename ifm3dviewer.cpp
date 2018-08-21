@@ -179,20 +179,16 @@ void IFM3DViewer::run()
             res = pmdGet3DCoordinates(hnd, &xyz3Dcoordinate[0], xyz3Dcoordinate.size() * sizeof(float));
 
             lock.lockForWrite();
-            int counter = 0;
+
             for (size_t i = 0; i < imgHeight * imgWidth; i++)
             {
-                if (!(flags[i] & 1))
-                {
-                    cloud->points[i].x = xyz3Dcoordinate[i * 3 + 0];
-                    cloud->points[i].y = xyz3Dcoordinate[i * 3 + 1];
-                    cloud->points[i].z = xyz3Dcoordinate[i * 3 + 2];
-                    counter++;
-                }
+                cloud->points[i].x = xyz3Dcoordinate[i * 3 + 0];
+                cloud->points[i].y = xyz3Dcoordinate[i * 3 + 1];
+                cloud->points[i].z = xyz3Dcoordinate[i * 3 + 2];
             }
 
-            cloud->width = counter;
-            cloud->points.resize(counter);
+//            cloud->width = counter;
+//            cloud->points.resize(counter);
             lock.unlock();
             viewer->updatePointCloud<pcl::PointXYZ>(cloud, "cloud");
             vtkDisplay->update();
@@ -221,7 +217,27 @@ void IFM3DViewer::takeSnapshot()
         return;
     }
 
-    pcl::PointCloud<pcl::PointXYZ> *temp = cloud.get();
+    // create temporary cloud to save
+    pcl::PointCloud<pcl::PointXYZ> *temp(new pcl::PointCloud<pcl::PointXYZ>);
+    temp->width = cloud->width;
+    temp->height = cloud->height;
+    temp->is_dense = false;
+    temp->points.resize(temp->width * temp->height);
+
+    // filter invalid points
+    int counter = 0;
+    for (size_t i = 0; i < temp->width; i++)
+    {
+        if (!(flags[i] & 1))
+        {
+            temp->points[i].x = xyz3Dcoordinate[i * 3 + 0];
+            temp->points[i].y = xyz3Dcoordinate[i * 3 + 1];
+            temp->points[i].z = xyz3Dcoordinate[i * 3 + 2];
+            counter++;
+        }
+    }
+    temp->width = counter;
+    temp->points.resize(counter);
 
     // Generate image name according to current time
     QDateTime current_date_time = QDateTime::currentDateTime();
