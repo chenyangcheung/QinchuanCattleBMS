@@ -17,7 +17,11 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>QinchuanCattleBMS</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="qbmsres.qrc">
+    <normaloff>:/imgs/app-icon</normaloff>:/imgs/app-icon</iconset>
   </property>
   <property name="layoutDirection">
    <enum>Qt::LeftToRight</enum>
@@ -1257,8 +1261,23 @@
     </property>
     <addaction name="setThresholdAction"/>
    </widget>
+   <widget class="QMenu" name="menuFiles">
+    <property name="title">
+     <string>Files</string>
+    </property>
+    <addaction name="saveBMIAction"/>
+   </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>About</string>
+    </property>
+    <addaction name="aboutAppAction"/>
+    <addaction name="aboutQtAction"/>
+   </widget>
    <addaction name="menuQinchuanCattleBMS"/>
+   <addaction name="menuFiles"/>
    <addaction name="menuSettings"/>
+   <addaction name="menuAbout"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -1294,6 +1313,21 @@
     <string>Set Threshold</string>
    </property>
   </action>
+  <action name="saveBMIAction">
+   <property name="text">
+    <string>Save BMI Result</string>
+   </property>
+  </action>
+  <action name="aboutAppAction">
+   <property name="text">
+    <string>About App</string>
+   </property>
+  </action>
+  <action name="aboutQtAction">
+   <property name="text">
+    <string>About Qt</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -1313,6 +1347,8 @@
    </slots>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="qbmsres.qrc"/>
+ </resources>
  <connections/>
 </ui>

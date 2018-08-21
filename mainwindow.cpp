@@ -12,6 +12,8 @@
 #include <QFont>
 #include <QHeaderView>
 #include <helpdialog.h>
+#include <QFile>
+#include <QTextStream>
 
 // VLCQt library
 #include <VLCQtCore/Common.h>
@@ -41,6 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // global settings
     dataCount = 0;      // init counter with 0
+    useDefalutValue = true;
 
     // 2d camera settings
     ui->camera->setStyleSheet("border:1px solid black");
@@ -171,6 +174,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->open3DcameraAction, &QAction::triggered, this, &MainWindow::open3dCamera);
     connect(ui->openPCDAction, &QAction::triggered, &ifm3dViewer, &IFM3DViewer::openLocal);
+
+    // menu action
+    connect(ui->saveBMIAction, &QAction::triggered, this, &MainWindow::saveBMIToFile);
+    connect(ui->aboutAppAction, &QAction::triggered, this, &MainWindow::showAboutInfo);
+    connect(ui->aboutQtAction, &QAction::triggered, this, &MainWindow::showQtAbout);
 }
 
 MainWindow::~MainWindow()
@@ -183,14 +191,30 @@ MainWindow::~MainWindow()
 
 void MainWindow::openLocal()
 {
+    // clear player
+    _player->stop();
+
     QString file =
             QFileDialog::getOpenFileName(this, tr("Open file"),
                                          ".",
-                                         tr("Multimedia files(*)"));
+                                         tr("Multimedia files(*.mp4 *.mkv *.dvi *.flv *.rmvb *.wmv *avi *wmv);;Image files(*.png *.jpg *.jpeg *.bmp *.gif)"));
 
     if (file.isEmpty())
         return;
 
+    // remove specail process for image files
+    disconnect(_player, &VlcMediaPlayer::playing, _player, &VlcMediaPlayer::pause);
+
+    QFileInfo fi(file);
+    QString fileType = fi.suffix();
+
+    // if type is image, player pause!
+    if (fileType == "jpg" || fileType == "png"
+     || fileType == "jpeg" || fileType == "bmp"
+     || fileType == "gif")
+    {
+        connect(_player, &VlcMediaPlayer::playing, _player, &VlcMediaPlayer::pause);
+    }
     _media = new VlcMedia(file, true, _instance);
 
     _player->open(_media);
@@ -361,6 +385,7 @@ void MainWindow::toggleSelectedFlag()
 void MainWindow::updatePointInfo(qreal x, qreal y)
 {
     curPos = QPoint(x, y);
+    useDefalutValue = false;
     qDebug() << "Current position: " << "[" << x << "," << y << "]";
 }
 
@@ -534,6 +559,12 @@ void MainWindow::unsavePoint8Info(bool checked)
 
 void MainWindow::clearAll()
 {
+    // unset ifComputed flag
+    ifComputed = false;
+
+    useDefalutValue = true;
+    // TODO: check if previous BMI result is saved
+
     // clear items in graphics view
     for (int i = 0; i < 8; i++)
     {
@@ -581,11 +612,14 @@ bool MainWindow::checkIfAllSaved()
 
 void MainWindow::computeBodyMeasurement()
 {
-    if (!checkIfAllSaved())
+    if (!useDefalutValue && !checkIfAllSaved())
     {
         QMessageBox::warning(nullptr, tr("Warning"), tr("There are points un-set positon, please set position for them!"));
         return;
     }
+
+    // set ifComputed flag
+    ifComputed = true;
 
     // step 1: init BMS core
     bmscore.initBMScore();
@@ -637,6 +671,75 @@ void MainWindow::setBMScoreThreshold()
 
 void MainWindow::showSelectPointsHelp()
 {
-    HelpDialog hdlg;
-    hdlg.exec();
+    HelpDialog *hdlg = new HelpDialog;
+    hdlg->setModal(false);
+    hdlg->show();
+}
+
+QString MainWindow::getFileNamePrefix()
+{
+    return QString();
+}
+
+void MainWindow::saveBMIToFile()
+{
+    // check if has computed result
+    if (!ifComputed)
+    {
+        QMessageBox::warning(nullptr, "Warning", "There are no result to save!");
+        return;
+    }
+
+    // Generate image name according to current time
+    QDateTime current_date_time = QDateTime::currentDateTime();
+    QString current_date = current_date_time.toString("yyyy-MM-dd-hhmmsszzz");
+    QString defaultFilePath = qApp->applicationDirPath() + "/" + current_date + "-BMI-result.txt";
+    QString realFilePath = QFileDialog::getSaveFileName(nullptr, "Save BMI Computation Result",
+                                                    defaultFilePath);
+
+    if (realFilePath.isEmpty())
+        return;
+
+    QFile file(realFilePath);
+
+    if (!file.open(QIODevice::ReadWrite | QIODevice::Text))
+        return;
+
+    QTextStream out(&file);
+    out << "======== Body Measurement System Computation Result ========";
+    out << "\n";
+    out << "-- Images Info --\n";
+    out << "\n";
+    out << "2D Image File: " << image2DName << "\n";
+    out << "3D Image File: " << image3DName << "\n";
+    out << "\n";
+    out << "-- Position Info --\n";
+    out << "\n";
+    for (int i = 0; i < 8; i++)
+        out << "Point " << i << ": (" << pointList[i].pos.x() << ", " << pointList[i].pos.y() << ")\n";
+    out << "\n";
+    out << "-- Body Measurement Info --\n";
+    out << "\n";
+
+    out << "Withers Height: " << bmscore.getWithersHeight() << " m\n";
+    out << "Chest Depth: " << bmscore.getChestDepth() << " m\n";
+    out << "Back Height: " << bmscore.getBackHeight() << " m\n";
+    out << "Body Length: " << bmscore.getBodyLength() << " m\n";
+    out << "Waist Height: " << bmscore.getWaistHeight() << " m\n";
+    out << "Rump Length: " << bmscore.getRumpLength() << " m\n";
+    out << "Hip Height: " << bmscore.getHipHeight() << " m\n";
+
+    file.close();
+}
+
+void MainWindow::showAboutInfo()
+{
+    QMessageBox::about(nullptr, "About QinchuanCattleBMS", "This is a software to compute body measurement of Cattles.");
+    return;
+}
+
+void MainWindow::showQtAbout()
+{
+    QMessageBox::aboutQt(nullptr, "About Qt");
+    return;
 }

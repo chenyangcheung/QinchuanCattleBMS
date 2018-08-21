@@ -280,9 +280,19 @@ INCLUDEPATH += $$OPENCV_PATH/include
 
 message("opencv path: $$OPENCV_PATH")
 
+# ifm pmdsdk library
+IFM_PMD_SDK_PATH = $$(IFM_PMD_SKD)
+
+LIBS += -L$$IFM_PMD_SDK_PATH/lib \
+        -lpmdaccess2
+
+INCLUDEPATH += $$IFM_PMD_SDK_PATH/include
+
 message("All include path: $$INCLUDEPATH")
 message("All Libraries: $$LIBS")
 
 RESOURCES += \
     qbmsres.qrc
+
+RC_FILE = app.rc
 

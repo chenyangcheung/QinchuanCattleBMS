@@ -45,13 +45,15 @@ void BMScore::initBMScore()
     neican.push_back({ 0 , 1302.604 , 578.403 });
     neican.push_back({ 0 , 0  ,1 });
 
-    // clear world points
-    for (int i = 0; i < 8; i++)
-    {
-        world_points[i].x = 0;
-        world_points[i].y = 0;
-        world_points[i].z = 0;
-    }
+    // set world points default values
+    world_points[0] = pcl::PointXYZ(-0.05, -0.226, 2.175);
+    world_points[1] = pcl::PointXYZ(-0.108, 0.653, 2.424);
+    world_points[2] = pcl::PointXYZ(0.098, -0.204, 2.194);
+    world_points[3] = pcl::PointXYZ(0.063, 0.183, 2.186);
+    world_points[4] = pcl::PointXYZ(0.282, -0.166, 2.156);
+    world_points[5] = pcl::PointXYZ(0.464, -0.154, 2.111);
+    world_points[6] = pcl::PointXYZ(-0.188, 0.092, 2.384);
+    world_points[7] = pcl::PointXYZ(0.81, -0.14, 2.176);
 }
 
 bool BMScore::readCloudData(std::string cloudName)
@@ -170,9 +172,9 @@ void BMScore::computeBodyMeasurement()
         qDebug() << "Running to line: " << __LINE__;
         for (size_t i = 0; i < pointIdxNKNSearch.size(); i++)
         {
-            double cloud_after_z = cloud->points[pointIdxNKNSearch[i]].x + 0.20247;
+            double cloud_after_x = cloud->points[pointIdxNKNSearch[i]].x + 0.20247;
             double cloud_after_y = cloud->points[pointIdxNKNSearch[i]].y - 0.00161;
-            double cloud_after_x = cloud->points[pointIdxNKNSearch[i]].z - 0.019;
+            double cloud_after_z = cloud->points[pointIdxNKNSearch[i]].z - 0.019;
 
             std::vector<std::vector<double>> C = { { cloud_after_x },{ cloud_after_y },{ cloud_after_z } };
 
@@ -198,15 +200,24 @@ void BMScore::computeBodyMeasurement()
 //     for(int k=0;k<4;k++){
 //          qDebug() << "Invisible Point: " <<k+1<< "(" << invisible_points[k].x << "," << invisible_points[k].y << "," << invisible_points[k].z << ")";
 //     }
-     //计算各项体尺数值
-     withers_height = sqrt((world_points[0].x-world_points[1].x)*(world_points[0].x-world_points[1].x) + (world_points[0].y-world_points[1].y)*(world_points[0].y-world_points[1].y) + (world_points[0].z-world_points[1].z)*(world_points[0].z-world_points[1].z));
-     chest_depth =  sqrt((world_points[2].x-world_points[3].x)*(world_points[2].x-world_points[3].x) + (world_points[2].y-world_points[3].y)*(world_points[2].y-world_points[3].y) + (world_points[2].z-world_points[3].z)*(world_points[2].z-world_points[3].z));
-     back_height = sqrt((world_points[4].x-world_points[4].x)*(world_points[4].x-world_points[4].x) + (world_points[4].y-world_points[1].y)*(world_points[4].y-world_points[1].y) + (world_points[4].z-world_points[4].z)*(world_points[4].z-world_points[4].z));
-     waist_height = sqrt((world_points[5].x-world_points[5].x)*(world_points[5].x-world_points[5].x) + (world_points[5].y-world_points[1].y)*(world_points[5].y-world_points[1].y) + (world_points[5].z-world_points[5].z)*(world_points[5].z-world_points[5].z));
-     hip_height = sqrt((world_points[7].x-world_points[7].x)*(world_points[7].x-world_points[7].x) + (world_points[7].y-world_points[1].y)*(world_points[7].y-world_points[1].y) + (world_points[7].z-world_points[7].z)*(world_points[7].z-world_points[7].z));
-     rump_length = sqrt((world_points[7].x-world_points[5].x)*(world_points[7].x-world_points[5].x) + (world_points[7].y-world_points[7].y)*(world_points[7].y-world_points[7].y) + (world_points[7].z-world_points[7].z)*(world_points[7].z-world_points[7].z));
-     body_length = sqrt((world_points[6].x-world_points[7].x)*(world_points[6].x-world_points[7].x) + (world_points[6].y-world_points[7].y)*(world_points[6].y-world_points[7].y) + (world_points[6].z-world_points[7].z)*(world_points[6].z-world_points[7].z));
-    }
+    //计算各项体尺数值
+//    withers_height = sqrt((world_points[0].x-world_points[1].x)*(world_points[0].x-world_points[1].x) + (world_points[0].y-world_points[1].y)*(world_points[0].y-world_points[1].y) + (world_points[0].z-world_points[1].z)*(world_points[0].z-world_points[1].z));
+//    chest_depth =  sqrt((world_points[2].x-world_points[3].x)*(world_points[2].x-world_points[3].x) + (world_points[2].y-world_points[3].y)*(world_points[2].y-world_points[3].y) + (world_points[2].z-world_points[3].z)*(world_points[2].z-world_points[3].z));
+//    back_height = sqrt((world_points[4].x-world_points[4].x)*(world_points[4].x-world_points[4].x) + (world_points[4].y-world_points[1].y)*(world_points[4].y-world_points[1].y) + (world_points[4].z-world_points[4].z)*(world_points[4].z-world_points[4].z));
+//    waist_height = sqrt((world_points[5].x-world_points[5].x)*(world_points[5].x-world_points[5].x) + (world_points[5].y-world_points[1].y)*(world_points[5].y-world_points[1].y) + (world_points[5].z-world_points[5].z)*(world_points[5].z-world_points[5].z));
+//    hip_height = sqrt((world_points[7].x-world_points[7].x)*(world_points[7].x-world_points[7].x) + (world_points[7].y-world_points[1].y)*(world_points[7].y-world_points[1].y) + (world_points[7].z-world_points[7].z)*(world_points[7].z-world_points[7].z));
+//    rump_length = sqrt((world_points[7].x-world_points[5].x)*(world_points[7].x-world_points[5].x) + (world_points[7].y-world_points[7].y)*(world_points[7].y-world_points[7].y) + (world_points[7].z-world_points[7].z)*(world_points[7].z-world_points[7].z));
+//    body_length = sqrt((world_points[6].x-world_points[7].x)*(world_points[6].x-world_points[7].x) + (world_points[6].y-world_points[7].y)*(world_points[6].y-world_points[7].y) + (world_points[6].z-world_points[7].z)*(world_points[6].z-world_points[7].z));
+
+    withers_height = sqrt((world_points[0].x-world_points[1].x)*(world_points[0].x-world_points[1].x) + (world_points[0].y-world_points[1].y)*(world_points[0].y-world_points[1].y) /*+ (world_points[0].z-world_points[1].z)*(world_points[0].z-world_points[1].z)*/);
+    chest_depth =  sqrt((world_points[2].x-world_points[3].x)*(world_points[2].x-world_points[3].x) + (world_points[2].y-world_points[3].y)*(world_points[2].y-world_points[3].y) /*+ (world_points[2].z-world_points[3].z)*(world_points[2].z-world_points[3].z)*/);
+    back_height = sqrt((world_points[4].x-world_points[4].x)*(world_points[4].x-world_points[4].x) + (world_points[4].y-world_points[1].y)*(world_points[4].y-world_points[1].y) /*+ (world_points[4].z-world_points[4].z)*(world_points[4].z-world_points[4].z)*/);
+    waist_height = sqrt((world_points[5].x-world_points[5].x)*(world_points[5].x-world_points[5].x) + (world_points[5].y-world_points[1].y)*(world_points[5].y-world_points[1].y) /*+ (world_points[5].z-world_points[5].z)*(world_points[5].z-world_points[5].z)*/);
+    hip_height = sqrt((world_points[7].x-world_points[7].x)*(world_points[7].x-world_points[7].x) + (world_points[7].y-world_points[1].y)*(world_points[7].y-world_points[1].y) /*+ (world_points[7].z-world_points[7].z)*(world_points[7].z-world_points[7].z)*/);
+    rump_length = sqrt((world_points[7].x-world_points[5].x)*(world_points[7].x-world_points[5].x) + (world_points[7].y-world_points[7].y)*(world_points[7].y-world_points[7].y) /*+ (world_points[7].z-world_points[7].z)*(world_points[7].z-world_points[7].z)*/);
+    body_length = sqrt((world_points[6].x-world_points[7].x)*(world_points[6].x-world_points[7].x) + (world_points[6].y-world_points[7].y)*(world_points[6].y-world_points[7].y) /*+ (world_points[6].z-world_points[7].z)*(world_points[6].z-world_points[7].z)*/);
+}
+
 }
 double BMScore::getWithersHeight()
 {

@@ -49,6 +49,11 @@ private:
 //    QVector<QCheckBox*> ptCheckboxList;
     QVector<ImgPoint> pointList;
     BMScore bmscore;
+    // flags
+    bool ifComputed;      // check it before save BMI result, and it should be set true after trigger compute button
+                          // and unset when triggering reset button
+    bool useDefalutValue;
+    QString getFileNamePrefix();
 private slots:
     // 2d camera
     void openLocal();
@@ -81,6 +86,9 @@ private slots:
     void computeBodyMeasurement();
     void setBMScoreThreshold();
     void showSelectPointsHelp();
+    void saveBMIToFile();
+    void showAboutInfo();
+    void showQtAbout();
 };
 
 #endif // MAINWINDOW_H
