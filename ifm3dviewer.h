@@ -55,6 +55,7 @@ private:
     PMDDataDescription dd;
     QReadWriteLock lock;
     QString snapshotPath;
+    bool isLocalPCD;
 };
 
 #endif // IFM3DVIEWER_H

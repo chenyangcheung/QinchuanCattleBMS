@@ -22,6 +22,7 @@ IFM3DViewer::IFM3DViewer(QObject *parent)
 {
     camIsActive = false;
     res = 0;
+    isLocalPCD = false;
 }
 
 void IFM3DViewer::initViewer(QVTKWidget *&vd)
@@ -66,6 +67,7 @@ void IFM3DViewer::initViewer(QVTKWidget *&vd)
 
 void IFM3DViewer::openCamera(QString ifm3d_ip)
 {
+    isLocalPCD = false;
     O3D3XX_IP = ifm3d_ip.toStdString();
     std::string PCIC_PORT_NUMBER = "80";
     std::string XMLRPC_PORT_NUMBER = "50010";
@@ -94,6 +96,7 @@ void IFM3DViewer::openCamera(QString ifm3d_ip)
 
 void IFM3DViewer::openLocal()
 {
+    isLocalPCD = true;
     if (camIsActive)
         closeCamera();
 
@@ -177,17 +180,11 @@ void IFM3DViewer::run()
 
         while (camIsActive)
         {
-//            if (!fg->WaitForFrame(buff.get(), 500))
-//            {
-//                break;
-//            }
             res = pmdUpdate(hnd);
             if (res != PMD_OK)
             {
                 break;
             }
-//            buff->Cloud();
-//            cloud = buff->Cloud();
 
             // update cloud data
             res = pmdGetFlags(hnd, &flags[0], flags.size() * sizeof(float));
@@ -202,8 +199,6 @@ void IFM3DViewer::run()
                 cloud->points[i].z = xyz3Dcoordinate[i * 3 + 2];
             }
 
-//            cloud->width = counter;
-//            cloud->points.resize(counter);
             lock.unlock();
             viewer->updatePointCloud<pcl::PointXYZ>(cloud, "cloud");
             vtkDisplay->update();
@@ -232,37 +227,42 @@ void IFM3DViewer::takeSnapshot()
         return;
     }
 
-    // create temporary cloud to save
-    pcl::PointCloud<pcl::PointXYZ> *temp(new pcl::PointCloud<pcl::PointXYZ>);
-    temp->width = cloud->width;
-    temp->height = cloud->height;
-    temp->is_dense = false;
-    temp->points.resize(temp->width * temp->height);
-
-    // filter invalid points
-    int counter = 0;
-    for (size_t i = 0; i < temp->width; i++)
-    {
-        if (!(flags[i] & 1))
-        {
-            temp->points[i].x = xyz3Dcoordinate[i * 3 + 0];
-            temp->points[i].y = xyz3Dcoordinate[i * 3 + 1];
-            temp->points[i].z = xyz3Dcoordinate[i * 3 + 2];
-            counter++;
-        }
-    }
-    temp->width = counter;
-    temp->points.resize(counter);
-
     // Generate image name according to current time
     QDateTime current_date_time = QDateTime::currentDateTime();
     QString current_date = current_date_time.toString("yyyy-MM-dd-hhmmsszzz");
     ssname = QFileInfo(snapshotPath).filePath() + "/" + current_date + ".pcd";
 
-    lock.lockForRead();
+    // create temporary cloud to save
+    pcl::PointCloud<pcl::PointXYZ> *temp(new pcl::PointCloud<pcl::PointXYZ>);
+    if (!isLocalPCD)
+    {
+        temp->width = cloud->width;
+        temp->height = cloud->height;
+        temp->is_dense = false;
+        temp->points.resize(temp->width * temp->height);
+
+        // filter invalid points
+        int counter = 0;
+        for (size_t i = 0; i < temp->width; i++)
+        {
+            if (!(flags[i] & 1))
+            {
+                temp->points[i].x = xyz3Dcoordinate[i * 3 + 0];
+                temp->points[i].y = xyz3Dcoordinate[i * 3 + 1];
+                temp->points[i].z = xyz3Dcoordinate[i * 3 + 2];
+                counter++;
+            }
+        }
+        temp->width = counter;
+        temp->points.resize(counter);
+    }
+    else
+    {
+        temp = cloud.get();
+    }
+
     // Save pcd file by pcl library
     pcl::io::savePCDFile(ssname.toStdString(), *temp);
-    lock.unlock();
 
     QMessageBox::information(nullptr, tr("Info"), tr("Save snapshot to ") + ssname);
 }
