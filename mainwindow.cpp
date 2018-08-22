@@ -207,7 +207,7 @@ void MainWindow::openLocal()
 
     QString file =
             QFileDialog::getOpenFileName(this, tr("Open file"),
-                                         ".",
+                                         QDir::homePath(),
                                          tr("Multimedia files(*.mp4 *.mkv *.dvi *.flv *.rmvb *.wmv *avi *wmv);;Image files(*.png *.jpg *.jpeg *.bmp *.gif)"));
 
     if (file.isEmpty())
@@ -704,7 +704,7 @@ void MainWindow::saveBMIToFile()
     // Generate image name according to current time
     QDateTime current_date_time = QDateTime::currentDateTime();
     QString current_date = current_date_time.toString("yyyy-MM-dd-hhmmsszzz");
-    QString defaultFilePath = qApp->applicationDirPath() + "/" + current_date + "-BMI-result.txt";
+    QString defaultFilePath = QDir::homePath() + "/" + current_date + "-BMI-result.txt";
     QString realFilePath = QFileDialog::getSaveFileName(nullptr, "Save BMI Computation Result",
                                                     defaultFilePath);
 

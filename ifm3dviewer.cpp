@@ -101,7 +101,7 @@ void IFM3DViewer::openLocal()
         closeCamera();
 
     filename = QFileDialog::getOpenFileName(nullptr,
-               tr("Open PointCloud"), ".", tr("Open PCD files (*.pcd)"));
+               tr("Open PointCloud"), QDir::homePath(), tr("Open PCD files (*.pcd)"));
     if (!filename.isEmpty())
     {
         std::string file_name = filename.toStdString();
