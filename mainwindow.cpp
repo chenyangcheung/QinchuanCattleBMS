@@ -90,6 +90,21 @@ MainWindow::MainWindow(QWidget *parent) :
 
     imgMarkScene = new ImgMarkScene(this);
 
+    ui->waistHgtInfoLabel->setText("m");
+    ui->waistHgtInfoLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    ui->withersHgtInfoLabel->setText("m");
+    ui->withersHgtInfoLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    ui->bodyLgtInfoLabel->setText("m");
+    ui->bodyLgtInfoLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    ui->backHgtInfoLabel->setText("m");
+    ui->backHgtInfoLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    ui->hipHgtInfoLabel->setText("m");
+    ui->hipHgtInfoLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    ui->rumpLgtInfoLabel->setText("m");
+    ui->rumpLgtInfoLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    ui->chestDptInfoLabel->setText("m");
+    ui->chestDptInfoLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+
     ptRatioBtnGroup = new QButtonGroup(this);
     ptRatioBtnGroup->addButton(ui->point1Ratio, 0);
     ptRatioBtnGroup->addButton(ui->point2Ratio, 1);
@@ -608,13 +623,13 @@ void MainWindow::clearAll()
     imgMarkScene->resetAllSaved();
 
     // clear body measurement info
-    ui->waistHgtInfoLabel->setText("");
-    ui->withersHgtInfoLabel->setText("");
-    ui->bodyLgtInfoLabel->setText("");
-    ui->backHgtInfoLabel->setText("");
-    ui->hipHgtInfoLabel->setText("");
-    ui->rumpLgtInfoLabel->setText("");
-    ui->chestDptInfoLabel->setText("");
+    ui->waistHgtInfoLabel->setText("m");
+    ui->withersHgtInfoLabel->setText("m");
+    ui->bodyLgtInfoLabel->setText("m");
+    ui->backHgtInfoLabel->setText("m");
+    ui->hipHgtInfoLabel->setText("m");
+    ui->rumpLgtInfoLabel->setText("m");
+    ui->chestDptInfoLabel->setText("m");
 }
 
 bool MainWindow::checkIfAllSaved()
@@ -666,13 +681,13 @@ void MainWindow::computeBodyMeasurement()
     bmscore.computeBodyMeasurement();
 
     // display result in GUI
-    ui->withersHgtInfoLabel->setText(QString("%1").arg(bmscore.getWithersHeight()));
-    ui->chestDptInfoLabel->setText(QString("%1").arg(bmscore.getChestDepth()));
-    ui->backHgtInfoLabel->setText(QString("%1").arg(bmscore.getBackHeight()));
-    ui->waistHgtInfoLabel->setText(QString("%1").arg(bmscore.getWaistHeight()));
-    ui->hipHgtInfoLabel->setText(QString("%1").arg(bmscore.getHipHeight()));
-    ui->rumpLgtInfoLabel->setText(QString("%1").arg(bmscore.getRumpLength()));
-    ui->bodyLgtInfoLabel->setText(QString("%1").arg(bmscore.getBodyLength()));
+    ui->withersHgtInfoLabel->setText(QString("%1").arg(bmscore.getWithersHeight()) + " m");
+    ui->chestDptInfoLabel->setText(QString("%1").arg(bmscore.getChestDepth()) + " m");
+    ui->backHgtInfoLabel->setText(QString("%1").arg(bmscore.getBackHeight()) + " m");
+    ui->waistHgtInfoLabel->setText(QString("%1").arg(bmscore.getWaistHeight()) + " m");
+    ui->hipHgtInfoLabel->setText(QString("%1").arg(bmscore.getHipHeight()) + " m");
+    ui->rumpLgtInfoLabel->setText(QString("%1").arg(bmscore.getRumpLength()) + " m");
+    ui->bodyLgtInfoLabel->setText(QString("%1").arg(bmscore.getBodyLength()) + " m");
 }
 
 void MainWindow::setBMScoreThreshold()

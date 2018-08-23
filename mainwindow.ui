@@ -252,6 +252,9 @@
                   <property name="text">
                    <string/>
                   </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
                  </widget>
                 </item>
                </layout>
