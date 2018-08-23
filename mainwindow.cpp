@@ -631,7 +631,7 @@ void MainWindow::computeBodyMeasurement()
 {
     if (!useDefalutValue && !checkIfAllSaved())
     {
-        QMessageBox::warning(nullptr, tr("Warning"), tr("There are points un-set positon, please set position for them!"));
+        QMessageBox::warning(nullptr, tr("Warning"), tr("There is no image group selected, or there are points un-set positon. Please select a image group or set position for all points."));
         return;
     }
 
