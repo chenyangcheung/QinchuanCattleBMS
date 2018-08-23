@@ -766,7 +766,7 @@ void MainWindow::saveBMIToFile()
 
 void MainWindow::showAboutInfo()
 {
-    QMessageBox::about(nullptr, "About QinchuanCattleBMS", "This is a software to compute body measurement of Cattles.");
+    QMessageBox::about(nullptr, "About QinchuanCattleBMS v1.0", "This is a software to compute body measurement of Cattles. This software is licensed under the <a href=https://opensource.org/licenses/GPL-3.0>GNU General Public License v3.0</a>. You can report bugs <a href=https://github.com/chenyangcheung/QinchuanCattleBMS/issues>here</a> to us.");
     return;
 }
 
