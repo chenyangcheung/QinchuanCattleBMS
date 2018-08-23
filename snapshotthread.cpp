@@ -9,6 +9,7 @@ SnapshotThread::SnapshotThread(QObject *parent)
     : QThread(parent)
 {
     setCalParams();
+    isImg = false;
 }
 
 void SnapshotThread::setCalParams()
@@ -53,8 +54,8 @@ void SnapshotThread::takeSnapshot(VlcMediaPlayer *&player)
     wait();
     if (ifGetSnapshot)
     {
-        // TODO: CALIBRATE IMAGE
-        imgCalibrate(ssname);
+        if (!isImg)
+            imgCalibrate(ssname);
         QMessageBox::information(nullptr, tr("Info"), tr("Save snapshot to ") + ssname);
     }
     else

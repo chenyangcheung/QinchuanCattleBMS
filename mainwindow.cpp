@@ -226,6 +226,11 @@ void MainWindow::openLocal()
      || fileType == "gif")
     {
         connect(_player, &VlcMediaPlayer::playing, _player, &VlcMediaPlayer::pause);
+        SnapshotThread.isImg = true;
+    }
+    else
+    {
+        SnapshotThread.isImg = false;
     }
     _media = new VlcMedia(file, true, _instance);
 

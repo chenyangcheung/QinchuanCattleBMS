@@ -25,6 +25,8 @@ private:
     cv::Mat cameraMatrix;
     cv::Mat distCoeffs;
     QString snapshotPath;
+public:
+    bool isImg;
 };
 
 #endif // SNAPSHOTTHREAD_H
