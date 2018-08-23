@@ -15,7 +15,7 @@
 #include <QApplication>
 #include <pcl/common/transforms.h>
 #include <QFileInfo>
-
+#include <QMessageBox>
 
 IFM3DViewer::IFM3DViewer(QObject *parent)
     : QThread(parent)
@@ -81,6 +81,15 @@ void IFM3DViewer::openCamera(QString ifm3d_ip)
 //        fg = std::make_shared<ifm3d::FrameGrabber>(cam, 0xFFFF);
 
         camIsActive = true;
+        res = pmdOpen(&hnd, SOURCE_PLUGIN, SOURCE_PARAM.c_str(), PROC_PLUGIN, PROC_PARAM);
+
+        if (res != PMD_OK)
+        {
+            char err[128];
+            pmdGetLastError(hnd, err, 128);
+            QMessageBox::warning(nullptr, "Warning", "Connect failed: " + QString::fromStdString(err));
+            return;
+        }
         start();
     }
     catch (const std::exception& ex)
@@ -135,35 +144,35 @@ void IFM3DViewer::run()
 {
     int imgWidth;
     int imgHeight;
-    char err[256] = { 0 };
+//    char err[256] = { 0 };
     try
     {
 //        auto buff = std::make_shared<ifm3d::ImageBuffer>();
         // connect to camera
-        res = pmdOpen(&hnd, SOURCE_PLUGIN, SOURCE_PARAM.c_str(), PROC_PLUGIN, PROC_PARAM);
+//        res = pmdOpen(&hnd, SOURCE_PLUGIN, SOURCE_PARAM.c_str(), PROC_PLUGIN, PROC_PARAM);
 
-        if (res != PMD_OK)
-        {
-            fprintf(stderr, "Could not connect: \n");
-            getchar();
-            return;
-        }
+//        if (res != PMD_OK)
+//        {
+//            fprintf(stderr, "Could not connect: \n");
+//            getchar();
+//            return;
+//        }
 
         res = pmdUpdate(hnd); // to update the camera parameter and framedata
         if (res != PMD_OK)
         {
-            pmdGetLastError(hnd, err, 256);
-            fprintf(stderr, "Could not updateData: \n%s\n", err);
+//            pmdGetLastError(hnd, err, 256);
+//            fprintf(stderr, "Could not updateData: \n%s\n", err);
             pmdClose(hnd);
-            printf("Camera Connection Closed. \n");
+//            printf("Camera Connection Closed. \n");
             return;
         }
 
         res = pmdGetSourceDataDescription(hnd, &dd);
         if (res != PMD_OK)
         {
-            pmdGetLastError(hnd, err, 128);
-            fprintf(stderr, "Could not get data description: \n%s\n", err);
+//            pmdGetLastError(hnd, err, 128);
+//            fprintf(stderr, "Could not get data description: \n%s\n", err);
             pmdClose(hnd);
             return;
         }
@@ -210,8 +219,8 @@ void IFM3DViewer::run()
         res = pmdClose(hnd);
         if (res != PMD_OK)
         {
-            pmdGetLastError(hnd, err, 128);
-            fprintf(stderr, "Could not close the connection %s\n", err);
+//            pmdGetLastError(hnd, err, 128);
+//            fprintf(stderr, "Could not close the connection %s\n", err);
         }
         qDebug() << ex.what();
         return;
