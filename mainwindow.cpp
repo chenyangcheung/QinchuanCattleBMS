@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // global settings
     dataCount = 0;      // init counter with 0
-    useDefalutValue = true;
+    useDefalutValue = false;
     snapshotPath = QDir::homePath() + "/bms_snapshots";
     // create snapshot path
     if (!QDir().exists(snapshotPath))
@@ -143,7 +143,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(_player, &VlcMediaPlayer::end, _player, &VlcMediaPlayer::stop);
 
     // connects of compute body measurement
-    connect(ui->imageTableWidget, &QTableWidget::itemActivated, this, &MainWindow::display2dImage);
+    connect(ui->imageTableWidget, &QTableWidget::itemClicked, this, &MainWindow::display2dImage);
     connect(ui->point1Ratio, &QRadioButton::toggled, this, &MainWindow::toggleSelectedFlag);
     connect(ui->point2Ratio, &QRadioButton::toggled, this, &MainWindow::toggleSelectedFlag);
     connect(ui->point3Ratio, &QRadioButton::toggled, this, &MainWindow::toggleSelectedFlag);
