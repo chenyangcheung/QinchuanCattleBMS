@@ -80,7 +80,8 @@ MainWindow::MainWindow(QWidget *parent) :
 //    ui->imageTableWidget->horizontalHeader()->setStretchLastSection(true);
     ui->imageTableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section{background:lightgray;}");
     ui->imageTableWidget->setStyleSheet("selection-background-color:skyblue;");
-
+    ui->imageTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->imageTableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
 
     QStringList tableHeader;
 
