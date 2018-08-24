@@ -36,29 +36,8 @@ void IFM3DViewer::initViewer(QVTKWidget *&vd)
     viewer->addPointCloud<pcl::PointXYZ>(cloud, "cloud");
 
     viewer->addCoordinateSystem();
-    int v_pcl(0);
-//    viewer->createViewPort(0., 0., 1., 1., v_pcl);
-//    viewer->setBackgroundColor(0, 0, 0, v_pcl);
-    viewer->setCameraPosition(-3.0, // x-position
-                              0,    // y-position
-                              0,    // z-position
-                              0,    // x-axis "up" (0 = false)
-                              0,    // y-axis "up" (0 = false)
-                              1,    // z-axis "up" (1 = true)
-                              v_pcl);    // viewport
-
     viewer->setBackgroundColor (0.1, 0.1, 0.1);
-//    int v_pcl(0);
-//    viewer->createViewPort(0., 0., 1., 1., v_pcl);
-//    viewer->setBackgroundColor(0, 0, 0, v_pcl);
-//    viewer->setCameraPosition(-3.0, // x-position
-//                              0,    // y-position
-//                              0,    // z-position
-//                              0,    // x-axis "up" (0 = false)
-//                              0,    // y-axis "up" (0 = false)
-//                              1,    // z-axis "up" (1 = true)
-//                              v_pcl);    // viewport
-    viewer->addCoordinateSystem (1.0, "cloud", 0);
+    viewer->addCoordinateSystem (1.0, "cloud");
     vtkDisplay->SetRenderWindow(viewer->getRenderWindow());
     viewer->setupInteractor(vtkDisplay->GetInteractor(), vtkDisplay->GetRenderWindow());
     vtkDisplay->update();
@@ -72,35 +51,35 @@ void IFM3DViewer::openCamera(QString ifm3d_ip)
     std::string PCIC_PORT_NUMBER = "80";
     std::string XMLRPC_PORT_NUMBER = "50010";
     SOURCE_PARAM = O3D3XX_IP + ":" + PCIC_PORT_NUMBER + ":" + XMLRPC_PORT_NUMBER;
+    char err[256];
+    camIsActive = true;
 
-//    IFM3D_IP = ifm3d_ip;
+    res = pmdOpen(&hnd, SOURCE_PLUGIN, SOURCE_PARAM.c_str(), PROC_PLUGIN, PROC_PARAM);
 
-    try
-    {
-//        cam = std::make_shared<ifm3d::Camera>(IFM3D_IP.toStdString());
-//        fg = std::make_shared<ifm3d::FrameGrabber>(cam, 0xFFFF);
-
-        camIsActive = true;
-        res = pmdOpen(&hnd, SOURCE_PLUGIN, SOURCE_PARAM.c_str(), PROC_PLUGIN, PROC_PARAM);
-
-        if (res != PMD_OK)
-        {
-            char err[128];
-            pmdGetLastError(hnd, err, 128);
-            QMessageBox::warning(nullptr, "Warning", "Connect failed: " + QString::fromStdString(err));
-            return;
-        }
-        start();
-    }
-    catch (const std::exception& ex)
+    if (res != PMD_OK)
     {
         camIsActive = false;
-        QString qExcept;
-//        qDebug() << ex.what();
-        QMessageBox::warning(nullptr, tr("Warning"), qExcept.fromStdString(ex.what()));
+        pmdGetLastError(hnd, err, 128);
+        QMessageBox::warning(nullptr, "Warning", "Connect failed: " + QString::fromStdString(err));
         return;
     }
 
+    // start o3d3xx camera thread
+    start();
+
+    // wait o3d3xx camera thread to quit
+    quit();
+    wait();
+
+    // close o3d3xx camera
+    res = pmdClose(hnd);
+    if (res != PMD_OK)
+    {
+        camIsActive = false;
+        pmdGetLastError(hnd, err, 128);
+        QMessageBox::warning(nullptr, "Warning", "Could not close the connection " + QString::fromStdString(err));
+        return;
+    }
 }
 
 void IFM3DViewer::openLocal()
@@ -134,7 +113,6 @@ void IFM3DViewer::openLocal()
         }
 
         viewer->updatePointCloud<pcl::PointXYZ>(cloud, "cloud");
-//        std::cout << matrix << std::endl;
         viewer->resetCamera();
         vtkDisplay->update();
     }
@@ -144,88 +122,60 @@ void IFM3DViewer::run()
 {
     int imgWidth;
     int imgHeight;
-//    char err[256] = { 0 };
-    try
+    res = pmdUpdate(hnd); // to update the camera parameter and framedata
+    if (res != PMD_OK)
     {
-//        auto buff = std::make_shared<ifm3d::ImageBuffer>();
-        // connect to camera
-//        res = pmdOpen(&hnd, SOURCE_PLUGIN, SOURCE_PARAM.c_str(), PROC_PLUGIN, PROC_PARAM);
-
-//        if (res != PMD_OK)
-//        {
-//            fprintf(stderr, "Could not connect: \n");
-//            getchar();
-//            return;
-//        }
-
-        res = pmdUpdate(hnd); // to update the camera parameter and framedata
-        if (res != PMD_OK)
-        {
-//            pmdGetLastError(hnd, err, 256);
-//            fprintf(stderr, "Could not updateData: \n%s\n", err);
-            pmdClose(hnd);
-//            printf("Camera Connection Closed. \n");
-            return;
-        }
-
-        res = pmdGetSourceDataDescription(hnd, &dd);
-        if (res != PMD_OK)
-        {
-//            pmdGetLastError(hnd, err, 128);
-//            fprintf(stderr, "Could not get data description: \n%s\n", err);
-            pmdClose(hnd);
-            return;
-        }
-
-        imgWidth = dd.img.numColumns;
-        imgHeight = dd.img.numRows;
-        xyz3Dcoordinate.resize(dd.img.numColumns * dd.img.numRows * 3);
-        // init cloud info
-        cloud->width = imgHeight * imgWidth;
-        cloud->height = 1;
-        cloud->is_dense = false;
-        cloud->points.resize(cloud->width * cloud->height);
-        flags.resize(imgWidth * imgHeight);
-
-        while (camIsActive)
-        {
-            res = pmdUpdate(hnd);
-            if (res != PMD_OK)
-            {
-                break;
-            }
-
-            // update cloud data
-            res = pmdGetFlags(hnd, &flags[0], flags.size() * sizeof(float));
-            res = pmdGet3DCoordinates(hnd, &xyz3Dcoordinate[0], xyz3Dcoordinate.size() * sizeof(float));
-
-            lock.lockForWrite();
-
-            for (size_t i = 0; i < imgHeight * imgWidth; i++)
-            {
-                cloud->points[i].x = xyz3Dcoordinate[i * 3 + 0];
-                cloud->points[i].y = xyz3Dcoordinate[i * 3 + 1];
-                cloud->points[i].z = xyz3Dcoordinate[i * 3 + 2];
-            }
-
-            lock.unlock();
-            viewer->updatePointCloud<pcl::PointXYZ>(cloud, "cloud");
-            vtkDisplay->update();
-        } // end: while (...)
+        pmdGetLastError(hnd, pmd_errs, 256);
         camIsActive = false;
-    }
-    catch (const std::exception& ex)
-    {
-        res = pmdClose(hnd);
-        if (res != PMD_OK)
-        {
-//            pmdGetLastError(hnd, err, 128);
-//            fprintf(stderr, "Could not close the connection %s\n", err);
-        }
-        qDebug() << ex.what();
+//        pmdClose(hnd);
         return;
     }
-    camIsActive = false;
+
+    res = pmdGetSourceDataDescription(hnd, &dd);
+    if (res != PMD_OK)
+    {
+        pmdGetLastError(hnd, pmd_errs, 128);
+        camIsActive = false;
+//        pmdClose(hnd);
+        return;
+    }
+
+    imgWidth = dd.img.numColumns;
+    imgHeight = dd.img.numRows;
+    xyz3Dcoordinate.resize(dd.img.numColumns * dd.img.numRows * 3);
+    // init cloud info
+    cloud->width = imgHeight * imgWidth;
+    cloud->height = 1;
+    cloud->is_dense = false;
+    cloud->points.resize(cloud->width * cloud->height);
+    flags.resize(imgWidth * imgHeight);
+
+    while (camIsActive)
+    {
+        res = pmdUpdate(hnd);
+        if (res != PMD_OK)
+        {
+            camIsActive = false;
+            break;
+        }
+
+        // update cloud data
+        res = pmdGetFlags(hnd, &flags[0], flags.size() * sizeof(float));
+        res = pmdGet3DCoordinates(hnd, &xyz3Dcoordinate[0], xyz3Dcoordinate.size() * sizeof(float));
+
+        lock.lockForWrite();
+
+        for (size_t i = 0; i < imgHeight * imgWidth; i++)
+        {
+            cloud->points[i].x = xyz3Dcoordinate[i * 3 + 0];
+            cloud->points[i].y = xyz3Dcoordinate[i * 3 + 1];
+            cloud->points[i].z = xyz3Dcoordinate[i * 3 + 2];
+        }
+
+        lock.unlock();
+        viewer->updatePointCloud<pcl::PointXYZ>(cloud, "cloud");
+        vtkDisplay->update();
+    } // end: while (...)
 }
 
 void IFM3DViewer::takeSnapshot()

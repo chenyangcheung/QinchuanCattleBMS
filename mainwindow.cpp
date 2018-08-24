@@ -418,7 +418,7 @@ void MainWindow::updatePointInfo(qreal x, qreal y)
 {
     curPos = QPoint(x, y);
     useDefalutValue = false;
-    qDebug() << "Current position: " << "[" << x << "," << y << "]";
+//    qDebug() << "Current position: " << "[" << x << "," << y << "]";
 }
 
 void MainWindow::savePointInfo(bool checked)
@@ -661,21 +661,21 @@ void MainWindow::computeBodyMeasurement()
     bool readPCDSuccess = bmscore.readCloudData(pcdPath.toStdString());
     if (!readPCDSuccess)
     {
-        qDebug() << "Read PCD file failed!";
+        QMessageBox::warning(nullptr, "Warning", "Read PCD file failed!");
         return;
     }
 
     // step 3: set positions of 8 points
     std::vector<PtPos> pps(8);
-    qDebug() << "Running to line: " << __LINE__;
+//    qDebug() << "Running to line: " << __LINE__;
     for (int i = 0; i < 8; i++)
     {
         pps[i].x = pointList[i].pos.x();
         pps[i].y = pointList[i].pos.y();
     }
-    qDebug() << "Running to line: " << __LINE__;
+//    qDebug() << "Running to line: " << __LINE__;
     bmscore.setPtPosList(pps);
-    qDebug() << "Set Positon success: " << __LINE__;
+//    qDebug() << "Set Positon success: " << __LINE__;
 
     // step 4: compute body measurent according to PCD data and points data
     bmscore.computeBodyMeasurement();
