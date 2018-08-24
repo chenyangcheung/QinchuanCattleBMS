@@ -35,7 +35,6 @@ void IFM3DViewer::initViewer(QVTKWidget *&vd)
 //    viewer->addPointCloud<pcl::PointXYZI>(cloud, intensity_distribution, "cloud");
     viewer->addPointCloud<pcl::PointXYZ>(cloud, "cloud");
 
-    viewer->addCoordinateSystem();
     viewer->setBackgroundColor (0.1, 0.1, 0.1);
     viewer->addCoordinateSystem (1.0, "cloud");
     vtkDisplay->SetRenderWindow(viewer->getRenderWindow());
