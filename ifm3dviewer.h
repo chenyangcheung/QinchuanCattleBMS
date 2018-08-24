@@ -39,18 +39,14 @@ private:
     QVTKWidget *vtkDisplay;
     QString filename;
     QString ssname;
-//    QString IFM3D_IP;
     std::string O3D3XX_IP;
     bool camIsActive;
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud;
     boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
-//    boost::shared_ptr<pcl::visualization::PCLVisualizer> realTimeViewer;
-//    ifm3d::Camera::Ptr cam;
-//    ifm3d::FrameGrabber::Ptr fg;
     std::vector<float> xyz3Dcoordinate;
     std::vector<unsigned> flags;
     std::string SOURCE_PARAM;
-    int res;
+    int res;    char pmd_errs[256];
     PMDHandle hnd = 0; // connection handle
     PMDDataDescription dd;
     QReadWriteLock lock;
