@@ -156,6 +156,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionOpen_Video, &QAction::triggered, this, &MainWindow::openLocal);
     connect(ui->actionOpen_Camera, &QAction::triggered, this, &MainWindow::openUrl);
     connect(_player, &VlcMediaPlayer::end, _player, &VlcMediaPlayer::stop);
+    connect(_player, &VlcMediaPlayer::error, this, &MainWindow::displayVlcError);
 
     // connects of compute body measurement
     connect(ui->imageTableWidget, &QTableWidget::itemClicked, this, &MainWindow::display2dImage);
@@ -260,7 +261,6 @@ void MainWindow::openUrl()
     if (url.isEmpty())
         return;
 
-    // TODO: add exception catch
     _media = new VlcMedia(url, _instance);
 
     _player->open(_media);
@@ -794,4 +794,10 @@ void MainWindow::setSanpshotPath()
 
     ifm3dViewer.setSnapshotPath(ssp);
     SnapshotThread.setSnapshotPath(ssp);
+}
+
+void MainWindow::displayVlcError()
+{
+    QMessageBox::warning(nullptr, "Warning", "Could not open IP Camera! Please check your url.");
+    return;
 }

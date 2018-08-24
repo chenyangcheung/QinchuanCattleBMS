@@ -91,6 +91,7 @@ private slots:
     void showAboutInfo();
     void showQtAbout();
     void setSanpshotPath();
+    void displayVlcError();
 };
 
 #endif // MAINWINDOW_H
