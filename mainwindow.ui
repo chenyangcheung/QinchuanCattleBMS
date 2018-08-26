@@ -39,11 +39,11 @@
       <property name="minimumSize">
        <size>
         <width>891</width>
-        <height>461</height>
+        <height>591</height>
        </size>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="cameraTab">
        <property name="sizePolicy">
@@ -230,7 +230,7 @@ QTabWidget::tab-bar {
           <property name="minimumSize">
            <size>
             <width>261</width>
-            <height>591</height>
+            <height>500</height>
            </size>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -244,8 +244,8 @@ QTabWidget::tab-bar {
              </property>
              <property name="minimumSize">
               <size>
-               <width>248</width>
-               <height>271</height>
+               <width>200</width>
+               <height>200</height>
               </size>
              </property>
              <property name="baseSize">
@@ -527,7 +527,7 @@ QTabWidget::tab-bar {
              <property name="minimumSize">
               <size>
                <width>248</width>
-               <height>300</height>
+               <height>230</height>
               </size>
              </property>
              <property name="maximumSize">
@@ -575,8 +575,8 @@ QTabWidget::tab-bar {
           </property>
           <property name="minimumSize">
            <size>
-            <width>791</width>
-            <height>581</height>
+            <width>400</width>
+            <height>461</height>
            </size>
           </property>
           <property name="baseSize">
@@ -594,12 +594,12 @@ QTabWidget::tab-bar {
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
-               <verstretch>80</verstretch>
+               <verstretch>0</verstretch>
               </sizepolicy>
              </property>
              <property name="minimumSize">
               <size>
-               <width>791</width>
+               <width>400</width>
                <height>411</height>
               </size>
              </property>
@@ -609,14 +609,14 @@ QTabWidget::tab-bar {
             <widget class="QGroupBox" name="pointsGroupBox">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-               <horstretch>78</horstretch>
-               <verstretch>71</verstretch>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
               </sizepolicy>
              </property>
              <property name="minimumSize">
               <size>
-               <width>731</width>
-               <height>83</height>
+               <width>400</width>
+               <height>40</height>
               </size>
              </property>
              <property name="maximumSize">
@@ -1172,14 +1172,14 @@ QTabWidget::tab-bar {
             <widget class="QWidget" name="optButtonsWidget" native="true">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-               <horstretch>78</horstretch>
-               <verstretch>71</verstretch>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
               </sizepolicy>
              </property>
              <property name="minimumSize">
               <size>
-               <width>781</width>
-               <height>60</height>
+               <width>400</width>
+               <height>20</height>
               </size>
              </property>
              <property name="maximumSize">
@@ -1197,7 +1197,7 @@ QTabWidget::tab-bar {
                 <property name="minimumSize">
                  <size>
                   <width>93</width>
-                  <height>28</height>
+                  <height>20</height>
                  </size>
                 </property>
                 <property name="text">
@@ -1210,7 +1210,7 @@ QTabWidget::tab-bar {
                 <property name="minimumSize">
                  <size>
                   <width>93</width>
-                  <height>28</height>
+                  <height>20</height>
                  </size>
                 </property>
                 <property name="text">
@@ -1223,7 +1223,7 @@ QTabWidget::tab-bar {
                 <property name="minimumSize">
                  <size>
                   <width>93</width>
-                  <height>28</height>
+                  <height>20</height>
                  </size>
                 </property>
                 <property name="text">
@@ -1246,6 +1246,27 @@ QTabWidget::tab-bar {
        <layout class="QHBoxLayout" name="horizontalLayout_9">
         <item>
          <widget class="QLabel" name="helpLabel">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>400</width>
+            <height>300</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+            <pointsize>8</pointsize>
+           </font>
+          </property>
+          <property name="locale">
+           <locale language="English" country="UnitedStates"/>
+          </property>
           <property name="frameShape">
            <enum>QFrame::Box</enum>
           </property>
@@ -1267,8 +1288,11 @@ QTabWidget::tab-bar {
           <property name="wordWrap">
            <bool>true</bool>
           </property>
+          <property name="indent">
+           <number>-1</number>
+          </property>
           <property name="textInteractionFlags">
-           <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+           <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
           </property>
          </widget>
         </item>
