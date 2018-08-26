@@ -45,7 +45,7 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="rgbCameraTab">
+      <widget class="QWidget" name="cameraTab">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -53,131 +53,163 @@
         </sizepolicy>
        </property>
        <attribute name="title">
-        <string>2D Camera</string>
+        <string>Cameras</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="0">
-         <layout class="QGridLayout" name="gridLayout">
-          <item row="0" column="0" colspan="3">
-           <widget class="VlcWidgetVideo" name="camera" native="true">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>640</width>
-              <height>360</height>
-             </size>
-            </property>
-            <property name="autoFillBackground">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QPushButton" name="OpenVideo">
-            <property name="minimumSize">
-             <size>
-              <width>101</width>
-              <height>23</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Open Video</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QPushButton" name="OpenCamera">
-            <property name="minimumSize">
-             <size>
-              <width>121</width>
-              <height>23</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Open Camera</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QPushButton" name="SnapShot">
-            <property name="minimumSize">
-             <size>
-              <width>93</width>
-              <height>23</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Snapshot</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tofCameraTab">
-       <attribute name="title">
-        <string>3D Camera</string>
-       </attribute>
-       <layout class="QGridLayout" name="gridLayout_3">
-        <item row="0" column="0" colspan="3">
-         <widget class="QVTKWidget" name="pclViewerWidget" native="true">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
+         <widget class="QTabWidget" name="camerasTabWidget">
+          <property name="styleSheet">
+           <string notr="true">QTabBar::tab {
+  background: white;
+  color: black;
+  padding: 3px;
+  width: 100px;
+  margin-bottom: 5px;
+  border: 1px solid #C4C4C3;
+ }
+QTabWidget::tab-bar { 
+    alignment:center;
+	
+}
+ QTabBar::tab:selected {
+  background: gray;
+  color:white;
+ }</string>
           </property>
-          <property name="minimumSize">
-           <size>
-            <width>881</width>
-            <height>375</height>
-           </size>
+          <property name="currentIndex">
+           <number>0</number>
           </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QPushButton" name="openPCD">
-          <property name="minimumSize">
-           <size>
-            <width>93</width>
-            <height>28</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Open PCD</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QPushButton" name="open3dCamera">
-          <property name="minimumSize">
-           <size>
-            <width>99</width>
-            <height>28</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Open Camera</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QPushButton" name="snapShot3d">
-          <property name="minimumSize">
-           <size>
-            <width>99</width>
-            <height>28</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Snapshot</string>
-          </property>
+          <widget class="QWidget" name="twoDcameraTab">
+           <attribute name="title">
+            <string>2D</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout">
+            <item row="0" column="0" colspan="3">
+             <widget class="VlcWidgetVideo" name="camera" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>640</width>
+                <height>360</height>
+               </size>
+              </property>
+              <property name="autoFillBackground">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QPushButton" name="OpenVideo">
+              <property name="minimumSize">
+               <size>
+                <width>101</width>
+                <height>23</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Open File</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QPushButton" name="OpenCamera">
+              <property name="minimumSize">
+               <size>
+                <width>121</width>
+                <height>23</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Open Camera</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QPushButton" name="SnapShot">
+              <property name="minimumSize">
+               <size>
+                <width>93</width>
+                <height>23</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Snapshot</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+           <zorder>SnapShot</zorder>
+           <zorder>OpenVideo</zorder>
+           <zorder>OpenCamera</zorder>
+           <zorder>camera</zorder>
+          </widget>
+          <widget class="QWidget" name="threeDcameraTab">
+           <attribute name="title">
+            <string>3D</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_5">
+            <item row="0" column="0" colspan="3">
+             <widget class="QVTKWidget" name="pclViewerWidget" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>881</width>
+                <height>375</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QPushButton" name="openPCD">
+              <property name="minimumSize">
+               <size>
+                <width>93</width>
+                <height>28</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Open File</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QPushButton" name="open3dCamera">
+              <property name="minimumSize">
+               <size>
+                <width>99</width>
+                <height>28</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Open Camera</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QPushButton" name="snapShot3d">
+              <property name="minimumSize">
+               <size>
+                <width>99</width>
+                <height>28</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Snapshot</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
          </widget>
         </item>
        </layout>
