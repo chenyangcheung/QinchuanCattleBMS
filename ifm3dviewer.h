@@ -33,6 +33,7 @@ public:
     QString getSnapshotName();
     ~IFM3DViewer();
     void setSnapshotPath(QString ssp);
+    bool getCameraState();
 protected:
     void virtual run() override;
 private:

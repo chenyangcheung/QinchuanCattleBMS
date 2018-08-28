@@ -6,6 +6,7 @@
 #include <QButtonGroup>
 #include <QVector>
 #include <QCheckBox>
+#include <QPair>
 
 #include "snapshotthread.h"
 #include "ifm3dviewer.h"
@@ -37,7 +38,7 @@ private:
     VlcInstance *_instance;
     VlcMedia *_media;
     VlcMediaPlayer *_player;
-    SnapshotThread SnapshotThread;
+    SnapshotThread vlc2DcameraSSThd;
     IFM3DViewer ifm3dViewer;
     QGraphicsScene *imageScene;
     ImgMarkScene *imgMarkScene;
@@ -53,8 +54,20 @@ private:
     bool ifComputed;      // check it before save BMI result, and it should be set true after trigger compute button
                           // and unset when triggering reset button
     bool useDefalutValue;
+    bool ifConnect2DCam, ifConnect3DCam;
     QString snapshotPath;
+    QVector<QPair<QString, QString>> computeGroupList;
     QString getFileNamePrefix();
+
+    // File Tab
+    VlcInstance *filesTabVlcInstance;
+    VlcMedia *filesTabVlcMedia;
+    VlcMediaPlayer *filesTabVlcPlayer;
+    SnapshotThread filesTabVlcSSThd;
+    pcl::PointCloud<pcl::PointXYZ>::Ptr fileTabCloud;
+    boost::shared_ptr<pcl::visualization::PCLVisualizer> fileTab3DViewer;
+    QVector<QString> files2DList;
+    QVector<QString> files3DList;
 private slots:
     // 2d camera
     void openLocal();
@@ -92,6 +105,14 @@ private slots:
     void showQtAbout();
     void setSanpshotPath();
     void displayVlcError();
+    // Files Tab
+    void filesTabOpenFile();
+    void filesTabDelete();
+    void filesTabVideoSnapshot();
+    void filesTabSelect();
+    void disableFilesTabSSBtn(int index);
+    void files2DTabDisplayImg();
+    void files3DTabDisplayImg();
 };
 
 #endif // MAINWINDOW_H

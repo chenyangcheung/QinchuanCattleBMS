@@ -30,6 +30,9 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
+// PCL library
+#include <vtkRenderWindow.h>
+
 // custom library
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -45,6 +48,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // global settings
     dataCount = 0;      // init counter with 0
     useDefalutValue = false;
+    ifConnect2DCam = ifConnect3DCam = false;
     snapshotPath = QDir::homePath() + "/bms_snapshots";
     // create snapshot path
     if (!QDir().exists(snapshotPath))
@@ -53,7 +57,8 @@ MainWindow::MainWindow(QWidget *parent) :
         // save log to file
     }
     ifm3dViewer.setSnapshotPath(snapshotPath);
-    SnapshotThread.setSnapshotPath(snapshotPath);
+    vlc2DcameraSSThd.setSnapshotPath(snapshotPath);
+    filesTabVlcSSThd.setSnapshotPath(snapshotPath);
 
     // 2d camera settings
     ui->camera->setStyleSheet("border:1px solid black");
@@ -150,8 +155,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ifm3dViewer.initViewer(ui->pclViewerWidget);
 
     // connects of 2d camera
-    connect(ui->OpenVideo, &QPushButton::clicked, this, &MainWindow::openLocal);
-    connect(ui->OpenCamera, &QPushButton::clicked, this, &MainWindow::openUrl);
+//    connect(ui->OpenVideo, &QPushButton::clicked, this, &MainWindow::openLocal);
+//    connect(ui->OpenCamera, &QPushButton::clicked, this, &MainWindow::openUrl);
     connect(ui->SnapShot, &QPushButton::clicked, this, &MainWindow::takeSnapShot);
     connect(ui->actionOpen_Video, &QAction::triggered, this, &MainWindow::openLocal);
     connect(ui->actionOpen_Camera, &QAction::triggered, this, &MainWindow::openUrl);
@@ -192,9 +197,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->cbmButton, &QPushButton::clicked, this, &MainWindow::computeBodyMeasurement);
 
     // connects of 3d camera
-    connect(ui->openPCD, &QPushButton::clicked, &ifm3dViewer, &IFM3DViewer::openLocal);
-    connect(ui->open3dCamera, &QPushButton::clicked, this, &MainWindow::open3dCamera);
-    connect(ui->snapShot3d, &QPushButton::clicked, this, &MainWindow::takeSnapShot3d);
+//    connect(ui->openPCD, &QPushButton::clicked, &ifm3dViewer, &IFM3DViewer::openLocal);
+//    connect(ui->open3dCamera, &QPushButton::clicked, this, &MainWindow::open3dCamera);
+//    connect(ui->snapShot3d, &QPushButton::clicked, this, &MainWindow::takeSnapShot3d);
+    connect(ui->snapShot3d, &QPushButton::clicked, this ,&MainWindow::takeSnapShot);
 
     connect(ui->setThresholdAction, &QAction::triggered, this, &MainWindow::setBMScoreThreshold);
     connect(ui->helpButton, &QPushButton::clicked, this, &MainWindow::showSelectPointsHelp);
@@ -207,6 +213,36 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->aboutAppAction, &QAction::triggered, this, &MainWindow::showAboutInfo);
     connect(ui->aboutQtAction, &QAction::triggered, this, &MainWindow::showQtAbout);
     connect(ui->setSnapshotPathAction, &QAction::triggered, this, &MainWindow::setSanpshotPath);
+
+    // Files Tab
+    // init components of 2D component
+    ui->imgFilesDisplayWidget->setStyleSheet("border:1px solid black");
+    filesTabVlcInstance = new VlcInstance(VlcCommon::args(), this);
+    filesTabVlcPlayer = new VlcMediaPlayer(filesTabVlcInstance);
+    filesTabVlcPlayer->setVideoWidget(ui->imgFilesDisplayWidget);
+    ui->imgFilesDisplayWidget->setMediaPlayer(filesTabVlcPlayer);
+    ui->filesTW2DFilesList->setSelectionMode(QAbstractItemView::SingleSelection);
+
+    connect(ui->filesTWOpenFileBtn, &QPushButton::clicked, this, &MainWindow::filesTabOpenFile);
+    connect(filesTabVlcPlayer, &VlcMediaPlayer::end, filesTabVlcPlayer, &VlcMediaPlayer::stop);
+    connect(ui->filesTWSnapshotBtn, &QPushButton::clicked, this, &MainWindow::filesTabVideoSnapshot);
+    connect(ui->displayTabWidget, &QTabWidget::currentChanged, this, &MainWindow::disableFilesTabSSBtn);
+    connect(ui->filesTW2DFilesList, &QListWidget::itemClicked, this, &MainWindow::files2DTabDisplayImg);
+
+    // init components of 3D component
+    fileTabCloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
+    fileTab3DViewer.reset(new pcl::visualization::PCLVisualizer ("fileTab3DViewer", false));
+    fileTab3DViewer->addPointCloud<pcl::PointXYZ>(fileTabCloud, "fileTabCloud");
+
+    fileTab3DViewer->setBackgroundColor (0.1, 0.1, 0.1);
+    fileTab3DViewer->addCoordinateSystem (1.0, "local_cloud", 0);
+    ui->localPCDDisplayWidget->SetRenderWindow(fileTab3DViewer->getRenderWindow());
+    fileTab3DViewer->setupInteractor(ui->localPCDDisplayWidget->GetInteractor(), ui->localPCDDisplayWidget->GetRenderWindow());
+    ui->localPCDDisplayWidget->update();
+    fileTab3DViewer->resetCamera();
+
+    connect(ui->filesTW3DFilesList, &QListWidget::itemClicked, this, &MainWindow::files3DTabDisplayImg);
+    connect(ui->filesTWSelectBtn, &QPushButton::clicked, this, &MainWindow::filesTabSelect);
 }
 
 MainWindow::~MainWindow()
@@ -214,6 +250,9 @@ MainWindow::~MainWindow()
     delete _player;
     delete _media;
     delete _instance;
+    delete filesTabVlcPlayer;
+    delete filesTabVlcMedia;
+    delete filesTabVlcInstance;
     delete ui;
 }
 
@@ -242,11 +281,11 @@ void MainWindow::openLocal()
      || fileType == "gif")
     {
         connect(_player, &VlcMediaPlayer::playing, _player, &VlcMediaPlayer::pause);
-        SnapshotThread.isImg = true;
+        vlc2DcameraSSThd.isImg = true;
     }
     else
     {
-        SnapshotThread.isImg = false;
+        vlc2DcameraSSThd.isImg = false;
     }
     _media = new VlcMedia(file, true, _instance);
 
@@ -261,6 +300,8 @@ void MainWindow::openUrl()
     if (url.isEmpty())
         return;
 
+    ifConnect2DCam = true;
+
     _media = new VlcMedia(url, _instance);
 
     _player->open(_media);
@@ -268,12 +309,33 @@ void MainWindow::openUrl()
 
 void MainWindow::takeSnapShot()
 {
+    if (!ifConnect2DCam)
+    {
+        QMessageBox::warning(nullptr, "Warning", "2D camera has been connected. Please check 2D camera connection.");
+        return;
+    }
+    if (!ifm3dViewer.getCameraState())
+    {
+        QMessageBox::warning(nullptr, "Warning", "3D camera has been connected. Please check 3D camera connection.");
+        return;
+    }
     // Pass player to snapshot thread
-    SnapshotThread.takeSnapshot(_player);
+    vlc2DcameraSSThd.takeSnapshot(_player);
 
     // record name of 2D snapshot
-    QFileInfo fi(SnapshotThread.getSnapshotName());
-    image2DName = fi.fileName();
+    QString img2d = vlc2DcameraSSThd.getSnapshotName();
+    image2DName = QFileInfo(img2d).fileName();
+
+    // take 3D snapshot
+    ifm3dViewer.takeSnapshot();
+
+    // record name of 3D snapshot
+    QString img3d = ifm3dViewer.getSnapshotName();
+    image3DName = QFileInfo(img3d).fileName();
+
+    computeGroupList.push_back(QPair<QString, QString>(img2d, img3d));
+
+    addData2Table();
 }
 
 void MainWindow::open3dCamera()
@@ -282,6 +344,8 @@ void MainWindow::open3dCamera()
             QInputDialog::getText(this, tr("Open 3D Camera"), tr("Enter the IP address of your camera"), QLineEdit::Normal, "192.168.1.3");
     if (ip_add.isEmpty())
         return;
+    ifConnect3DCam = true;
+
     ifm3dViewer.openCamera(ip_add);
 }
 
@@ -305,7 +369,7 @@ void MainWindow::takeSnapShot3d()
 void MainWindow::add2DImage2Table()
 {
     dataCount++;
-//    imgName = SnapshotThread.ssname;
+//    imgName = vlc2DcameraSSThd.ssname;
 
 //    QString imageName = QFileDialog::getOpenFileName(this, tr("Open file"),
 //                                             ".",
@@ -343,7 +407,8 @@ void MainWindow::display2dImage()
     }
 
 //    QString appPath = qApp->applicationDirPath();
-    QString imagePath = QFileInfo(snapshotPath).filePath() + "/" + ui->imageTableWidget->selectedItems().at(0)->text();
+//    QString imagePath = QFileInfo(snapshotPath).filePath() + "/" + ui->imageTableWidget->selectedItems().at(0)->text();
+    QString imagePath = computeGroupList[ui->imageTableWidget->currentRow()].first;
 
     if (imagePath.isEmpty())
         return;
@@ -657,7 +722,8 @@ void MainWindow::computeBodyMeasurement()
     bmscore.initBMScore();
 
     // step 2: input pcd data
-    QString pcdPath = QFileInfo(snapshotPath).filePath() + "/" + ui->imageTableWidget->selectedItems().at(1)->text();
+//    QString pcdPath = QFileInfo(snapshotPath).filePath() + "/" + ui->imageTableWidget->selectedItems().at(1)->text();
+    QString pcdPath = computeGroupList[ui->imageTableWidget->currentRow()].second;
     bool readPCDSuccess = bmscore.readCloudData(pcdPath.toStdString());
     if (!readPCDSuccess)
     {
@@ -793,11 +859,205 @@ void MainWindow::setSanpshotPath()
     // TODO: consider immigranting previous images
 
     ifm3dViewer.setSnapshotPath(ssp);
-    SnapshotThread.setSnapshotPath(ssp);
+    vlc2DcameraSSThd.setSnapshotPath(ssp);
 }
 
 void MainWindow::displayVlcError()
 {
     QMessageBox::warning(nullptr, "Warning", "Could not open IP Camera! Please check your url.");
     return;
+}
+
+// Files Tab
+void MainWindow::filesTabOpenFile()
+{
+    if (ui->displayTabWidget->currentIndex() == 0)
+    {
+        // clear player
+        filesTabVlcPlayer->stop();
+
+        QString file =
+                QFileDialog::getOpenFileName(this, tr("Open file"),
+                                             QDir::homePath(),
+                                             tr("Multimedia files(*.mp4 *.mkv *.dvi *.flv *.rmvb *.wmv *avi *wmv);;Image files(*.png *.jpg *.jpeg *.bmp *.gif)"));
+
+        if (file.isEmpty())
+            return;
+        filesTabVlcSSThd.isImg = false;
+
+        // remove specail process for image files
+        disconnect(filesTabVlcPlayer, &VlcMediaPlayer::playing, filesTabVlcPlayer, &VlcMediaPlayer::pause);
+
+        QFileInfo fi(file);
+        QString fileType = fi.suffix();
+
+        // if type is image, player pause!
+        if (fileType == "jpg" || fileType == "png"
+         || fileType == "jpeg" || fileType == "bmp"
+         || fileType == "gif")
+        {
+            connect(filesTabVlcPlayer, &VlcMediaPlayer::playing, filesTabVlcPlayer, &VlcMediaPlayer::pause);
+            ui->filesTW2DFilesList->addItem(fi.fileName());
+            ui->filesTWSnapshotBtn->setEnabled(false);
+            files2DList.push_back(file);
+        }
+        else
+        {
+            ui->filesTWSnapshotBtn->setEnabled(true);
+        }
+
+        ui->displayTabWidget->setCurrentIndex(0);
+        filesTabVlcMedia = new VlcMedia(file, true, filesTabVlcInstance);
+
+        filesTabVlcPlayer->open(filesTabVlcMedia);
+    }
+    else
+    {
+        QString filename = QFileDialog::getOpenFileName(nullptr,
+                   tr("Open PointCloud"), QDir::homePath(), tr("Open PCD files (*.pcd)"));
+        if (!filename.isEmpty())
+        {
+            ui->displayTabWidget->setCurrentIndex(1);
+            // add into list
+            files3DList.push_back(filename);
+            ui->filesTW3DFilesList->addItem(QFileInfo(filename).fileName());
+            std::string file_name = filename.toStdString();
+            pcl::PCLPointCloud2 cloud2;
+            Eigen::Vector4f origin;
+            Eigen::Quaternionf orientation;
+            int pcd_version;
+            int data_type;
+            unsigned int data_idx;
+            pcl::PCDReader rd;
+            rd.readHeader(file_name, cloud2, origin, orientation, pcd_version, data_type, data_idx);
+
+            if (data_type == 0)
+            {
+                pcl::io::loadPCDFile(filename.toStdString(), *fileTabCloud);
+            }
+            else if (data_type == 2)
+            {
+                pcl::PCDReader reader;
+                reader.read<pcl::PointXYZ>(filename.toStdString(), *fileTabCloud);
+            }
+            files3DList.push_back(filename);
+            fileTab3DViewer->updatePointCloud<pcl::PointXYZ>(fileTabCloud, "fileTabCloud");
+            fileTab3DViewer->resetCamera();
+            ui->localPCDDisplayWidget->update();
+        }
+    }
+}
+
+void MainWindow::filesTabDelete()
+{
+    int id2d = ui->filesTW2DFilesList->currentRow();
+    int id3d = ui->filesTW3DFilesList->currentRow();
+
+    if (id2d != -1)
+    {
+        QString filename = files2DList[id2d];
+        ui->filesTW2DFilesList->removeItemWidget(ui->filesTW2DFilesList->currentItem());
+        files2DList.remove(id2d);
+    }
+    if (id2d != -1)
+    {
+        QString filename = files3DList[id3d];
+        ui->filesTW3DFilesList->removeItemWidget(ui->filesTW3DFilesList->currentItem());
+        files3DList.remove(id3d);
+    }
+}
+
+void MainWindow::filesTabSelect()
+{
+    int id2d = ui->filesTW2DFilesList->currentRow();
+    if (id2d == -1)
+    {
+        QMessageBox::warning(nullptr, "Warning", "2D File has not been selected. Please select a 2D file from 2D File List.");
+        return;
+    }
+
+    int id3d = ui->filesTW3DFilesList->currentRow();
+    if (id3d == -1)
+    {
+        QMessageBox::warning(nullptr, "Warning", "3D File has not been selected. Please select a 3D file from 3D File List.");
+        return;
+    }
+
+
+    image2DName = QFileInfo(files2DList[id2d]).fileName();
+    image3DName = QFileInfo(files3DList[id3d]).fileName();
+
+    computeGroupList.push_back(QPair<QString, QString>(files2DList[id2d], files3DList[id3d]));
+    addData2Table();
+}
+
+void MainWindow::filesTabVideoSnapshot()
+{
+    // Pass player to snapshot thread
+    filesTabVlcSSThd.takeSnapshot(filesTabVlcPlayer);
+    qDebug() << filesTabVlcSSThd.getSnapshotName();
+    // TODO: check if get snapshot
+    files2DList.push_back(filesTabVlcSSThd.getSnapshotName());
+    ui->filesTW2DFilesList->addItem(QFileInfo(filesTabVlcSSThd.getSnapshotName()).fileName());
+}
+
+void MainWindow::disableFilesTabSSBtn(int index)
+{
+    if (index == 1)
+    {
+        ui->filesTWSnapshotBtn->setEnabled(false);
+    }
+    else
+    {
+        ui->filesTWSnapshotBtn->setEnabled(true);
+    }
+}
+
+void MainWindow::files2DTabDisplayImg()
+{
+//    QString item2DText = ui->filesTW2DFilesList->currentItem()->text();
+    int curId = ui->filesTW2DFilesList->currentRow();
+    QString filePath = files2DList[curId];
+
+    ui->displayTabWidget->setCurrentIndex(0);
+    // clear player
+    _player->stop();
+    connect(filesTabVlcPlayer, &VlcMediaPlayer::playing, filesTabVlcPlayer, &VlcMediaPlayer::pause);
+    ui->filesTWSnapshotBtn->setEnabled(false);
+    filesTabVlcMedia = new VlcMedia(filePath, true, filesTabVlcInstance);
+    filesTabVlcPlayer->open(filesTabVlcMedia);
+}
+
+void MainWindow::files3DTabDisplayImg()
+{
+//    QString item3DText = ui->filesTW3DFilesList->currentItem()->text();
+    int curId = ui->filesTW3DFilesList->currentRow();
+
+    QString filePath = files3DList[curId];
+    std::string file_name = filePath.toStdString();
+    pcl::PCLPointCloud2 cloud2;
+    Eigen::Vector4f origin;
+    Eigen::Quaternionf orientation;
+    int pcd_version;
+    int data_type;
+    unsigned int data_idx;
+    pcl::PCDReader rd;
+
+    ui->displayTabWidget->setCurrentIndex(1);
+
+    rd.readHeader(file_name, cloud2, origin, orientation, pcd_version, data_type, data_idx);
+
+    if (data_type == 0)
+    {
+        pcl::io::loadPCDFile(file_name, *fileTabCloud);
+    }
+    else if (data_type == 2)
+    {
+        pcl::PCDReader reader;
+        reader.read<pcl::PointXYZ>(file_name, *fileTabCloud);
+    }
+
+    fileTab3DViewer->updatePointCloud<pcl::PointXYZ>(fileTabCloud, "fileTabCloud");
+    fileTab3DViewer->resetCamera();
+    ui->localPCDDisplayWidget->update();
 }

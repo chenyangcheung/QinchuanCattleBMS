@@ -301,3 +301,8 @@ void IFM3DViewer::setSnapshotPath(QString ssp)
 {
     snapshotPath = ssp;
 }
+
+bool IFM3DViewer::getCameraState()
+{
+    return camIsActive;
+}
