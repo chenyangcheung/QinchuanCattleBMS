@@ -193,7 +193,7 @@ QTabWidget::tab-bar {
              <property name="minimumSize">
               <size>
                <width>241</width>
-               <height>271</height>
+               <height>240</height>
               </size>
              </property>
             </widget>
@@ -216,7 +216,7 @@ QTabWidget::tab-bar {
              <property name="minimumSize">
               <size>
                <width>241</width>
-               <height>271</height>
+               <height>240</height>
               </size>
              </property>
             </widget>
@@ -234,8 +234,8 @@ QTabWidget::tab-bar {
           </property>
           <property name="minimumSize">
            <size>
-            <width>831</width>
-            <height>600</height>
+            <width>400</width>
+            <height>400</height>
            </size>
           </property>
           <layout class="QGridLayout" name="gridLayout_7">
@@ -316,8 +316,8 @@ QTabWidget::tab-bar {
                  </property>
                  <property name="minimumSize">
                   <size>
-                   <width>640</width>
-                   <height>360</height>
+                   <width>400</width>
+                   <height>200</height>
                   </size>
                  </property>
                  <property name="autoFillBackground">
@@ -342,8 +342,8 @@ QTabWidget::tab-bar {
                  </property>
                  <property name="minimumSize">
                   <size>
-                   <width>640</width>
-                   <height>360</height>
+                   <width>400</width>
+                   <height>200</height>
                   </size>
                  </property>
                 </widget>
