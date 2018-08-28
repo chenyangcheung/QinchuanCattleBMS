@@ -301,6 +301,8 @@ void MainWindow::openUrl()
     if (url.isEmpty())
         return;
     ui->tabWidget->setCurrentIndex(0);
+    ui->camerasTabWidget->setCurrentIndex(0);
+
     ifConnect2DCam = true;
 
     _media = new VlcMedia(url, _instance);
@@ -335,7 +337,7 @@ void MainWindow::takeSnapShot()
     image3DName = QFileInfo(img3d).fileName();
 
     computeGroupList.push_back(QPair<QString, QString>(img2d, img3d));
-
+    QMessageBox::information(nullptr, tr("Info"), tr("Save snapshots ") + image2DName + tr(" and ") + image3DName + tr("."));
     addData2Table();
 }
 
@@ -347,6 +349,7 @@ void MainWindow::open3dCamera()
         return;
     ifConnect3DCam = true;
     ui->tabWidget->setCurrentIndex(0);
+    ui->camerasTabWidget->setCurrentIndex(1);
     ifm3dViewer.openCamera(ip_add);
 }
 

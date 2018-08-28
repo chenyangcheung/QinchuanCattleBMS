@@ -273,7 +273,7 @@ void IFM3DViewer::takeSnapshot()
     // Save pcd file by pcl library
     pcl::io::savePCDFile(ssname.toStdString(), *temp);
 
-    QMessageBox::information(nullptr, tr("Info"), tr("Save snapshot to ") + ssname);
+//    QMessageBox::information(nullptr, tr("Info"), tr("Save snapshot to ") + ssname);
 }
 
 QString IFM3DViewer::getSnapshotName()
