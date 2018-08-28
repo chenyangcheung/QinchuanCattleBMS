@@ -101,7 +101,6 @@ QTabWidget::tab-bar {
               <property name="autoFillBackground">
                <bool>false</bool>
               </property>
-              <zorder>SnapShot</zorder>
              </widget>
             </item>
             <item>
@@ -354,7 +353,6 @@ QTabWidget::tab-bar {
            </item>
           </layout>
           <zorder>displayTabWidget</zorder>
-          <zorder>filesTWFilesWidget</zorder>
           <zorder>filesTWSelectBtn</zorder>
           <zorder>filesTWOpenFileBtn</zorder>
           <zorder>filesTWSnapshotBtn</zorder>
@@ -1463,11 +1461,9 @@ QTabWidget::tab-bar {
     <property name="title">
      <string>Media</string>
     </property>
-    <addaction name="actionOpen_Video"/>
     <addaction name="actionOpen_Camera"/>
-    <addaction name="separator"/>
-    <addaction name="openPCDAction"/>
     <addaction name="open3DcameraAction"/>
+    <addaction name="openFileAction"/>
    </widget>
    <widget class="QMenu" name="menuSettings">
     <property name="title">
@@ -1510,9 +1506,9 @@ QTabWidget::tab-bar {
     <string>Open 3D camera</string>
    </property>
   </action>
-  <action name="openPCDAction">
+  <action name="openFileAction">
    <property name="text">
-    <string>Open PCD</string>
+    <string>Open Files</string>
    </property>
   </action>
   <action name="setThresholdAction">

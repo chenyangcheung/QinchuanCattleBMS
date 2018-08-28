@@ -56,7 +56,7 @@ void SnapshotThread::takeSnapshot(VlcMediaPlayer *&player)
     {
         if (!isImg)
             imgCalibrate(ssname);
-        QMessageBox::information(nullptr, tr("Info"), tr("Save snapshot to ") + ssname);
+//        QMessageBox::information(nullptr, tr("Info"), tr("Save snapshot to ") + ssname);
     }
     else
         QMessageBox::warning(nullptr, tr("Warning"), tr("There are nothing to be taken! Please open a video or camera."));

@@ -158,7 +158,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //    connect(ui->OpenVideo, &QPushButton::clicked, this, &MainWindow::openLocal);
 //    connect(ui->OpenCamera, &QPushButton::clicked, this, &MainWindow::openUrl);
     connect(ui->SnapShot, &QPushButton::clicked, this, &MainWindow::takeSnapShot);
-    connect(ui->actionOpen_Video, &QAction::triggered, this, &MainWindow::openLocal);
+//    connect(ui->actionOpen_Video, &QAction::triggered, this, &MainWindow::openLocal);
     connect(ui->actionOpen_Camera, &QAction::triggered, this, &MainWindow::openUrl);
     connect(_player, &VlcMediaPlayer::end, _player, &VlcMediaPlayer::stop);
     connect(_player, &VlcMediaPlayer::error, this, &MainWindow::displayVlcError);
@@ -206,7 +206,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->helpButton, &QPushButton::clicked, this, &MainWindow::showSelectPointsHelp);
 
     connect(ui->open3DcameraAction, &QAction::triggered, this, &MainWindow::open3dCamera);
-    connect(ui->openPCDAction, &QAction::triggered, &ifm3dViewer, &IFM3DViewer::openLocal);
+//    connect(ui->openPCDAction, &QAction::triggered, &ifm3dViewer, &IFM3DViewer::openLocal);
 
     // menu action
     connect(ui->saveBMIAction, &QAction::triggered, this, &MainWindow::saveBMIToFile);
@@ -243,6 +243,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->filesTW3DFilesList, &QListWidget::itemClicked, this, &MainWindow::files3DTabDisplayImg);
     connect(ui->filesTWSelectBtn, &QPushButton::clicked, this, &MainWindow::filesTabSelect);
+    connect(ui->openFileAction, &QAction::triggered, this, &MainWindow::filesTabOpenFile);
 }
 
 MainWindow::~MainWindow()
@@ -299,7 +300,7 @@ void MainWindow::openUrl()
 
     if (url.isEmpty())
         return;
-
+    ui->tabWidget->setCurrentIndex(0);
     ifConnect2DCam = true;
 
     _media = new VlcMedia(url, _instance);
@@ -345,7 +346,7 @@ void MainWindow::open3dCamera()
     if (ip_add.isEmpty())
         return;
     ifConnect3DCam = true;
-
+    ui->tabWidget->setCurrentIndex(0);
     ifm3dViewer.openCamera(ip_add);
 }
 
@@ -883,6 +884,8 @@ void MainWindow::filesTabOpenFile()
 
         if (file.isEmpty())
             return;
+
+        ui->tabWidget->setCurrentIndex(1);
         filesTabVlcSSThd.isImg = false;
 
         // remove specail process for image files
@@ -917,7 +920,7 @@ void MainWindow::filesTabOpenFile()
                    tr("Open PointCloud"), QDir::homePath(), tr("Open PCD files (*.pcd)"));
         if (!filename.isEmpty())
         {
-            ui->displayTabWidget->setCurrentIndex(1);
+            ui->tabWidget->setCurrentIndex(1);
             // add into list
             files3DList.push_back(filename);
             ui->filesTW3DFilesList->addItem(QFileInfo(filename).fileName());
