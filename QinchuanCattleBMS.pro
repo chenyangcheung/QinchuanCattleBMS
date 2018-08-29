@@ -240,13 +240,15 @@ LIBS += -L$$BOOST_PATH/lib64-msvc-14.0 \
 
 INCLUDEPATH += $$BOOST_PATH
 
+message("boost path: $$BOOST_PATH")
+
 # eigen library
 EIGEN_PATH = $$(QINCHUANCATTLE_BMS_LIBS_PATH)
 
 #LIBS += -L$$EIGEN_PATH/
 INCLUDEPATH += $$EIGEN_PATH/include/eigen3
 
-message("boost path: $$BOOST_PATH")
+message("eigen path: $$EIGEN_PATH")
 
 # opencv library
 OPENCV_PATH = $$(QINCHUANCATTLE_BMS_LIBS_PATH)
