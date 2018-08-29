@@ -329,7 +329,7 @@ void MainWindow::takeSnapShot()
     // take 2D snaspshot
     vlc2DcameraSSThd.takeSnapshot(_player);
 
-    if (vlc2DcameraSSThd.snapshotSuccess())
+    if (!vlc2DcameraSSThd.snapshotSuccess())
     {
         QMessageBox::warning(nullptr, "Warning", "2D camera snapshot failed! Please check connection.");
         return;
