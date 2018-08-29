@@ -16,6 +16,17 @@ Suggested version: qt-opensource-windows-x86-msvc2015_64-5.6.3
 Suggested version: VLC-Qt_1.1.0_win64_msvc2015
 3. OpenCV     
 Suggested version: opencv-2.4.13.6-vc14
+4. VTK
+Suggested version: vtk(with Qt support) 6.3
+5. PCL
+Suggested version: pcl msvc2015_64 1.8
+6. xmlrpc
+Suggested version: 1.33
+3. eigen
+Suggested version: 3.3.4
+3. boost
+Suggested version: 1.64
+3. ifm pmdsdk
 4. Visual Studio    
 Suggested version: visual_studio_community_2015_x86
 
@@ -30,10 +41,10 @@ Suggested version: visual_studio_community_2015_x86
    Value: %OPENCV_DIR%
 1. Name: BOOST_INSTALL_PATH     
    value: %BOOST_INSTALL_DIR%\local\boost_1_64_0
-1. Name: IFM3D_INSTALL_PATH                
-   Value: %IFM3D_INSTALL_PATH%\install
-1. Name: IFM3D_PATH              
-   Value: %IFM3D_PATH_DIR%\ifm3d
+1. Name: QINCHUANCATTLE_BMS_LIBS_PATH                
+   Value: %QINCHUANCATTLE_BMS_LIBS_PATH%\install
+1. Name: IFM_PMD_SKD
+   Value: %IFM_PMD_SKD%\lib
 
 ### Dynamic link library:
 
@@ -41,42 +52,5 @@ Suggested version: visual_studio_community_2015_x86
 1. Value：%OPENCV_DIR%\bin
 1. Value：%QT_DIR%\bin
 1. Value: %VLC_DIR%\bin
-
-
-## Tips
-
-### list
-
-- jfksjdkfjds
-- fdsjfkjsdf
-
-### number list
-
-1.   a
-1. dd
-1. sd
-
-### italic
-
-*word*
-
-### bold
-
-**word**
-
-### hyperlink
-
-[baidu](http://www.baidu.com)
-
-### code block
-
-`code`
-
-
-```
-fdsfjksdfjkj
-```
-
-### reference
-
-> fdsfdsfjkj
+1. Value: %QINCHUANCATTLE_BMS_LIBS_PATH%\bin
+1. Value: %IFM_PMD_SKD%\bin
