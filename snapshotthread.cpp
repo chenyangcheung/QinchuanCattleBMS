@@ -50,12 +50,12 @@ void SnapshotThread::takeSnapshot(VlcMediaPlayer *&player)
     start();
 
     // wait snapshot thread to quit
-//    quit();
-//    wait();
+    quit();
+    wait();
 //    if (ifGetSnapshot)
 //    {
-//        if (!isImg)
-//            imgCalibrate(ssname);
+//    if (!isImg)
+    imgCalibrate(ssname);
 //        QMessageBox::information(nullptr, tr("Info"), tr("Save snapshot to ") + ssname);
 //    }
 //    else
