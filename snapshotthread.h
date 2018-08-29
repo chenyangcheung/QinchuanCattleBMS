@@ -16,6 +16,7 @@ public:
     void setCalParams();
     void imgCalibrate(QString imgName);
     void setSnapshotPath(QString ssp);
+    bool snapshotSuccess();
 protected:
     void virtual run() override;
 private:

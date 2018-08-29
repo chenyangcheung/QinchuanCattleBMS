@@ -317,20 +317,25 @@ void MainWindow::takeSnapShot()
         QMessageBox::warning(nullptr, "Warning", "2D camera has been connected. Please check 2D camera connection.");
         return;
     }
-    if (!ifm3dViewer.getCameraState())
+    if (!ifConnect3DCam)
     {
         QMessageBox::warning(nullptr, "Warning", "3D camera has been connected. Please check 3D camera connection.");
         return;
     }
     // Pass player to snapshot thread
     vlc2DcameraSSThd.takeSnapshot(_player);
+    // take 3D snapshot
+    ifm3dViewer.takeSnapshot();
 
+
+    if (vlc2DcameraSSThd.snapshotSuccess())
+    {
+        QMessageBox::warning(nullptr, "Warning", "2D camera snapshot failed! Please check connection.");
+        return;
+    }
     // record name of 2D snapshot
     QString img2d = vlc2DcameraSSThd.getSnapshotName();
     image2DName = QFileInfo(img2d).fileName();
-
-    // take 3D snapshot
-    ifm3dViewer.takeSnapshot();
 
     // record name of 3D snapshot
     QString img3d = ifm3dViewer.getSnapshotName();

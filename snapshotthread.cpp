@@ -50,16 +50,16 @@ void SnapshotThread::takeSnapshot(VlcMediaPlayer *&player)
     start();
 
     // wait snapshot thread to quit
-    quit();
-    wait();
-    if (ifGetSnapshot)
-    {
-        if (!isImg)
-            imgCalibrate(ssname);
+//    quit();
+//    wait();
+//    if (ifGetSnapshot)
+//    {
+//        if (!isImg)
+//            imgCalibrate(ssname);
 //        QMessageBox::information(nullptr, tr("Info"), tr("Save snapshot to ") + ssname);
-    }
-    else
-        QMessageBox::warning(nullptr, tr("Warning"), tr("There are nothing to be taken! Please open a video or camera."));
+//    }
+//    else
+//        QMessageBox::warning(nullptr, tr("Warning"), tr("There are nothing to be taken! Please open a video or camera."));
 }
 
 QString SnapshotThread::getSnapshotName()
@@ -87,4 +87,9 @@ void SnapshotThread::imgCalibrate(QString imgName)
 void SnapshotThread::setSnapshotPath(QString ssp)
 {
     snapshotPath = ssp;
+}
+
+bool SnapshotThread::snapshotSuccess()
+{
+    return ifGetSnapshot;
 }
