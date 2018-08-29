@@ -9,7 +9,6 @@
 #include <string>
 #include <pcl/visualization/cloud_viewer.h>
 #include <pcl/io/pcd_io.h>
-#include <ifm3d/image.h>
 #include <QMessageBox>
 #include <QDateTime>
 #include <QApplication>
@@ -51,13 +50,8 @@ void IFM3DViewer::openCamera(QString ifm3d_ip)
     std::string XMLRPC_PORT_NUMBER = "50010";
     SOURCE_PARAM = O3D3XX_IP + ":" + PCIC_PORT_NUMBER + ":" + XMLRPC_PORT_NUMBER;
 
-//    IFM3D_IP = ifm3d_ip;
-
     try
     {
-//        cam = std::make_shared<ifm3d::Camera>(IFM3D_IP.toStdString());
-//        fg = std::make_shared<ifm3d::FrameGrabber>(cam, 0xFFFF);
-
         camIsActive = true;
         res = pmdOpen(&hnd, SOURCE_PLUGIN, SOURCE_PARAM.c_str(), PROC_PLUGIN, PROC_PARAM);
 
@@ -74,7 +68,6 @@ void IFM3DViewer::openCamera(QString ifm3d_ip)
     {
         camIsActive = false;
         QString qExcept;
-//        qDebug() << ex.what();
         QMessageBox::warning(nullptr, tr("Warning"), qExcept.fromStdString(ex.what()));
         return;
     }
@@ -125,17 +118,6 @@ void IFM3DViewer::run()
 //    char err[256] = { 0 };
     try
     {
-//        auto buff = std::make_shared<ifm3d::ImageBuffer>();
-        // connect to camera
-//        res = pmdOpen(&hnd, SOURCE_PLUGIN, SOURCE_PARAM.c_str(), PROC_PLUGIN, PROC_PARAM);
-
-//        if (res != PMD_OK)
-//        {
-//            fprintf(stderr, "Could not connect: \n");
-//            getchar();
-//            return;
-//        }
-
         res = pmdUpdate(hnd); // to update the camera parameter and framedata
         if (res != PMD_OK)
         {
