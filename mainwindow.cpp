@@ -1006,8 +1006,14 @@ void MainWindow::filesTabVideoSnapshot()
 {
     // Pass player to snapshot thread
     filesTabVlcSSThd.takeSnapshot(filesTabVlcPlayer);
-    qDebug() << filesTabVlcSSThd.getSnapshotName();
+//    qDebug() << filesTabVlcSSThd.getSnapshotName();
     // TODO: check if get snapshot
+    if (!filesTabVlcSSThd.snapshotSuccess())
+    {
+        QMessageBox::warning(nullptr, "Warning", "Snapshot failed!");
+        return;
+    }
+    QMessageBox::information(nullptr, tr("Info"), tr("Save snapshot to ") + filesTabVlcSSThd.getSnapshotName());
     files2DList.push_back(filesTabVlcSSThd.getSnapshotName());
     ui->filesTW2DFilesList->addItem(QFileInfo(filesTabVlcSSThd.getSnapshotName()).fileName());
 }
