@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AboutDlg</class>
+ <widget class="QDialog" name="AboutDlg">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>599</width>
+    <height>586</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>599</width>
+    <height>586</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>599</width>
+    <height>586</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>About</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>:/app_icon/app-logo</normaloff>:/app_icon/app-logo</iconset>
+  </property>
+  <widget class="QLabel" name="logoLabel">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>20</y>
+     <width>60</width>
+     <height>60</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="../qbmsres.qrc">:/imgs/app-icon</pixmap>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="nameLabel">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>20</y>
+     <width>251</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>16</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>QinchuanCattleBMS</string>
+   </property>
+  </widget>
+  <widget class="QTextBrowser" name="licenseText">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>400</y>
+     <width>541</width>
+     <height>161</height>
+    </rect>
+   </property>
+   <property name="source">
+    <url>
+     <string>file:///C:/Users/chaoy/gitRepos/QinchuanCattleBMS/software_license.html</string>
+    </url>
+   </property>
+  </widget>
+  <widget class="QLabel" name="authorLabel">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>80</y>
+     <width>551</width>
+     <height>311</height>
+    </rect>
+   </property>
+   <property name="inputMethodHints">
+    <set>Qt::ImhNone</set>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;QinchuanCattleBMS. Measuring Body Size of Qinchuan Cattle Easily.&lt;/p&gt;&lt;p&gt;Copyright (C) 2018 Chenyang Zhang&lt;/p&gt;&lt;p&gt;This program is free software: you can redistribute it and/or modify&lt;/p&gt;&lt;p&gt;it under the terms of the GNU General Public License as published by&lt;/p&gt;&lt;p&gt;the Free Software Foundation, either version 3 of the License, or&lt;/p&gt;&lt;p&gt;(at your option) any later version.&lt;/p&gt;&lt;p&gt;This program is distributed in the hope that it will be useful,&lt;/p&gt;&lt;p&gt;but WITHOUT ANY WARRANTY; without even the implied warranty of&lt;/p&gt;&lt;p&gt;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the&lt;/p&gt;&lt;p&gt;GNU General Public License for more details.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="textInteractionFlags">
+    <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse</set>
+   </property>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../qbmsres.qrc"/>
+ </resources>
+ <connections/>
+</ui>

@@ -27,8 +27,8 @@
 #include <exception>
 
 // OpenCV library
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
+//#include <opencv2/highgui/highgui.hpp>
+//#include <opencv2/imgproc/imgproc.hpp>
 
 // PCL library
 #include <vtkRenderWindow.h>
@@ -37,6 +37,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "bmscore.h"
+#include "about/aboutdlg.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -842,8 +843,9 @@ void MainWindow::saveBMIToFile()
 
 void MainWindow::showAboutInfo()
 {
-    QMessageBox::about(nullptr, "About QinchuanCattleBMS v1.0", "This is a software to compute body measurement of Cattles. This software is licensed under the <a href=https://opensource.org/licenses/GPL-3.0>GNU General Public License v3.0</a>. You can report bugs <a href=https://github.com/chenyangcheung/QinchuanCattleBMS/issues>here</a> to us.");
-    return;
+//    QMessageBox::about(nullptr, "About QinchuanCattleBMS v1.0", "This is a software to compute body measurement of Cattles. This software is licensed under the <a href=https://opensource.org/licenses/GPL-3.0>GNU General Public License v3.0</a>. You can report bugs <a href=https://github.com/chenyangcheung/QinchuanCattleBMS/issues>here</a> to us.");
+    AboutDlg adlg;
+    adlg.exec();
 }
 
 void MainWindow::showQtAbout()

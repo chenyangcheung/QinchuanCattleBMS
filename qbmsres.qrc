@@ -3,4 +3,7 @@
         <file alias="select_pts">selectPts.jpg</file>
         <file alias="app-icon">app_icon.ico</file>
     </qresource>
+    <qresource prefix="/licenses">
+        <file>software_license.html</file>
+    </qresource>
 </RCC>

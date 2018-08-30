@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     markitem.cpp \
     imgpoint.cpp \
     bmscore.cpp \
-    helpdialog.cpp
+    helpdialog.cpp \
+    about/aboutdlg.cpp
 
 HEADERS  += mainwindow.h \
     snapshotthread.h \
@@ -29,10 +30,12 @@ HEADERS  += mainwindow.h \
     markitem.h \
     imgpoint.h \
     bmscore.h \
-    helpdialog.h
+    helpdialog.h \
+    about/aboutdlg.h
 
 FORMS    += mainwindow.ui \
-    helpdialog.ui
+    helpdialog.ui \
+    about/aboutdlg.ui
 
 # VLC configuration
 win32 {
@@ -211,26 +214,6 @@ LIBS += -L$$VTK_PATH/lib  \
 INCLUDEPATH += $$VTK_PATH/include/vtk-6.3
 
 message("vtk path: $$VTK_PATH")
-
-# xmlrpc library
-XMLRPC_PATH = $$(QINCHUANCATTLE_BMS_LIBS_PATH)
-
-LIBS += -L$$XMLRPC_PATH/libs \
-        -lxmlrpc \
-        -lxmlrpc_abyss \
-        -lxmlrpc_client \
-        -lxmlrpc_client++ \
-        -lxmlrpc_cpp \
-        -lxmlrpc_packetsocket \
-        -lxmlrpc_server \
-        -lxmlrpc_server_pstream++ \
-        -lxmlrpc_server++ \
-        -lxmlrpc_util \
-        -lxmlrpc++
-
-INCLUDEPATH += $$XMLRPC_PATH/include
-
-message("xmlrpc path: $$XMLRPC_PATH")
 
 # boost library
 BOOST_PATH = $$(BOOST_INSTALL_PATH)
