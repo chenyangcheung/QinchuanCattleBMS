@@ -78,7 +78,7 @@
    </property>
    <property name="source">
     <url>
-     <string>file:///C:/Users/chaoy/gitRepos/QinchuanCattleBMS/software_license.html</string>
+     <string>qrc:/licenses/software_license.html</string>
     </url>
    </property>
   </widget>
