@@ -20,8 +20,6 @@ Suggested version: opencv-2.4.13.6-vc14
 Suggested version: vtk(with Qt support) 6.3
 5. PCL    
 Suggested version: pcl msvc2015_64 1.8
-6. xmlrpc   
-Suggested version: 1.33
 3. eigen    
 Suggested version: 3.3.4
 3. boost    
